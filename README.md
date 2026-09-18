@@ -1,0 +1,63 @@
+# SurfaceMesh: 3D surface meshes based on `CGAL`
+
+`SurfaceMesh` is an R package that supports basic processing of 3D surface meshes using as backend the C++ library [`CGAL`](https://www.cgal.org/) via R package [`RcppCGAL`](https://cran.r-project.org/package=RcppCGAL). Features:
+
+  * Read in and write mesh files in common formats (STL, PLY, OBJ, OFF)
+  * Conversion to / from class `mesh3d` from package [`rgl`](https://cran.r-project.org/package=rgl), also compatible with package [`Rvcg`](https://cran.r-project.org/package=Rvcg)
+  * Mesh repair
+      * Filling holes
+      * Removing self intersections
+  * Boolean mesh operations
+      * Union
+      * Dfference
+      * Intersection
+  * Isotropic remeshing
+  * Smoothing
+  * Subdivision
+      * Catmull-Clark
+      * Doo-Sabin
+      * Sqrt3
+      * Loop
+  * Surface reconstruction
+      * AFS
+      * SSS
+      * Poisson
+      * Alpha wrapping
+  * Bounding box
+      * Axis-parallel bounding box
+      * Optimal (oriented) bounding box
+  * Convex hull
+  * Distance from points to mesh
+  * Centroid (center of mass)
+  * Surface area
+  * Volume
+  * Vertex normals
+  * Randomly sampling points on a mesh
+
+The package also calculates distance and similarity metrics for a given pair of 3D surface meshes (see [dkfz metrics reloaded](https://metrics-reloaded.dkfz.de/metric-library)):
+
+  * Distance between the two respective centers of mass (DCOM)
+  * Hausdorff distance
+      * Approximate
+      * Bounded error
+      * Quantile (e.g., 'HD95')
+  * Average symmetric surface distance (ASSD)
+  * Root mean squared error (RMSE, with respect to the surface)
+  * Jaccard Similarity Coefficient (JSC, aka 'Intersection over Union', IoU)
+  * Dice Similarity Coefficient (DSC)
+
+## CAVE
+
+See package [`Rmpfr`](https://cran.r-project.org/package=Rmpfr) for a note on how to install system requirements [MPFR](https://www.mpfr.org/) and [GMP](https://gmplib.org/).
+
+## Implementation
+
+This package includes code adapted from packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/).  Currently, only a subset of the functionality of these packages is provided in `SurfaceMesh`.
+
+A fork / adaptation of packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) was carried out as upstream changes to CGAL introduced incompatibilities, and the packages were archived from [CRAN](https://cran.r-project.org/).
+
+The design was chosen such that mesh data resides in R space. This means that for each mesh operation, data is first transferred to the C++ side (using `Rcpp`), converted to a CGAL surface mesh, subjected to CGAL functions, and then transferred back to R. The package does not maintain a pointer to a C++ data structure to keep the mesh data there - unlike packages such as [`terra`](https://cran.r-project.org/package=terra) or [`cgalMeshes`](https://github.com/stla/cgalMeshes/). This approach carries a performance penalty, but from an R perspective, it is more straightforward. In particular, there are no serialization issues (saving meshes). Furthermore, memory management is easier.
+
+## License
+
+This package is provided under the GPL-3 license, but it uses the C++ library [`CGAL`](https://www.cgal.org/). To use CGAL for commercial purposes, you must obtain a license from the [GeometryFactory](https://geometryfactory.com).

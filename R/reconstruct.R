@@ -1,0 +1,245 @@
+## ----------------------------------------------------------------------- //
+## Code adapted from packages
+## https://github.com/stla/Boov/
+## https://github.com/stla/PolygonSoup/
+## https://github.com/stla/cgalMeshes/
+## developed and copyright by
+## Stéphane Laurent <laurent_step@outlook.fr>
+## adapted by
+## Daniel Wollschlaeger
+## License: GPL-3
+## ----------------------------------------------------------------------- //
+
+#' @title Advancing front surface reconstruction
+#' @description Reconstruction of a surface mesh from a cloud of 3D points.
+#'
+#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param jetSmoothing Optional integer >= 2. If specified,
+#'   the point cloud is smoothed before the reconstruction, using
+#'   this integer as the number of neighbors for the smoothing. Note that this
+#'   smoothing preprocessing relocates the points and then should not be used
+#'   if the points have been sampled without noise on the surface.
+#' @param repairSoup Boolean. Whether to clean the mesh (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices).
+#' @param normals Boolean. Whether to return vertex normals.
+#' @returns A \code{CGALmesh} object.
+#' @details See \url{https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/}
+#'   for details.
+#' @seealso \code{\link[SurfaceMesh]{reconstructSSS}},
+#'    \code{\link[SurfaceMesh]{reconstructPoisson}}, \code{\link[SurfaceMesh]{alphaWrap}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' # no smoothing
+#' mesh          <- dataHeart1
+#' mesh_rgl      <- toRGL(mesh)
+#' mesh_afs1     <- reconstructAFS(mesh[["vertices"]])
+#' mesh_afs1_rgl <- toRGL(mesh_afs1)
+#'
+#' # jet smoothing
+#' mesh_afs2     <- reconstructAFS(mesh[["vertices"]],
+#'                                 jetSmoothing=30)
+#' mesh_afs2_rgl <- toRGL(mesh_afs2)
+#'
+#' open3d(windowRect=50 + c(0, 0, 1200, 400))
+#' mfrow3d(1, 3)
+#' wire3d(mesh_rgl)
+#' next3d()
+#' wire3d(mesh_afs1_rgl)
+#' next3d()
+#' wire3d(mesh_afs2_rgl)
+#'
+#' @export
+reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
+  if(!is.matrix(x) || !is.numeric(x)) {
+    stop("The `x` argument must be a numeric matrix.", call. = TRUE)
+  }
+  if(ncol(x) != 3L) {
+    stop("The `x` matrix must have three columns.", call. = TRUE)
+  }
+  if(nrow(x) <= 3L) {
+    stop("Insufficient number of points in `x`.", call. = TRUE)
+  }
+  if(anyNA(x)) {
+    stop("Points with missing values are not allowed.", call. = TRUE)
+  }
+  storage.mode(x) <- "double"
+  if(!missing(jetSmoothing)) {
+    stopifnot(isPositiveInteger(jetSmoothing), jetSmoothing >= 2L)
+  } else {
+    jetSmoothing <- 0L
+  }
+  stopifnot(isBoolean(repairSoup))
+  mesh_cpp <- reconstructAFS_cpp(t(x), as.integer(jetSmoothing), repairSoup, normals)
+  fromCPP(mesh_cpp)
+}
+
+#' @title Poisson surface reconstruction
+#' @description Poisson reconstruction of a surface, from a cloud of 3D points.
+#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param normalsFun A function to generate normals, e.g., as returned by
+#'   \code{\link[SurfaceMesh]{getNormalsFun}}.
+#' @param spacing Optional size parameter. Smaller values increase the precision
+#'   of the output mesh at the cost of higher computation time. If missing,
+#'   a reasonable default value: an average spacing that is stored in the
+#'   \code{"spacing"} attribute of the output.
+#' @param smAngle Bound for the minimum facet angle in degrees.
+#' @param smRadius Relative bound for the radius of the surface Delaunay balls.
+#' @param smDistance Relative bound for the center-center distances.
+#' @param normals Boolean. Whether to return vertex normals.
+#' @returns A \code{CGALmesh} object.
+#' @details See \url{https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/}
+#'   for details.
+#' @seealso \code{\link[SurfaceMesh]{reconstructAFS}},
+#'    \code{\link[SurfaceMesh]{reconstructSSS}},
+#'    \code{\link[SurfaceMesh]{alphaWrap}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' mesh     <- makeMesh(dataHopfTorus)
+#' mesh_rgl <- toRGL(mesh)
+#' mesh_psr <- reconstructPoisson(mesh[["vertices"]],
+#'                                normalsFun=getNormalsFun(6L),
+#'                                smAngle=10,
+#'                                smRadius=3,
+#'                                smDistance=0.3)
+#' mesh_psr_rgl <- toRGL(mesh_psr)
+#'
+#' open3d(windowRect=50 + c(0, 0, 800, 400))
+#' mfrow3d(1, 2)
+#' wire3d(mesh_rgl)
+#' next3d()
+#' wire3d(mesh_psr_rgl)
+#'
+#' @export
+reconstructPoisson <- function(
+  x,
+  normalsFun= getNormalsFun(6L),
+  spacing,
+  smAngle   = 20,
+  smRadius  = 30,
+  smDistance= 0.375,
+  normals   = FALSE) {
+  if(!is.matrix(x) || !is.numeric(x)) {
+    stop("The `x` argument must be a numeric matrix.", call. = TRUE)
+  }
+  if(anyNA(x)) {
+    stop("Missing values in the `x` matrix are not allowed.", call. = TRUE)
+  }
+  dimension <- ncol(x)
+  if(dimension != 3L) {
+    stop("The `x` matrix must have three columns.", call. = TRUE)
+  }
+  storage.mode(x) <- "double"
+  if(!is.function(normalsFun) || !inherits(normalsFun, "CGALnormalsFunc")) {
+    stop("Invalid argument `normalsFun`must be a function as ",
+         "returned by `getNormalsFun`")
+  }
+  if(nrow(x) <= dimension) {
+    stop("Insufficient number of points.", call. = TRUE)
+  }
+  # if(any(is.na(points)) || (!is.null(normalsIn) && any(is.na(normalsIn)))) {
+  #   stop("Points or normalsIn with missing values are not allowed.", call. = TRUE)
+  # }
+  if(missing(spacing)) {
+    spacing <- -1
+  } else {
+    stopifnot(isPositiveNumber(spacing))
+  }
+  stopifnot(isPositiveNumber(smAngle))
+  stopifnot(isPositiveNumber(smRadius))
+  stopifnot(isPositiveNumber(smDistance))
+  normalsIn <- normalsFun(x)
+  mesh_cpp <- reconstructPoisson_cpp(
+    t(x), normalsIn, spacing, smAngle, smRadius, smDistance, normals)
+  fromCPP(mesh_cpp)
+}
+
+#' @title Scale-space surface reconstruction
+#' @description Reconstruction of a surface from a cloud of 3D points.
+#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param scaleIterations Positive integer. Number of iterations used to increase the scale.
+#' @param neighbors Positive integer. Number of neighbors used to smooth the point cloud.
+#' @param samples Positive integer. Number of samples used to smooth the point cloud.
+#' @param separateShells Boolean. whether to separate the shells.
+#' @param forceManifold Boolean. whether to force a manifold output mesh.
+#' @param borderAngle Bound on the angle in degrees used to detect border edges.
+#' @param repairSoup Boolean. Whether to clean the mesh (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices).
+#' @param normals Boolean. Whether to return vertex normals.
+#' @returns A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
+#' @details See \url{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}
+#'   for details.
+#' @seealso \code{\link[SurfaceMesh]{reconstructAFS}},
+#'    \code{\link[SurfaceMesh]{reconstructPoisson}}, \code{\link[SurfaceMesh]{alphaWrap}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' mesh     <- dataHeart1
+#' mesh_rgl <- toRGL(mesh)
+#' mesh_sss <- reconstructSSS(mesh[["vertices"]],
+#'                            scaleIterations=1,
+#'                            forceManifold  =TRUE,
+#'                            neighbors      =6)
+#'
+#' mesh_sss_rgl <- toRGL(mesh_sss)
+#'
+#' open3d(windowRect=50 + c(0, 0, 800, 400))
+#' mfrow3d(1, 2)
+#' wire3d(mesh_rgl)
+#' next3d()
+#' wire3d(mesh_sss_rgl)
+#'
+#' @export
+reconstructSSS <- function(
+  x,
+  scaleIterations=1L,
+  neighbors      =12L,
+  samples        =300L,
+  separateShells =FALSE,
+  forceManifold  =TRUE,
+  borderAngle    =45,
+  repairSoup     =TRUE,
+  normals        =FALSE) {
+  if(!is.matrix(x) || !is.numeric(x)) {
+    stop("The `x` argument must be a numeric matrix.", call. = TRUE)
+  }
+  if(ncol(x) != 3L) {
+    stop("The `x` matrix must have three columns.", call. = TRUE)
+  }
+  if(nrow(x) <= 3L) {
+    stop("Insufficient number of points.", call. = TRUE)
+  }
+  if(anyNA(x)) {
+    stop("Points with missing values are not allowed.", call. = TRUE)
+  }
+  storage.mode(x) <- "double"
+  stopifnot(isStrictPositiveInteger(scaleIterations))
+  stopifnot(isStrictPositiveInteger(neighbors), neighbors >= 2)
+  stopifnot(isStrictPositiveInteger(samples))
+  stopifnot(isBoolean(separateShells))
+  stopifnot(isBoolean(forceManifold))
+  stopifnot(isNonNegativeNumber(borderAngle))
+  stopifnot(isBoolean(repairSoup))
+  stopifnot(isBoolean(normals))
+  mesh_cpp <- reconstructSSS_cpp(
+    t(x),
+    as.integer(scaleIterations),
+    as.integer(neighbors),
+    as.integer(samples),
+    separateShells,
+    forceManifold,
+    as.double(borderAngle),
+    repairSoup,
+    normals)
+  fromCPP(mesh_cpp)
+}

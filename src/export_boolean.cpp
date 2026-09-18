@@ -1,0 +1,234 @@
+// ----------------------------------------------------------------------- //
+// Code adapted from packages
+// https://github.com/stla/Boov/
+// https://github.com/stla/PolygonSoup/
+// https://github.com/stla/cgalMeshes/
+// developed and copyright by
+// Stéphane Laurent <laurent_step@outlook.fr>
+// adapted by
+// Daniel Wollschlaeger
+// License: GPL-3
+// ----------------------------------------------------------------------- //
+
+#ifndef _CGALMESHHEADER_
+#include "SurfaceMesh.h"
+#endif
+
+#include <CGAL/Polygon_mesh_processing/corefinement.h>
+#include <CGAL/Polygon_mesh_processing/measure.h>
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+template <typename MeshT>
+void checkMesh1(const MeshT &mesh, std::size_t i) {
+  const bool si = PMP::does_self_intersect(mesh);
+  if(si) {
+    std::string msg = "Mesh n" + std::to_string(i) + " self-intersects.";
+    Rcpp::stop(msg);
+  }
+}
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+template <typename MeshT>
+void checkMesh2(const MeshT &mesh, const std::string& what) {
+  const bool si = PMP::does_self_intersect(mesh);
+  if(si) {
+    std::string msg = "The " + what + " self-intersects.";
+    Rcpp::stop(msg);
+  }
+}
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+template <typename KernelT, typename MeshT, typename PointT>
+MeshT boolIntersection(const Rcpp::List &rmeshes,
+                       const bool repairSoup,
+                       const bool verbose) {
+  const std::size_t nMeshes = rmeshes.size();
+  if(nMeshes < 2) {
+    Rcpp::stop("Need at least 2 meshes for intersection.");
+  }
+  std::vector<MeshT> meshes(nMeshes);
+  Rcpp::List rmesh_0 = Rcpp::as<Rcpp::List>(rmeshes(0));
+  if(verbose) { rmessage("Processing mesh1"); }
+  MeshT mesh_0 = make_surf_mesh_valid<MeshT, PointT>(
+      rmesh_0,
+      true,        // soup
+      true,        // triangulate - must be triangle
+      repairSoup,  // repair_soup
+      verbose);    // verbose
+
+  meshes[0] = std::move(mesh_0);
+  for(std::size_t i = 1; i < nMeshes; i++) {
+    if(i == 1) {
+      checkMesh1<MeshT>(meshes[0], 1);
+    } else {
+      checkMesh2<MeshT>(meshes[i - 1], "intersection");
+    }
+    const std::string meshnum = std::to_string(i + 1);
+    Rcpp::List rmesh_i = Rcpp::as<Rcpp::List>(rmeshes(i));
+    if(verbose) { rmessage("Processing mesh" + meshnum); }
+    MeshT mesh_i = make_surf_mesh_valid<MeshT, PointT>(
+        rmesh_i,
+        true,        // soup
+        true,        // triangulate - must be triangle
+        repairSoup,  // repair_soup
+        verbose);    // verbose
+    checkMesh1<MeshT>(mesh_i, i + 1);
+    const bool ok = PMP::corefine_and_compute_intersection(
+      meshes[i - 1], mesh_i, meshes[i]);
+    if(!ok) {
+      Rcpp::stop("Intersection computation has failed.");
+    }
+  }
+  return meshes[nMeshes - 1];
+}
+
+// [[Rcpp::export]]
+Rcpp::List boolIntersectionEK_cpp(const Rcpp::List rmeshes,
+                                  const bool repairSoup,
+                                  const bool normals,
+                                  const bool verbose) {
+  EMesh3 mesh = boolIntersection<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
+}
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+template <typename KernelT, typename MeshT, typename PointT>
+MeshT boolDifference(const Rcpp::List &rmesh1,
+                     const Rcpp::List &rmesh2,
+                     const bool repairSoup,
+                     const bool verbose) {
+  if(verbose) { rmessage("Processing mesh1"); }
+  MeshT smesh1 = make_surf_mesh_valid<MeshT, PointT>(
+      rmesh1,
+      true,        // soup
+      true,        // triangulate - must be triangle
+      repairSoup,  // repair_soup
+      verbose);    // verbose
+  checkMesh1<MeshT>(smesh1, 1);
+  if(verbose) { rmessage("Processing mesh2"); }
+  MeshT smesh2 = make_surf_mesh_valid<MeshT, PointT>(
+      rmesh2,
+      true,        // soup
+      true,        // triangulate - must be triangle
+      repairSoup,  // repair_soup
+      verbose);    // verbose
+  checkMesh1<MeshT>(smesh2, 2);
+  MeshT mesh_d;
+  bool ok = PMP::corefine_and_compute_difference(smesh1, smesh2, mesh_d);
+  if(!ok) {
+    Rcpp::stop("Difference computation has failed.");
+  }
+  return mesh_d;
+}
+
+// [[Rcpp::export]]
+Rcpp::List boolDifferenceEK_cpp(const Rcpp::List rmesh1,
+                                const Rcpp::List rmesh2,
+                                const bool repairSoup,
+                                const bool normals,
+                                const bool verbose) {
+  EMesh3 mesh = boolDifference<EK, EMesh3, EPoint3>(rmesh1, rmesh2, repairSoup, verbose);
+  return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
+}
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+template <typename KernelT, typename MeshT, typename PointT>
+MeshT boolUnion(const Rcpp::List &rmeshes,
+                const bool repairSoup,
+                const bool verbose) {
+  const std::size_t nMeshes = rmeshes.size();
+  if(nMeshes < 2) {
+    Rcpp::stop("Need at least 2 meshes for union.");
+  }
+  std::vector<MeshT> meshes(nMeshes);
+  Rcpp::List rmesh = Rcpp::as<Rcpp::List>(rmeshes(0));
+  if(verbose) { rmessage("Processing mesh1"); }
+  MeshT mesh_0 = make_surf_mesh_valid<MeshT, PointT>(
+      rmesh,
+      true,        // soup
+      true,        // triangulate - must be triangle
+      repairSoup,  // repair_soup
+      verbose);    // verbose
+  meshes[0] = std::move(mesh_0);
+  for(std::size_t i = 1; i < nMeshes; i++) {
+    if(i == 1) {
+      checkMesh1<MeshT>(meshes[0], 1);
+    } else {
+      checkMesh2<MeshT>(meshes[i - 1], "union");
+    }
+    const std::string meshnum = std::to_string(i + 1);
+    Rcpp::List rmesh_i = Rcpp::as<Rcpp::List>(rmeshes(i));
+    if(verbose) { rmessage("Processing mesh" + meshnum); }
+    MeshT mesh_i = make_surf_mesh_valid<MeshT, PointT>(
+        rmesh_i,
+        true,        // soup
+        true,        // triangulate - must be triangle
+        repairSoup,  // repair_soup
+        verbose);    // verbose
+    checkMesh1<MeshT>(mesh_i, i + 1);
+    const bool ok =
+        PMP::corefine_and_compute_union(meshes[i - 1], mesh_i, meshes[i]);
+    if(!ok) {
+      Rcpp::stop("Union computation has failed.");
+    }
+  }
+  return meshes[nMeshes - 1];
+}
+
+// [[Rcpp::export]]
+Rcpp::List boolUnionEK_cpp(const Rcpp::List rmeshes,
+                           const bool repairSoup,
+                           const bool normals,
+                           const bool verbose) {
+  EMesh3 mesh = boolUnion<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
+}
+
+// ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
+Rcpp::List getJSCDSC_cpp(const Rcpp::List rmeshes,
+                         const bool repairSoup,
+                         const bool verbose) {
+  const EMesh3 mesh_1 = make_surf_mesh_valid<EMesh3, EPoint3>(
+      Rcpp::as<Rcpp::List>(rmeshes(0)),
+      true,        // soup
+      true,        // triangulate - must be triangle
+      repairSoup,  // repair_soup
+      verbose);
+  const EMesh3 mesh_2 = make_surf_mesh_valid<EMesh3, EPoint3>(
+      Rcpp::as<Rcpp::List>(rmeshes(1)),
+      true,        // soup
+      true,        // triangulate - must be triangle
+      repairSoup,  // repair_soup
+      verbose);
+  const EMesh3 mesh_i = boolIntersection<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  const EMesh3 mesh_u = boolUnion<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  if(!CGAL::is_closed(mesh_u) ||
+     !CGAL::is_closed(mesh_i)) {
+    Rcpp::warning("Mesh union or intersection is not closed.");
+    return Rcpp::NumericVector::get_na();
+  }
+  if(PMP::does_self_intersect(mesh_u) ||
+     PMP::does_self_intersect(mesh_i)) {
+    Rcpp::warning("Mesh union or intersection self-intersects.");
+    return Rcpp::NumericVector::get_na();
+  }
+  const double vol_1 = CGAL::to_double<EK::FT>(PMP::volume(mesh_1));
+  const double vol_2 = CGAL::to_double<EK::FT>(PMP::volume(mesh_2));
+  const double vol_i = CGAL::to_double<EK::FT>(PMP::volume(mesh_i));
+  const double vol_u = CGAL::to_double<EK::FT>(PMP::volume(mesh_u));
+  const double jsc   =   vol_i / vol_u;
+  const double dsc   = 2*vol_i / (vol_1 + vol_2);
+  return Rcpp::List::create(
+    Rcpp::Named("Vol1")= vol_1,
+    Rcpp::Named("Vol2")= vol_2,
+    Rcpp::Named("VolI")= vol_i,
+    Rcpp::Named("VolU")= vol_u,
+    Rcpp::Named("JSC") = jsc,
+    Rcpp::Named("DSC") = dsc);
+}

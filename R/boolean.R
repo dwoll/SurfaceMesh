@@ -1,0 +1,269 @@
+## ----------------------------------------------------------------------- //
+## Code adapted from packages
+## https://github.com/stla/Boov/
+## https://github.com/stla/PolygonSoup/
+## https://github.com/stla/cgalMeshes/
+## developed and copyright by
+## Stéphane Laurent <laurent_step@outlook.fr>
+## adapted by
+## Daniel Wollschlaeger
+## License: GPL-3
+## ----------------------------------------------------------------------- //
+
+#' @title Intersection of meshes
+#' @description Compute the intersection of the given meshes.
+#'
+#' @param x A list of meshes, each being either a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param repairSoup Boolean. Whether to clean the meshes (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices).
+#'   Set to \code{FALSE} if you know the meshes are clean, to
+#'   gain some speed.
+#' @param normals Boolean. Whether to return the vertex normals of the
+#'   output mesh.
+#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @returns A \code{CGALmesh} object.
+#' @details See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#' @seealso See also \code{\link[SurfaceMesh]{boolUnion}} and
+#'   \code{\link[SurfaceMesh]{boolDifference}} for other Boolean mesh operations.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' # mesh one: truncated icosahedron; we triangulate it
+#' mesh1 <- makeMesh(dataTruncIcosahedron,
+#'                   triangulate=TRUE,
+#'                   normals    = FALSE)
+#'
+#' # mesh two: a cube
+#' mesh2_rgl <- translate3d(cube3d(), 2, 0, 0)
+#' mesh2     <- makeMesh(mesh2_rgl,
+#'                       triangulate=TRUE,
+#'                       normals    =FALSE)
+#'
+#' # compute the intersection
+#' mesh_i <- boolIntersection(list(mesh1, mesh2))
+#'
+#' # plot
+#' mesh1_rgl  <- toRGL(mesh1)
+#' mesh_i_rgl <- toRGL(mesh_i)
+#' open3d(windowRect=c(50, 50, 562, 562))
+#' shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
+#' shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
+#' shade3d(mesh_i_rgl, color="red")
+#' plotEdges(vertices         =mesh_i[["vertices"]],
+#'           edges            =mesh_i[["exteriorEdges"]],
+#'           edgesAsTubes     =FALSE,
+#'           lwd              =3,
+#'           verticesAsSpheres=FALSE)
+#'
+#' @export
+boolIntersection <- function(x, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
+  stopifnot(is.list(x))
+  stopifnot(length(x) >= 2L)
+  stopifnot(isBoolean(repairSoup))
+  stopifnot(isBoolean(normals))
+  stopifnot(isBoolean(verbose))
+  checkMeshes <- lapply(x, function(mesh) {
+    if(inherits(mesh, "mesh3d")) {
+      vft  <- getVFT(mesh, beforeCheck = TRUE)
+      mesh <- vft[["rmesh"]]
+    }
+    checkMesh(mesh[["vertices"]], mesh[["faces"]], aslist = TRUE)
+  })
+  meshes <- lapply(checkMeshes, `[`, c("vertices", "faces"))
+  inter  <- boolIntersectionEK_cpp(meshes, repairSoup, normals, verbose)
+  fromCPP(inter)
+}
+
+#' @title Difference between two meshes
+#' @description Compute the difference between two meshes.
+#'
+#' @param mesh1 A mesh, either being given a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param mesh2 A mesh, either being given a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param repairSoup Boolean. Whether to clean the meshes (merging duplicated
+#'   vertices, duplicated faces, removing isolated vertices). Set to
+#'   \code{FALSE} if you know the meshes are clean to gain some speed.
+#' @param normals Boolean. Whether to return the vertex normals of the
+#'   output mesh.
+#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @returns A \code{CGALmesh} object.
+#' @details See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
+#' @seealso See also \code{\link[SurfaceMesh]{boolIntersection}} and
+#'   \code{\link[SurfaceMesh]{boolUnion}} for other Boolean mesh operations.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' # mesh one: a cube
+#' mesh1_rgl <- cube3d() # (from the rgl package)
+#'
+#' # mesh two: another cube
+#' mesh2_rgl <- translate3d(cube3d(), 1, 1, 0)
+#'
+#' # compute the difference
+#' mesh_d <- boolDifference(mesh1_rgl, mesh2_rgl)
+#'
+#' # plot
+#' mesh_d_rgl <- toRGL(mesh_d)
+#' open3d(windowRect=c(50, 50, 562, 562))
+#' shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
+#' shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
+#' shade3d(mesh_d_rgl, color="red")
+#' plotEdges(vertices         =mesh_d[["vertices"]],
+#'           edges            =mesh_d[["exteriorEdges"]],
+#'           edgesAsTubes     =TRUE,
+#'           verticesAsSpheres=TRUE)
+#'
+#' @export
+boolDifference <- function(
+  mesh1, mesh2, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
+  stopifnot(is.list(mesh1), is.list(mesh2))
+  stopifnot(isBoolean(repairSoup))
+  stopifnot(isBoolean(normals))
+  stopifnot(isBoolean(verbose))
+
+  if(inherits(mesh1, "mesh3d")) {
+    vft   <- getVFT(mesh1, beforeCheck = TRUE)
+    mesh1 <- vft[["rmesh"]]
+  }
+  checkMesh1 <- checkMesh(mesh1[["vertices"]], mesh1[["faces"]], aslist = TRUE)
+
+  if(inherits(mesh2, "mesh3d")) {
+    vft   <- getVFT(mesh2, beforeCheck = TRUE)
+    mesh2 <- vft[["rmesh"]]
+  }
+  checkMesh2 <- checkMesh(mesh2[["vertices"]], mesh2[["faces"]], aslist = TRUE)
+
+  mesh1  <- checkMesh1[c("vertices", "faces")]
+  mesh2  <- checkMesh2[c("vertices", "faces")]
+  differ <- boolDifferenceEK_cpp(
+    mesh1, mesh2, repairSoup, normals, verbose)
+  fromCPP(differ)
+}
+
+#' @title Union of meshes
+#' @description Compute the union of the given meshes.
+#'
+#' @param x A list of meshes, each being either a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param repairSoup Boolean. Whether to clean the meshes (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices).
+#'   Set to \code{FALSE} if you know the meshes are clean, to
+#'   gain some speed.
+#' @param normals Boolean. Whether to return the vertex normals of the
+#'   output mesh.
+#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @returns A \code{CGALmesh} object.
+#' @details See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
+#' @seealso See also \code{\link[SurfaceMesh]{boolIntersection}} and
+#'   \code{\link[SurfaceMesh]{boolDifference}} for other Boolean mesh operations.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' # mesh one: a cube
+#' mesh1_rgl <- cube3d() # (from the rgl package)
+#'
+#' # mesh two: another cube
+#' mesh2_rgl <- translate3d(cube3d(), 1, 1, 1)
+#'
+#' # compute the union
+#' mesh_u <- boolUnion(list(mesh1_rgl, mesh2_rgl))
+#'
+#' # plot
+#' mesh_u_rgl <- toRGL(mesh_u)
+#' open3d(windowRect=c(50, 50, 562, 562))
+#' shade3d(mesh_u_rgl, color="red")
+#' plotEdges(vertices         =mesh_u[["vertices"]],
+#'           edges            =mesh_u[["exteriorEdges"]],
+#'           edgesAsTubes     =TRUE,
+#'           verticesAsSpheres=TRUE)
+#'
+#' @export
+boolUnion <- function(x, repairSoup = TRUE, normals = FALSE, verbose = FALSE) {
+  stopifnot(is.list(x))
+  stopifnot(length(x) >= 2L)
+  stopifnot(isBoolean(repairSoup))
+  stopifnot(isBoolean(normals))
+  stopifnot(isBoolean(verbose))
+
+  checkMeshes <- lapply(x, function(mesh) {
+    if(inherits(mesh, "mesh3d")) {
+      vft  <- getVFT(mesh, beforeCheck = TRUE)
+      mesh <- vft[["rmesh"]]
+    }
+    checkMesh(mesh[["vertices"]], mesh[["faces"]], aslist = TRUE)
+  })
+
+  meshes <- lapply(checkMeshes, `[`, c("vertices", "faces"))
+  umesh  <- boolUnionEK_cpp(meshes, repairSoup, normals, verbose)
+  fromCPP(umesh)
+}
+
+#' @title Jaccard Similarity Coefficient and Dice Similarity Coefficient
+#' @description Compute the Jaccard Similarity Coefficient (JSC, also known as
+#'   Intersection over Union, IoU) and the Dice Similarity Coefficient (DSC)
+#'   for the respective volumes defined by two 3D surface meshes.
+#' @param mesh1 Either a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param mesh2 Either a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param repairSoup Boolean. Whether to clean the meshes (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices).
+#'   Set to \code{FALSE} if you know the meshes are clean, to
+#'   gain some speed.
+#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @returns A \code{list} with five components: \code{"Vol1"}, \code{"Vol2"},
+#'   \code{"VolI"}, \code{"VolU"}, \code{"JSC"} (IoU) and \code{"DSC"}.
+#' @details See \url{https://metrics-reloaded.dkfz.de/metric-library/dsc} and
+#'   \url{https://metrics-reloaded.dkfz.de/metric-library/intersection_over_union}
+#'   for details.
+#' @seealso See also \code{\link[SurfaceMesh]{boolUnion}},
+#'   \code{\link[SurfaceMesh]{boolIntersection}}, and
+#'   \code{\link[SurfaceMesh]{boolDifference}} for Boolean mesh operations.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
+#' # mesh one: a cube
+#' mesh1_rgl <- cube3d() # (from the rgl package)
+#'
+#' # mesh two: another cube
+#' mesh2_rgl <- translate3d(cube3d(), 1, 1, 1)
+#'
+#' # compute JSC, DSC
+#' getJSCDSC(list(mesh1_rgl, mesh2_rgl))
+#'
+#' @export
+getJSCDSC <- function(mesh1, mesh2, repairSoup = TRUE, verbose = FALSE) {
+  stopifnot(isBoolean(repairSoup))
+  stopifnot(isBoolean(verbose))
+  x <- list(mesh1, mesh2)
+  checkMeshes <- lapply(x, function(mesh) {
+    if(inherits(mesh, "mesh3d")) {
+      vft  <- getVFT(mesh, beforeCheck = TRUE)
+      mesh <- vft[["rmesh"]]
+    }
+    checkMesh(mesh[["vertices"]], mesh[["faces"]], aslist = TRUE)
+  })
+
+  meshes <- lapply(checkMeshes, `[`, c("vertices", "faces"))
+  getJSCDSC_cpp(meshes, repairSoup, verbose)
+}

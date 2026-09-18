@@ -1,0 +1,3 @@
+This package adapts code from R packages cgalMeshes, Boov, and PolygonSoup authored by Stephane Laurent that were previously archived from CRAN. As explained in a post to r-package-devel (https://stat.ethz.ch/pipermail/r-package-devel/2026q3/012462.html), several attempts to contact him via Email and GitHub issues were unsuccessful. An "in memoriam" badge on his LinkedIn site (https://www.linkedin.com/in/stephane-laurent-5105193/) indicates that he may be deceased.
+
+The adapted packages were licensed under GPL-3. Source files, help files, and the DESCRIPTION of this package list Stephane Laurent as the original author of relevant portions of the code.

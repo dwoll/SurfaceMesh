@@ -1,0 +1,39 @@
+Type: Package
+Package: SurfaceMesh
+Title: Utility Functions for 3D Surface Meshes Based on 'CGAL'
+Version: 0.0.1
+Authors@R:
+  c(person("Daniel", "Wollschlaeger", role=c("aut", "cre"), email="wollschlaeger@uni-mainz.de"),
+    person("Stephane", "Laurent", role=c("aut")))
+Maintainer: Daniel Wollschlaeger <wollschlaeger@uni-mainz.de>
+Description: Basic processing of 3D surface meshes based on the
+    'C++' library 'CGAL' <https://www.cgal.org/>.
+    Reads and writes common file formats for meshes and
+    polygon soups.
+    Supports mesh repair, remeshing, smoothing, subdivision,
+    Boolean operations, surface reconstruction, (optimal)
+    bounding box, convex hull as well as distance and
+    similarity metrics for two given meshes.
+    Adapts code from packages 'Boov', 'PolygonSoup',
+    and 'cgalMeshes' developed by Stephane Laurent.
+License: GPL-3
+URL: https://github.com/dwoll/SurfaceMesh/
+BugReports: https://github.com/dwoll/SurfaceMesh/issues/
+Depends:
+    R (>= 4.0.0)
+Imports:
+    Rcpp (>= 1.0.9),
+    rgl
+LinkingTo:
+    BH,
+    Rcpp,
+    RcppCGAL (>= 6.2.0),
+    RcppEigen
+Encoding: UTF-8
+LazyData: true
+SystemRequirements: C++17, gmp, mpfr
+SystemRequirementsNote: 'MPFR' (MP Floating-Point Reliable Library,
+        https://www.mpfr.org/) and 'GMP' (GNU Multiple Precision
+        library, https://gmplib.org/)
+Roxygen: list(markdown=TRUE)
+Config/roxygen2/version: 8.1.0

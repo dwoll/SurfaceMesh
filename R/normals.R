@@ -1,0 +1,76 @@
+## ----------------------------------------------------------------------- //
+## Code adapted from packages
+## https://github.com/stla/Boov/
+## https://github.com/stla/PolygonSoup/
+## https://github.com/stla/cgalMeshes/
+## developed and copyright by
+## Stéphane Laurent <laurent_step@outlook.fr>
+## adapted by
+## Daniel Wollschlaeger
+## License: GPL-3
+## ----------------------------------------------------------------------- //
+
+#' @title Normals for a point cloud
+#' @description Returns a function which computes normals for a
+#'   3D point cloud.
+#' @param x \code{integer}. Number of neighbors used to compute the normals.
+#' @param method One of \code{"pca"} to estimate the normal direction at
+#'   each point by linear least squares fitting of a plane over its nearest
+#'   neighbors, or \code{"jet"} to estimate the normal direction at each
+#'   point by fitting a jet surface over its nearest neighbors). See details.
+#' @returns A function which takes just one argument: a numeric matrix with
+#'   three columns, each row represents a point, and the function returns a
+#'   matrix of the same size as the input matrix, with each row giving one
+#'   unit normal for the point.
+#' @note The \code{getNormalsFun} function is intended to be used in the
+#'   \code{\link[SurfaceMesh]{reconstructPoisson}} function. If you want to use it for
+#'   another purpose, be careful because the function it returns does not
+#'   check the matrix it takes as argument.
+#' @details See \url{https://doc.cgal.org/latest/Point_set_processing_3/} for details.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#' mesh     <- dataHeart1
+#' mesh_rgl <- toRGL(mesh)
+#' fun      <- getNormalsFun(6)
+#' mesh_psr <- reconstructPoisson(mesh[["vertices"]],
+#'                                normalsFun=fun,
+#'                                smAngle=10,
+#'                                smRadius=1.5,
+#'                                smDistance=0.3)
+#'
+#' mesh_psr_rgl <- toRGL(mesh_psr)
+#'
+#' open3d(windowRect=50 + c(0, 0, 800, 400))
+#' mfrow3d(1, 2)
+#' wire3d(mesh_rgl)
+#' next3d()
+#' wire3d(mesh_psr_rgl)
+#'
+#' @export
+getNormalsFun <- function(x, method = c("PCA", "Jet")) {
+  method_choices <- c("pca", "jet")
+  method         <- match.arg(tolower(method), choices=method_choices)
+  methodInt      <- match(method, method_choices)
+  x <- as.integer(x)
+  if(x < 2L) {
+    stop("There must be at least two neighbors.", call. = TRUE)
+  }
+  fun <- function(points) {
+    if(!is.matrix(points) || !is.numeric(points)) {
+      stop("The `points` argument must be a numeric matrix.", call. = TRUE)
+    }
+    if(ncol(points) != 3L) {
+      stop("The `points` matrix must have three columns.", call. = TRUE)
+    }
+    if(nrow(points) <= 3L) {
+      stop("Insufficient number of points.", call. = TRUE)
+    }
+    storage.mode(points) <- "double"
+    jet_pca_normals_cpp(t(points), x, methodInt)
+  }
+  class(fun) <- "CGALnormalsFunc"
+  fun
+}
