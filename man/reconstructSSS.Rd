@@ -43,7 +43,8 @@ A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \str
 Reconstruction of a surface from a cloud of 3D points.
 }
 \details{
-See \href{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}{Scale-space Surface Reconstruction}.
+See \url{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}
+for details.
 }
 \examples{
 library(SurfaceMesh)

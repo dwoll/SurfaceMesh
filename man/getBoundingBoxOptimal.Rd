@@ -34,6 +34,10 @@ wire3d(mesh_rgl)
 wire3d(obb_rgl)
 
 }
+\seealso{
+See \code{\link[SurfaceMesh]{getBoundingBox}} for the axis-aligned bounding
+box and \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
+}
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 }

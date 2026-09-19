@@ -17,7 +17,7 @@ getBoundingBox(x, triangulate = FALSE, normals = FALSE)
 A \code{CGALmesh} object.
 }
 \description{
-Get axis-parallel bounding box
+Get the axis-parallel bounding box of a 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)
@@ -31,6 +31,10 @@ open3d(windowRect=50 + c(0, 0, 800, 400))
 wire3d(mesh_rgl)
 wire3d(bb_rgl)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for the optimal
+(oriented) bounding box and \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

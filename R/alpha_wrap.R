@@ -41,7 +41,6 @@
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' mesh            <- dataHeart1
 #' mesh_rgl        <- toRGL(mesh)
 #' mesh_alwrap     <- alphaWrap(mesh,

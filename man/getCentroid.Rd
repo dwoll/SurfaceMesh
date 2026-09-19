@@ -2,18 +2,19 @@
 % Please edit documentation in R/mesh.R
 \name{getCentroid}
 \alias{getCentroid}
-\title{Get mesh centroid}
+\title{Get mesh centroid (center of mass)}
 \usage{
 getCentroid(x)
 }
 \arguments{
-\item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}. The mesh must be triangle.}
+\item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+The mesh must be triangle or must be able to be made triangle.}
 }
 \value{
-\code{numeric} 3-vector with the coordinates of the mesh centroid.
+\code{numeric}. 3-vector with the coordinates of the mesh centroid.
 }
 \description{
-Get the centroid of a given 3D surface mesh.
+Get the centroid (center of mass) of a given 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)

@@ -5,13 +5,14 @@
 \alias{dataOloid}
 \title{A mesh of an oloid}
 \format{
-A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+A \code{CGALmesh} object.
 }
 \usage{
 dataOloid
 }
 \description{
-An object of class \code{CGALmesh} representing an oloid.
+A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}
+representing an oloid.
 }
 \author{
 Originally developed by Stephane Laurent.

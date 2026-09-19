@@ -36,7 +36,6 @@ See \url{https://doc.cgal.org/latest/Alpha_wrap_3/} for details.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 mesh            <- dataHeart1
 mesh_rgl        <- toRGL(mesh)
 mesh_alwrap     <- alphaWrap(mesh,
@@ -52,9 +51,10 @@ wire3d(mesh_alwrap_rgl)
 
 }
 \seealso{
-\code{\link[SurfaceMesh]{reconstructAFS}},
+See also \code{\link[SurfaceMesh]{reconstructAFS}},
 \code{\link[SurfaceMesh]{reconstructSSS}},
-\code{\link[SurfaceMesh]{reconstructPoisson}}
+\code{\link[SurfaceMesh]{reconstructPoisson}} for other surface Reconstruction
+methods.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

@@ -11,8 +11,8 @@ A list with components \code{vb}, \code{it}, and \code{normals}.
 dataSeptuaginta
 }
 \description{
-An object of class \code{mesh3d} from package \strong{rgl} representing
-a septuaginta, i.e. a polyhedron with 72 faces like a sphere based on the drawing by Leonardo da Vinci.
+An object of class \code{\link[rgl]{mesh3d}} representing a septuaginta,
+i.e. a polyhedron with 72 faces like a sphere based on the drawing by Leonardo da Vinci.
 }
 \author{
 Originally developed by Stephane Laurent.

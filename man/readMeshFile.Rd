@@ -42,6 +42,10 @@ view3d(0, 0, zoom=0.8)
 shade3d(mesh_rgl, color="palevioletred")
 
 }
+\seealso{
+See \code{\link[SurfaceMesh]{makeMesh}} and \code{\link[SurfaceMesh]{makeMeshValid}}
+for creating a \code{CGALmesh} object.
+}
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 }

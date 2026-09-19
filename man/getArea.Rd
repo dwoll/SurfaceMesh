@@ -10,7 +10,7 @@ getArea(x)
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 }
 \value{
-\code{numeric}: The mesh area.
+\code{numeric}. The mesh area.
 }
 \description{
 Get the surface area of a given 3D surface mesh.
@@ -20,6 +20,9 @@ library(SurfaceMesh)
 mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
 getArea(mesh)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{getVolume}} for the volume bounded by the mesh.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

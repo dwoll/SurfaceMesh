@@ -44,6 +44,11 @@ view3d(0, 0, zoom=0.9)
 wire3d(mesh_ds_rgl)
 
 }
+\seealso{
+See \code{\link[SurfaceMesh]{subdivideCatmullClark}} for Catmull-Clark subdivision,
+\code{\link[SurfaceMesh]{subdivideSqrt3}} for Sqrt3 subdivision, and
+\code{\link[SurfaceMesh]{subdivideLoop}} for loop subdivision.
+}
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 }

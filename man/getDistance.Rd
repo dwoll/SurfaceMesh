@@ -17,7 +17,8 @@ The mesh must be triangle or must be able to be made triangle.}
 to the mesh \code{x}.
 }
 \description{
-Get the Euclidean distance of points to a given 3D surface mesh.
+Calculate the Euclidean distance of a set of points to a
+given 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)

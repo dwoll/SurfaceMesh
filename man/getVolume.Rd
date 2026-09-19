@@ -10,7 +10,7 @@ getVolume(x)
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 }
 \value{
-\code{numeric}: The mesh volume - if mesh bounds a volume.
+\code{numeric}. The mesh volume - if mesh bounds a volume.
 }
 \description{
 Get the volume of a given 3D surface mesh.
@@ -20,6 +20,9 @@ library(SurfaceMesh)
 mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
 getVolume(mesh)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{getArea}} for the mesh area.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

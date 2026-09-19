@@ -128,8 +128,8 @@ getHausdorffQuantile <- function(mesh1, mesh2, symmetric = TRUE, p = 0.95, ...) 
 #'   If missing, the number of vertices is used.
 #' @param ptsPerDist \code{numeric}.
 #' @param ptsPerEdge \code{integer}.
-#' @param ptsPerArea \code{numberic}.
-#' @param ptsPerFace\code{integer}.
+#' @param ptsPerArea \code{numeric}.
+#' @param ptsPerFace \code{integer}.
 #' @returns A list with components \code{"HDq"} (quantile Hausdorff distance),
 #'   \code{"ASSD"} (average symmetric surface distance),
 #'   \code{"RMSE"} (root mean squared error).
@@ -171,17 +171,17 @@ getSurfaceDist <- function(mesh1,
   stopifnot(isBoolean(returnDists))
   stopifnot(isBoolean(symmetric))
   stopifnot(is.numeric(p), length(p) == 1L, p > 0, p < 1)
-  sampleOptL <- checkSampleOpts(list(method,
-                                     sampleVerts,
-                                     sampleEdges,
-                                     sampleFaces,
-                                     gridSpacing,
-                                     ptsOnEdges,
-                                     ptsOnFaces,
-                                     ptsPerDist,
-                                     ptsPerEdge,
-                                     ptsPerArea,
-                                     ptsPerFace))
+  sampleOptL <- checkSampleOpts(list(method     =method,
+                                     sampleVerts=sampleVerts,
+                                     sampleEdges=sampleEdges,
+                                     sampleFaces=sampleFaces,
+                                     gridSpacing=gridSpacing,
+                                     ptsOnEdges =ptsOnEdges,
+                                     ptsOnFaces =ptsOnFaces,
+                                     ptsPerDist =ptsPerDist,
+                                     ptsPerEdge =ptsPerEdge,
+                                     ptsPerArea =ptsPerArea,
+                                     ptsPerFace =ptsPerFace))
   meshCPP1 <- fromR(mesh1)
   meshCPP2 <- fromR(mesh2)
   getSurfaceDist_cpp(meshCPP1,

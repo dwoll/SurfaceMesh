@@ -45,7 +45,9 @@ getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE,
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getHausdorffQuantile}} for the quantile Hausdorff distance.
+See \code{\link[SurfaceMesh]{getHausdorffQuantile}} for the quantile Hausdorff distance,
+\code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics, and
+\code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

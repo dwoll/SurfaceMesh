@@ -31,7 +31,7 @@ or \code{triangulate_and_refine_hole()} (\code{FALSE})?}
 Fill boundary holes.
 }
 \details{
-See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/}.
+See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} for details.
 If faces are not already triangle, the mesh is first triangulated.
 }
 \examples{
@@ -39,6 +39,10 @@ library(SurfaceMesh)
 mesh      <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_fill <- fillBoundaryHoles(mesh)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{removeSelfIntersections}} for removing
+self-intersections.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

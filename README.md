@@ -11,7 +11,9 @@
       * Union
       * Dfference
       * Intersection
-  * Isotropic remeshing
+  * Remeshing
+      * Isotropic
+      * Triangulated surface mesh simplification 
   * Smoothing
   * Subdivision
       * Catmull-Clark
@@ -52,11 +54,11 @@ See package [`Rmpfr`](https://cran.r-project.org/package=Rmpfr) for a note on ho
 
 ## Implementation
 
-This package includes code adapted from packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/).  Currently, only a subset of the functionality of these packages is provided in `SurfaceMesh`.
+This package includes code adapted from packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Currently, only a subset of the functionality of these packages is provided in `SurfaceMesh`.
 
 A fork / adaptation of packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) was carried out as upstream changes to CGAL introduced incompatibilities, and the packages were archived from [CRAN](https://cran.r-project.org/).
 
-The design was chosen such that mesh data resides in R space. This means that for each mesh operation, data is first transferred to the C++ side (using `Rcpp`), converted to a CGAL surface mesh, subjected to CGAL functions, and then transferred back to R. The package does not maintain a pointer to a C++ data structure to keep the mesh data there - unlike packages such as [`terra`](https://cran.r-project.org/package=terra) or [`cgalMeshes`](https://github.com/stla/cgalMeshes/). This approach carries a performance penalty, but from an R perspective, it is more straightforward. In particular, there are no serialization issues (saving meshes). Furthermore, memory management is easier.
+The design was chosen such that mesh data resides in R space. This means that for each mesh operation, data is first transferred to the C++ side (using `Rcpp`), converted to a CGAL surface mesh, processed with CGAL functions, and then transferred back to R. The package does not maintain a pointer to a C++ data structure to keep the mesh data there - unlike packages such as [`terra`](https://cran.r-project.org/package=terra) or [`cgalMeshes`](https://github.com/stla/cgalMeshes/). This approach carries a performance penalty, but from an R perspective, it is more straightforward. In particular, there are no serialization issues (saving meshes). Furthermore, memory management is easier.
 
 ## License
 

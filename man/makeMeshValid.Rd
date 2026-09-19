@@ -20,9 +20,10 @@ coordinates of the vertices of the mesh. 2) Either a list containing the compone
 \code{\link[rgl]{mesh3d}} object). 3) A filename to read a
 mesh file as in \code{\link[SurfaceMesh]{readMeshFile}}.}
 
-\item{faces}{Either an integer matrix (each row provides the vertex indices
-of the corresponding face) or a list of integer vectors, each one
-providing the vertex indices of the corresponding face.}
+\item{faces}{When \code{x} is a numeric matrix with the vertices: Either an integer
+matrix (each row provides the vertex indices of the corresponding face) or a
+list of integer vectors, each one providing the vertex indices of the
+corresponding face.}
 
 \item{soup}{Boolean. Whether to assume a polygon soup. If \code{FALSE}, assume
 correctly oriented faces - which is a bit faster.}
@@ -36,7 +37,7 @@ are already triangle.}
 }
 \value{
 A list of class \code{CGALmesh} giving the vertices, the edges, the faces
-of the mesh, the exterior edges, the exterior vertices and optionally the normals.
+of the mesh, the exterior edges, the exterior vertices, and optionally the normals.
 }
 \description{
 Make a 3D surface mesh from an input file,
@@ -44,12 +45,11 @@ from an existing \strong{rgl} mesh object, or
 from given vertices and faces - assuming that the input defines a valid mesh.
 Omitted validity checks save some processing time.
 The returned faces are coherently oriented (if possible),
-normals are computed if requested, triangulation is performed if requested
+normals are computed if requested, triangulation is performed if requested.
 }
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 ## mesh from file
 f_mesh    <- system.file("extdata", "corner.off", package="SurfaceMesh")
 mesh1     <- makeMeshValid(f_mesh, soup=TRUE, triangulate=TRUE)
@@ -68,10 +68,10 @@ wire3d(mesh2_rgl)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{plotEdges}} for more details about the edges
+See \code{\link[SurfaceMesh]{plotEdges}} for details about the edges
 returned by this function.
 See \code{\link[SurfaceMesh]{makeMesh}} for a similar function that does not assume
-that the input defines a valid mesh, and performs mesh repair.
+that the input defines a valid mesh, and may perform mesh repair.
 See \code{\link[SurfaceMesh]{toRGL}} for conversion to class
 \code{\link[rgl]{mesh3d}} from package \strong{rgl}.
 }

@@ -28,7 +28,7 @@ removeSelfIntersections(
 Remove self intersections.
 }
 \details{
-See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/}.
+See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} for details.
 If faces are not triangle, the mesh is triangulated.
 }
 \examples{
@@ -37,6 +37,10 @@ mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_nsi <- removeSelfIntersections(mesh)
 getVolume(mesh_nsi)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{fillBoundaryHoles}} for filling
+boundary holes.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

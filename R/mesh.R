@@ -57,7 +57,6 @@
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' ## make mesh based on file
 #' f_mesh    <- system.file("extdata", "dataHeart3.ply", package="SurfaceMesh")
 #' mesh1     <- makeMesh(f_mesh, verbose=TRUE)
@@ -196,7 +195,6 @@ makeMesh <- function(x,
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' ## mesh from file
 #' f_mesh    <- system.file("extdata", "corner.off", package="SurfaceMesh")
 #' mesh1     <- makeMeshValid(f_mesh, soup=TRUE, triangulate=TRUE)
@@ -469,6 +467,9 @@ getCentroid <- function(x) {
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#'
 #' mesh     <- makeMesh(dataHopfTorus)
 #' mesh_rgl <- toRGL(mesh)
 #' hull     <- getConvexHull(mesh[["vertices"]])
@@ -745,7 +746,6 @@ orientToBoundVolume <- function(x, normals = FALSE) {
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' # triangulate and plot the pentagrammic prism mesh
 #' mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
 #' mesh_rgl <- toRGL(mesh)
@@ -830,7 +830,9 @@ print.CGALmesh <- function(x, ...) {
 #'   number of points to pick on the surface.
 #'   If missing, the number of vertices is used.
 #' @param ptsPerDist \code{numeric}.
-#' @param ptsPerArea \code{numberic}.
+#' @param ptsPerEdge \code{integer}.
+#' @param ptsPerArea \code{numeric}.
+#' @param ptsPerFace \code{integer}.
 #' @return A \code{n x 3} numeric matrix containing the sampled vertices.
 #' @details For details on sampling options, see
 #'   \url{https://doc.cgal.org/latest/Polygon_mesh_processing/group__PMP__distance__grp.html}.
@@ -855,17 +857,17 @@ samplePoints <- function(x,
                          ptsPerArea  = NULL,
                          ptsPerFace  = NULL) {
   stopifnot(inherits(x, "CGALmesh"))
-  sampleOptL <- checkSampleOpts(list(method,
-                                     sampleVerts,
-                                     sampleEdges,
-                                     sampleFaces,
-                                     gridSpacing,
-                                     ptsOnEdges,
-                                     ptsOnFaces,
-                                     ptsPerDist,
-                                     ptsPerEdge,
-                                     ptsPerArea,
-                                     ptsPerFace))
+  sampleOptL <- checkSampleOpts(list(method     =method,
+                                     sampleVerts=sampleVerts,
+                                     sampleEdges=sampleEdges,
+                                     sampleFaces=sampleFaces,
+                                     gridSpacing=gridSpacing,
+                                     ptsOnEdges =ptsOnEdges,
+                                     ptsOnFaces =ptsOnFaces,
+                                     ptsPerDist =ptsPerDist,
+                                     ptsPerEdge =ptsPerEdge,
+                                     ptsPerArea =ptsPerArea,
+                                     ptsPerFace =ptsPerFace))
   meshCPP <- fromR(x)
   ## output matrix already transposed in samplePoints_cpp()
   samplePoints_cpp(meshCPP, sampleOptL)

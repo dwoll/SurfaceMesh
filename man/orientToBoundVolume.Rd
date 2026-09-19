@@ -15,7 +15,7 @@ orientToBoundVolume(x, normals = FALSE)
 A \code{CGALmesh} object.
 }
 \description{
-Orient a given 3D surface mesh to bound a volume
+Orient a given 3D surface mesh to bound a volume.
 }
 \examples{
 library(SurfaceMesh)
@@ -23,6 +23,11 @@ mesh   <- makeMesh(dataPentaPrism)
 mesh_o <- orientToBoundVolume(mesh)
 getVolume(mesh_o)
 
+}
+\seealso{
+\code{\link[SurfaceMesh]{doesBoundVolume}} to check if mesh
+bounds a volume and \code{\link[SurfaceMesh]{getVolume}} to get the
+volume bounded by the mesh.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

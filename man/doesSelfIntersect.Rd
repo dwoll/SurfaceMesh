@@ -22,6 +22,9 @@ doesSelfIntersect(mesh)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{removeSelfIntersections}} for a function to
-remove self-intersections.
+See \code{\link[SurfaceMesh]{removeSelfIntersections}} for removing
+self-intersections.
+}
+\author{
+Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 }

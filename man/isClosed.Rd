@@ -13,7 +13,7 @@ isClosed(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Is the given 3D surface mesh closed?
+Check if the given 3D surface mesh is closed.
 }
 \examples{
 library(SurfaceMesh)

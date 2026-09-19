@@ -27,7 +27,8 @@ A \code{CGALmesh} object.
 Reconstruction of a surface mesh from a cloud of 3D points.
 }
 \details{
-See \href{https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/}{Advancing Front Surface Reconstruction}.
+See \url{https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/}
+for details.
 }
 \examples{
 library(SurfaceMesh)

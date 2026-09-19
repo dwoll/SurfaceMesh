@@ -33,9 +33,9 @@ outlying regions than the full Hausdorff distance.
 }
 \details{
 See \url{https://metrics-reloaded.dkfz.de/metric-library/xhd} for details.
-Note: This function under the hood simply calls
-\code{\link[SurfaceMesh]{getSurfaceDist}} and extracts the quantile Hausdorff distance.
-See there for details on the sampling process.
+Note: This function is just a wrapper for
+\code{\link[SurfaceMesh]{getSurfaceDist}}, and extracts the quantile Hausdorff distance.
+See there for sampling options.
 }
 \examples{
 library(SurfaceMesh)
@@ -44,8 +44,10 @@ getHausdorffQuantile(dataHeart1, dataHeart2, p=0.95)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance.
-See \code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics.
+See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance,
+\code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics, and
+\code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
+(JSC, DSC).
 }
 \author{
 Daniel Wollschlaeger.

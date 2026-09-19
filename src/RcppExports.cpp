@@ -524,9 +524,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// remeshIsotropicUniform_cpp
-Rcpp::List remeshIsotropicUniform_cpp(const Rcpp::List rmesh, const double targetEdgeLen, const unsigned int nIter, const unsigned int nRelaxSteps, const bool protectConstraints, const bool normals);
-RcppExport SEXP _SurfaceMesh_remeshIsotropicUniform_cpp(SEXP rmeshSEXP, SEXP targetEdgeLenSEXP, SEXP nIterSEXP, SEXP nRelaxStepsSEXP, SEXP protectConstraintsSEXP, SEXP normalsSEXP) {
+// remeshIsoUniform_cpp
+Rcpp::List remeshIsoUniform_cpp(const Rcpp::List rmesh, const double targetEdgeLen, const unsigned int nIter, const unsigned int nRelaxSteps, const bool protectConstraints, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshIsoUniform_cpp(SEXP rmeshSEXP, SEXP targetEdgeLenSEXP, SEXP nIterSEXP, SEXP nRelaxStepsSEXP, SEXP protectConstraintsSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -536,13 +536,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const unsigned int >::type nRelaxSteps(nRelaxStepsSEXP);
     Rcpp::traits::input_parameter< const bool >::type protectConstraints(protectConstraintsSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(remeshIsotropicUniform_cpp(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals));
+    rcpp_result_gen = Rcpp::wrap(remeshIsoUniform_cpp(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals));
     return rcpp_result_gen;
 END_RCPP
 }
-// remeshIsotropicAdapt_cpp
-Rcpp::List remeshIsotropicAdapt_cpp(const Rcpp::List rmesh, const double tol, const double edgeMin, const double edgeMax, const unsigned int nIter, const unsigned int nRelaxSteps, const bool normals);
-RcppExport SEXP _SurfaceMesh_remeshIsotropicAdapt_cpp(SEXP rmeshSEXP, SEXP tolSEXP, SEXP edgeMinSEXP, SEXP edgeMaxSEXP, SEXP nIterSEXP, SEXP nRelaxStepsSEXP, SEXP normalsSEXP) {
+// remeshIsoAdapt_cpp
+Rcpp::List remeshIsoAdapt_cpp(const Rcpp::List rmesh, const double tol, const double edgeMin, const double edgeMax, const unsigned int nIter, const unsigned int nRelaxSteps, const bool protectConstraints, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshIsoAdapt_cpp(SEXP rmeshSEXP, SEXP tolSEXP, SEXP edgeMinSEXP, SEXP edgeMaxSEXP, SEXP nIterSEXP, SEXP nRelaxStepsSEXP, SEXP protectConstraintsSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -552,8 +552,44 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type edgeMax(edgeMaxSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type nIter(nIterSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type nRelaxSteps(nRelaxStepsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type protectConstraints(protectConstraintsSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(remeshIsotropicAdapt_cpp(rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, normals));
+    rcpp_result_gen = Rcpp::wrap(remeshIsoAdapt_cpp(rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, normals));
+    return rcpp_result_gen;
+END_RCPP
+}
+// simplifyLT_cpp
+Rcpp::List simplifyLT_cpp(const Rcpp::List rmesh, const bool repairSoup, const bool repairMesh, const Rcpp::String method, const double ueRatio, const unsigned int ueCount, const bool normals, const bool verbose);
+RcppExport SEXP _SurfaceMesh_simplifyLT_cpp(SEXP rmeshSEXP, SEXP repairSoupSEXP, SEXP repairMeshSEXP, SEXP methodSEXP, SEXP ueRatioSEXP, SEXP ueCountSEXP, SEXP normalsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const bool >::type repairSoup(repairSoupSEXP);
+    Rcpp::traits::input_parameter< const bool >::type repairMesh(repairMeshSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< const double >::type ueRatio(ueRatioSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type ueCount(ueCountSEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(simplifyLT_cpp(rmesh, repairSoup, repairMesh, method, ueRatio, ueCount, normals, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// simplifyGH_cpp
+Rcpp::List simplifyGH_cpp(const Rcpp::List rmesh, const bool repairSoup, const bool repairMesh, const double ueRatio, const Rcpp::String policy, const bool normals, const bool verbose);
+RcppExport SEXP _SurfaceMesh_simplifyGH_cpp(SEXP rmeshSEXP, SEXP repairSoupSEXP, SEXP repairMeshSEXP, SEXP ueRatioSEXP, SEXP policySEXP, SEXP normalsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const bool >::type repairSoup(repairSoupSEXP);
+    Rcpp::traits::input_parameter< const bool >::type repairMesh(repairMeshSEXP);
+    Rcpp::traits::input_parameter< const double >::type ueRatio(ueRatioSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String >::type policy(policySEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(simplifyGH_cpp(rmesh, repairSoup, repairMesh, ueRatio, policy, normals, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -665,8 +701,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_reconstructAFS_cpp", (DL_FUNC) &_SurfaceMesh_reconstructAFS_cpp, 4},
     {"_SurfaceMesh_reconstructPoisson_cpp", (DL_FUNC) &_SurfaceMesh_reconstructPoisson_cpp, 7},
     {"_SurfaceMesh_reconstructSSS_cpp", (DL_FUNC) &_SurfaceMesh_reconstructSSS_cpp, 9},
-    {"_SurfaceMesh_remeshIsotropicUniform_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsotropicUniform_cpp, 6},
-    {"_SurfaceMesh_remeshIsotropicAdapt_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsotropicAdapt_cpp, 7},
+    {"_SurfaceMesh_remeshIsoUniform_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsoUniform_cpp, 6},
+    {"_SurfaceMesh_remeshIsoAdapt_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsoAdapt_cpp, 8},
+    {"_SurfaceMesh_simplifyLT_cpp", (DL_FUNC) &_SurfaceMesh_simplifyLT_cpp, 8},
+    {"_SurfaceMesh_simplifyGH_cpp", (DL_FUNC) &_SurfaceMesh_simplifyGH_cpp, 7},
     {"_SurfaceMesh_smoothShape_cpp", (DL_FUNC) &_SurfaceMesh_smoothShape_cpp, 5},
     {"_SurfaceMesh_subdivideCatmullClark_cpp", (DL_FUNC) &_SurfaceMesh_subdivideCatmullClark_cpp, 3},
     {"_SurfaceMesh_subdivideDooSabin_cpp", (DL_FUNC) &_SurfaceMesh_subdivideDooSabin_cpp, 4},

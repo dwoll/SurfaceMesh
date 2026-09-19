@@ -153,12 +153,20 @@ reconstructSSS_cpp <- function(pts, scaleIterations, nNeighbors, nSamples, separ
     .Call(`_SurfaceMesh_reconstructSSS_cpp`, pts, scaleIterations, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals)
 }
 
-remeshIsotropicUniform_cpp <- function(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals) {
-    .Call(`_SurfaceMesh_remeshIsotropicUniform_cpp`, rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals)
+remeshIsoUniform_cpp <- function(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals) {
+    .Call(`_SurfaceMesh_remeshIsoUniform_cpp`, rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals)
 }
 
-remeshIsotropicAdapt_cpp <- function(rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, normals) {
-    .Call(`_SurfaceMesh_remeshIsotropicAdapt_cpp`, rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, normals)
+remeshIsoAdapt_cpp <- function(rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, normals) {
+    .Call(`_SurfaceMesh_remeshIsoAdapt_cpp`, rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, normals)
+}
+
+simplifyLT_cpp <- function(rmesh, repairSoup, repairMesh, method, ueRatio, ueCount, normals, verbose) {
+    .Call(`_SurfaceMesh_simplifyLT_cpp`, rmesh, repairSoup, repairMesh, method, ueRatio, ueCount, normals, verbose)
+}
+
+simplifyGH_cpp <- function(rmesh, repairSoup, repairMesh, ueRatio, policy, normals, verbose) {
+    .Call(`_SurfaceMesh_simplifyGH_cpp`, rmesh, repairSoup, repairMesh, ueRatio, policy, normals, verbose)
 }
 
 smoothShape_cpp <- function(rmesh, indices, nIter, time, normals) {
@@ -180,3 +188,4 @@ subdivideSqrt3_cpp <- function(rmesh, nIter, normals) {
 subdivideLoop_cpp <- function(rmesh, nIter, normals) {
     .Call(`_SurfaceMesh_subdivideLoop_cpp`, rmesh, nIter, normals)
 }
+

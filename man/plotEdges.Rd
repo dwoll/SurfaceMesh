@@ -33,8 +33,8 @@ vertex indices.}
 
 \item{verticesAsSpheres}{Boolean. Whether to draw the vertices as spheres.}
 
-\item{only}{\code{integer} vector made of the indices of the vertices you want
-to plot (as spheres). If missing, all vertices are plotted as spheres.}
+\item{only}{\code{integer} vector with the indices of the vertices
+to plot as spheres. If missing, all vertices are plotted as spheres.}
 
 \item{spheresRadius}{The radius of the spheres when
 \code{verticesAsSpheres=TRUE}.}
@@ -51,7 +51,6 @@ Plot the given edges with functions from package \strong{rgl}.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 # triangulate and plot the pentagrammic prism mesh
 mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl <- toRGL(mesh)

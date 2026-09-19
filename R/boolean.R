@@ -32,7 +32,6 @@
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' # mesh one: truncated icosahedron; we triangulate it
 #' mesh1 <- makeMesh(dataTruncIcosahedron,
 #'                   triangulate=TRUE,
@@ -103,7 +102,6 @@ boolIntersection <- function(x, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' # mesh one: a cube
 #' mesh1_rgl <- cube3d() # (from the rgl package)
 #'
@@ -173,7 +171,6 @@ boolDifference <- function(
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' # mesh one: a cube
 #' mesh1_rgl <- cube3d() # (from the rgl package)
 #'
@@ -241,7 +238,6 @@ boolUnion <- function(x, repairSoup = TRUE, normals = FALSE, verbose = FALSE) {
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
 #' # mesh one: a cube
 #' mesh1_rgl <- cube3d() # (from the rgl package)
 #'
@@ -249,7 +245,7 @@ boolUnion <- function(x, repairSoup = TRUE, normals = FALSE, verbose = FALSE) {
 #' mesh2_rgl <- translate3d(cube3d(), 1, 1, 1)
 #'
 #' # compute JSC, DSC
-#' getJSCDSC(list(mesh1_rgl, mesh2_rgl))
+#' getJSCDSC(mesh1_rgl, mesh2_rgl)
 #'
 #' @export
 getJSCDSC <- function(mesh1, mesh2, repairSoup = TRUE, verbose = FALSE) {

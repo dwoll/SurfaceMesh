@@ -13,13 +13,16 @@ hasGarbage(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Does the given 3D surface mesh have garbage?
+Check if the given 3D surface mesh has garbage.
 }
 \examples{
 library(SurfaceMesh)
 mesh <- makeMesh(dataPentaPrism)
 hasGarbage(mesh)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{isValid}} for checking if the mesh is valid.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

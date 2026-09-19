@@ -21,6 +21,11 @@ mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
 doesBoundVolume(mesh)
 
 }
+\seealso{
+See \code{\link[SurfaceMesh]{orientToBoundVolume}} for orienting the mesh to
+bound a volume, and \code{\link[SurfaceMesh]{getVolume}} for the volume bounded by
+the mesh.
+}
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 }

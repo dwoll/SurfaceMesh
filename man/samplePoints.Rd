@@ -4,45 +4,61 @@
 \alias{samplePoints}
 \title{Sample vertices on mesh}
 \usage{
-samplePoints(x,
-             method = c("random", "grid", "mc"),
-             sampleVerts = TRUE,
-             sampleEdges = TRUE,
-             sampleFaces = TRUE,
-             gridSpacing = NULL,
-             ptsOnEdges = NULL,
-             ptsOnFaces = NULL,
-             ptsPerDist = NULL,
-             ptsPerEdge = NULL,
-             ptsPerArea = NULL,
-             ptsPerFace = NULL)
+samplePoints(
+  x,
+  method = c("random", "grid", "mc"),
+  sampleVerts = TRUE,
+  sampleEdges = TRUE,
+  sampleFaces = TRUE,
+  gridSpacing = NULL,
+  ptsOnEdges = NULL,
+  ptsOnFaces = NULL,
+  ptsPerDist = NULL,
+  ptsPerEdge = NULL,
+  ptsPerArea = NULL,
+  ptsPerFace = NULL
+)
 }
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
+
 \item{method}{\code{character}. \code{"random"} for random uniform sampling,
-    \code{"grid"} for grid sampling, \code{"mc"} for Monte Carlo sampling.
-    See details.}
+\code{"grid"} for grid sampling, \code{"mc"} for Monte Carlo sampling.
+See details.}
 
 \item{sampleVerts}{Boolean. Do sample vertices?}
+
 \item{sampleEdges}{Boolean. Do sample edges?}
+
 \item{sampleFaces}{Boolean. Do sample faces?}
+
 \item{gridSpacing}{\code{numeric}.}
+
 \item{ptsOnEdges}{\code{integer}. For the random sampling method as the
-  number of points to pick exclusively on edges.
-  If missing, the number of edges is used.}
+number of points to pick exclusively on edges.
+If missing, the number of edges is used.}
+
 \item{ptsOnFaces}{\code{integer}. For the random sampling method as the
-  number of points to pick on the surface.
-  If missing, the number of vertices is used.}
+number of points to pick on the surface.
+If missing, the number of vertices is used.}
+
 \item{ptsPerDist}{\code{numeric}.}
-\item{ptsPerEdge}{\code{numeric}.}
+
+\item{ptsPerEdge}{\code{integer}.}
+
 \item{ptsPerArea}{\code{numeric}.}
-\item{ptsPerFace}{\code{numeric}.}
+
+\item{ptsPerFace}{\code{integer}.}
 }
 \value{
 A \code{n x 3} numeric matrix containing the sampled vertices.
 }
 \description{
-Random sampling of vertices on a given triangle 3D surface mesh.
+Random sampling of vertices on a given 3D triangle surface mesh.
+}
+\details{
+For details on sampling options, see
+\url{https://doc.cgal.org/latest/Polygon_mesh_processing/group__PMP__distance__grp.html}.
 }
 \examples{
 library(SurfaceMesh)

@@ -39,7 +39,6 @@ for details.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 # mesh one: a cube
 mesh1_rgl <- cube3d() # (from the rgl package)
 
@@ -49,6 +48,11 @@ mesh2_rgl <- translate3d(cube3d(), 1, 1, 1)
 # compute JSC, DSC
 getJSCDSC(mesh1_rgl, mesh2_rgl)
 
+}
+\seealso{
+See also \code{\link[SurfaceMesh]{boolUnion}},
+\code{\link[SurfaceMesh]{boolIntersection}}, and
+\code{\link[SurfaceMesh]{boolDifference}} for Boolean mesh operations.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

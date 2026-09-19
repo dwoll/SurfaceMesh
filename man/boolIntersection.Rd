@@ -33,7 +33,6 @@ See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 # mesh one: truncated icosahedron; we triangulate it
 mesh1 <- makeMesh(dataTruncIcosahedron,
                   triangulate=TRUE,
@@ -61,6 +60,10 @@ plotEdges(vertices         =mesh_i[["vertices"]],
           lwd              =3,
           verticesAsSpheres=FALSE)
 
+}
+\seealso{
+See also \code{\link[SurfaceMesh]{boolUnion}} and
+\code{\link[SurfaceMesh]{boolDifference}} for other Boolean mesh operations.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

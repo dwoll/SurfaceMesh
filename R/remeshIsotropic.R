@@ -14,7 +14,9 @@
 #' @description Isotropic remeshing of a triangular 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param method \code{character}. Either \code{"uniform"} for uniform sizing field
-#'    or \code{"adaptive"} for adaptive sizing field.
+#'   (all triangle edges are targeted to have equal lengths)
+#'   or \code{"adaptive"} for adaptive sizing field
+#'   (triangle edge lengths depend on the local curvature).
 #' @param targetEdgeLen Positive number for \code{method="uniform"}:
 #'   The target edge length of the remeshed mesh.
 #' @param tol Positive number for \code{method="adaptive"}.
@@ -70,25 +72,24 @@ remeshIsotropic <- function(
     meshCPP <- fromR(x)
     meshRem <- if(method == "uniform") {
       stopifnot(isPositiveNumber(targetEdgeLen))
-      remeshIsotropicUniform_cpp(
-          meshCPP,
-          targetEdgeLen,
-          as.integer(nIter),
-          as.integer(nRelaxSteps),
-          normals)
+      remeshIsoUniform_cpp(meshCPP,
+                           targetEdgeLen,
+                           as.integer(nIter),
+                           as.integer(nRelaxSteps),
+                           protectConstraints,
+                           normals)
     } else if(method == "adaptive") {
       stopifnot(isPositiveNumber(tol))
       stopifnot(isPositiveNumber(edgeMin))
       stopifnot(isPositiveNumber(edgeMax))
-      remeshIsotropicAdapt_cpp(
-          meshCPP,
-          tol,
-          edgeMin,
-          edgeMax,
-          as.integer(nIter),
-          as.integer(nRelaxSteps),
-          protectConstraints,
-          normals)
+      remeshIsoAdapt_cpp(meshCPP,
+                         tol,
+                         edgeMin,
+                         edgeMax,
+                         as.integer(nIter),
+                         as.integer(nRelaxSteps),
+                         protectConstraints,
+                         normals)
     }
 
     fromCPP(meshRem)

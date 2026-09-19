@@ -13,13 +13,16 @@ isValid(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Is the given mesh a valid 3D surface mesh?
+Check if the given mesh is a valid 3D surface mesh.#'
 }
 \examples{
 library(SurfaceMesh)
 mesh <- makeMesh(dataPentaPrism)
 isValid(mesh)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{hasGarbage}} to check if mesh has garbage.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

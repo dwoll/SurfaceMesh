@@ -26,25 +26,27 @@ package \strong{rgl}. 3) A filename to read a
 mesh file as in \code{\link[SurfaceMesh]{readMeshFile}}.}
 
 \item{faces}{When \code{x} is a numeric matrix with the vertices: Either an integer
-matrix (each row provides the vertex indices
-of the corresponding face) or a list of integer vectors, each one
-providing the vertex indices of the corresponding face.}
+matrix (each row provides the vertex indices of the corresponding face) or a
+list of integer vectors, each one providing the vertex indices of the
+corresponding face.}
 
 \item{triangulate}{Boolean. Whether to triangulate the faces. Ignored if faces
 are already triangle.}
 
 \item{repairSoup}{Boolean. Whether to clean the mesh (merging duplicated
-vertices, duplicated faces, removing isolated vertices).}
+vertices and duplicated faces, removing isolated vertices).}
 
-\item{removeIntersections}{Boolean. Whether to attempt to remove self intersections.}
+\item{removeIntersections}{Boolean. Whether to attempt to remove self-intersections.}
 
-\item{removeMethod}{\code{character}. One of \code{"auto"} (for auto-refine)
+\item{removeMethod}{\code{character}. Method for removing self-intersections.
+One of \code{"auto"} (for auto-refine)
 and \code{"auto_snap"} (auto-refine with iterative snap).}
 
 \item{fillHoles}{Boolean. Whether to attempt to fill boundary holes.}
 
 \item{fairHole}{Boolean. Use CGAL \code{triangulate_refine_and_fair_hole()}
-(\code{TRUE}) or \code{triangulate_and_refine_hole()} (\code{FALSE})?}
+(\code{TRUE}) or \code{triangulate_and_refine_hole()} (\code{FALSE})
+when filling holes?}
 
 \item{maxNumHoles}{\code{integer}. Maximum number of holes to be filled. May be 0.}
 
@@ -54,7 +56,7 @@ and \code{"auto_snap"} (auto-refine with iterative snap).}
 }
 \value{
 A list of class \code{CGALmesh} giving the vertices, the edges, the faces
-of the mesh, the exterior edges, the exterior vertices and optionally the
+of the mesh, the exterior edges, the exterior vertices, and optionally the
 vertex normals.
 }
 \description{
@@ -68,7 +70,6 @@ triangulation is performed if requested.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 ## make mesh based on file
 f_mesh    <- system.file("extdata", "dataHeart3.ply", package="SurfaceMesh")
 mesh1     <- makeMesh(f_mesh, verbose=TRUE)
@@ -107,7 +108,7 @@ wire3d(mesh3_rgl)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{plotEdges}} for more details about the edges
+See \code{\link[SurfaceMesh]{plotEdges}} for details about the edges
 returned by this function.
 See \code{\link[SurfaceMesh]{makeMeshValid}} for a similar function that assumes
 that the input defines a valid mesh, and does not perform mesh repair to gain

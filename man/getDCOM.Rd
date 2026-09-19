@@ -16,7 +16,7 @@ The Euclidean distance between the two respective centers of mass.
 }
 \description{
 Calculates the Euclidean distance between the two
-respective centers of mass of two meshes
+respective centers of mass of two 3D surface meshes.
 }
 \examples{
 library(SurfaceMesh)
@@ -24,7 +24,7 @@ getDCOM(dataHeart1, dataHeart2)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getCentroid}} for calculating the centroid.
+See \code{\link[SurfaceMesh]{getCentroid}} for calculating the center of mass.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

@@ -312,52 +312,52 @@ checkSampleOpts <- function(x) {
   method_choices <- c("random", "grid", "mc")
   method         <- match.arg(x[["method"]], choices=method_choices)
   x[["method"]]  <- match(method, method_choices)
-  if(!hasName(x, "sampleVerts")) {
+  if(!hasName(x, "sampleVerts") || is.null(x[["sampleVerts"]])) {
     x[["sampleVerts"]] <- TRUE
   } else {
     stopifnot(isBoolean(x[["sampleVerts"]]))
   }
-  if(!hasName(x, "sampleEdges")) {
+  if(!hasName(x, "sampleEdges") || is.null(x[["sampleEdges"]])) {
     x[["sampleEdges"]] <- TRUE
   } else {
     stopifnot(isBoolean(x[["sampleEdges"]]))
   }
-  if(!hasName(x, "sampleFaces")) {
+  if(!hasName(x, "sampleFaces") || is.null(x[["sampleFaces"]])) {
     x[["sampleFaces"]] <- TRUE
   } else {
     stopifnot(isBoolean(x[["sampleFaces"]]))
   }
-  if(!hasName(x, "ptsOnEdges")) {
+  if(!hasName(x, "ptsOnEdges") || is.null(x[["ptsOnEdges"]])) {
     x[["ptsOnEdges"]] <- 0L
   } else {
     stopifnot(isStrictPositiveInteger(x[["ptsOnEdges"]]))
   }
-  if(!hasName(x, "ptsOnFaces")) {
+  if(!hasName(x, "ptsOnFaces") || is.null(x[["ptsOnFaces"]])) {
     x[["ptsOnFaces"]] <- 0L
   } else {
     stopifnot(isStrictPositiveInteger(x[["ptsOnFaces"]]))
   }
-  if(!hasName(x, "gridSpacing")) {
+  if(!hasName(x, "gridSpacing") || is.null(x[["gridSpacing"]])) {
     x[["gridSpacing"]] <- 0.0
   } else {
     stopifnot(isPositiveNumber(x[["gridSpacing"]]))
   }
-  if(!hasName(x, "ptsPerDist")) {
+  if(!hasName(x, "ptsPerDist") || is.null(x[["ptsPerDist"]])) {
     x[["ptsPerDist"]] <- 0.0
   } else {
     stopifnot(isPositiveNumber(x[["ptsPerDist"]]))
   }
-  if(!hasName(x, "ptsPerEdge")) {
+  if(!hasName(x, "ptsPerEdge") || is.null(x[["ptsPerEdge"]])) {
     x[["ptsPerEdge"]] <- 0L
   } else {
     stopifnot(isStrictPositiveInteger(x[["ptsPerEdge"]]))
   }
-  if(!hasName(x, "ptsPerArea")) {
+  if(!hasName(x, "ptsPerArea") || is.null(x[["ptsPerArea"]])) {
     x[["ptsPerArea"]] <- 0.0
   } else {
     stopifnot(isPositiveNumber(x[["ptsPerArea"]]))
   }
-  if(!hasName(x, "ptsPerFace")) {
+  if(!hasName(x, "ptsPerFace") || is.null(x[["ptsPerFace"]])) {
     x[["ptsPerFace"]] <- 0L
   } else {
     stopifnot(isStrictPositiveInteger(x[["ptsPerFace"]]))

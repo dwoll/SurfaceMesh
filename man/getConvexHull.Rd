@@ -2,23 +2,29 @@
 % Please edit documentation in R/mesh.R
 \name{getConvexHull}
 \alias{getConvexHull}
-\title{Get convex hull of a set of points}
+\title{Convex hull of a set of 3D points}
 \usage{
-getConvexHull(x, normals)
+getConvexHull(x, normals = TRUE)
 }
 \arguments{
 \item{x}{\code{numeric} matrix with 3 columns with one point per row.}
-\item{normals}{Boolean. Whether to compute vertex normals.}
+
+\item{normals}{Boolean. Whether to return vertex normals.}
 }
 \value{
 A \code{CGALmesh} object.
 }
 \description{
-Get the convex hull of a given set of points in 3D using the quickhull algorithm.
+Get the convex hull of a given set of 3D points
+using the quickhull algorithm.
+}
+\details{
+See \url{https://doc.cgal.org/latest/Convex_hull_3/} for details.
 }
 \examples{
 library(SurfaceMesh)
 library(rgl)
+
 mesh     <- makeMesh(dataHopfTorus)
 mesh_rgl <- toRGL(mesh)
 hull     <- getConvexHull(mesh[["vertices"]])
@@ -29,6 +35,11 @@ mfrow3d(1, 2)
 wire3d(mesh_rgl)
 next3d()
 wire3d(hull_rgl)
+
+}
+\seealso{
+See \code{\link[SurfaceMesh]{getBoundingBox}},
+\code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for bounding box functions.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

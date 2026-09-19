@@ -33,7 +33,6 @@ See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
 # mesh one: a cube
 mesh1_rgl <- cube3d() # (from the rgl package)
 
@@ -52,6 +51,10 @@ plotEdges(vertices         =mesh_u[["vertices"]],
           edgesAsTubes     =TRUE,
           verticesAsSpheres=TRUE)
 
+}
+\seealso{
+See also \code{\link[SurfaceMesh]{boolIntersection}} and
+\code{\link[SurfaceMesh]{boolDifference}} for other Boolean mesh operations.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

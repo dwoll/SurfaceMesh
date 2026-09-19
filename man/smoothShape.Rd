@@ -25,8 +25,8 @@ typical values lie between \code{1e-6} and \code{1}. See details.}
 A \code{CGALmesh} object.
 }
 \description{
-Smooths the overall shape of the mesh by using the mean
-curvature flow.
+Smooths the overall shape of a 3D surface mesh by using
+the mean curvature flow.
 Includes triangulation if mesh is not already triangle.
 }
 \details{
