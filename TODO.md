@@ -1,6 +1,11 @@
 # TODO
 
   * vignette
+      * `rgl::setupKnitr(autoprint = TRUE)`
+      * `snapshot3d("figure1.png", webshot = FALSE)`
+      * ```{r rgl=TRUE, dev='png'}
+      rgl::plot3d(runif(10), runif(10), runif(10))
+      ```
   * `remeshIsotropic()`
       * does not work well for pentagrammic prism - why? (`Rvcg::vcgIsotropicRemeshing()` works)
 

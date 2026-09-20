@@ -31,7 +31,8 @@ or \code{triangulate_and_refine_hole()} (\code{FALSE})?}
 Fill boundary holes.
 }
 \details{
-See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} for details.
+See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/}
+and \url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 If faces are not already triangle, the mesh is first triangulated.
 }
 \examples{

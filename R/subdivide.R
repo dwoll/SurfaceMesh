@@ -30,16 +30,14 @@
 #'
 #' mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 #' mesh_rgl    <- toRGL(mesh)
-#' mesh_sd     <- subdivideCatmullClark(mesh, nIter=2)
-#' mesh_sd_rgl <- toRGL(mesh_sd)
+#' mesh_cc     <- subdivideCatmullClark(mesh, nIter=2)
+#' mesh_cc_rgl <- toRGL(mesh_cc)
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' mfrow3d(1, 2)
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_rgl)
 #' next3d()
-#' view3d(0, 0, zoom=0.9)
-#' wire3d(mesh_sd_rgl)
+#' wire3d(mesh_cc_rgl)
 #'
 #' @export
 subdivideCatmullClark <- function(x, nIter = 1L, normals = FALSE) {
@@ -80,10 +78,8 @@ subdivideCatmullClark <- function(x, nIter = 1L, normals = FALSE) {
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' mfrow3d(1, 2)
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_rgl)
 #' next3d()
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_ds_rgl)
 #'
 #' @export
@@ -125,10 +121,8 @@ subdivideDooSabin <- function(x, nIter = 1L, triangulate = TRUE, normals = FALSE
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' mfrow3d(1, 2)
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_rgl)
 #' next3d()
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_s3_rgl)
 #'
 #' @export
@@ -169,10 +163,8 @@ subdivideSqrt3 <- function(x, nIter = 1L, normals = FALSE) {
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' mfrow3d(1, 2)
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_rgl)
 #' next3d()
-#' view3d(0, 0, zoom=0.9)
 #' wire3d(mesh_l_rgl)
 #'
 #' @export

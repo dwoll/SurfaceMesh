@@ -178,7 +178,7 @@ Rcpp::List fillBoundaryHoles_cpp(
       1,            // remove_method
       true,         // fill_holes
       fairHole,     // fair hole
-      0,            // max_num_holes
+      maxNumHoles,  // max_num_holes
       verbose);     // verbose
    return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
 }

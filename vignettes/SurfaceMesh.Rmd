@@ -1,0 +1,586 @@
+---
+title: "SurfaceMesh: 3D Surface Meshes Based on CGAL"
+author: "Daniel Wollschläger (<wollschlaeger@uni-mainz.de>)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  rmarkdown::html_vignette:
+    fig_height: 5
+    fig_width: 5
+    toc: true
+  html_document:
+    df_print: paged
+    toc: true
+  pdf_document:
+    fig_height: 5
+    fig_width: 5
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{SurfaceMesh}
+  %\VignetteDepends{SurfaceMesh}
+  %\VignetteKeywords{SurfaceMesh}
+  %\VignettePackage{SurfaceMesh}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, echo=FALSE, results="asis"}
+source("setup.R")
+setupKnitr(autoprint = TRUE)
+set.seed(123)
+
+rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
+```
+
+# Introduction
+
+`SurfaceMesh` is an R package that supports basic processing of 3D surface meshes using as backend the C++ library [`CGAL`](https://www.cgal.org/) for computational geometry via R package [`RcppCGAL`](https://cran.r-project.org/package=RcppCGAL). Features include:
+
+  * Read in and write mesh files in common formats (STL, PLY, OBJ, OFF)
+  * Conversion to / from class `mesh3d` from package [`rgl`](https://cran.r-project.org/package=rgl), also compatible with package [`Rvcg`](https://cran.r-project.org/package=Rvcg)
+  * Mesh repair
+  * Boolean mesh operations on bounded volumes
+  * Remeshing
+  * Subdivision
+  * Surface reconstruction
+  * Bounding box
+  * Convex hull
+  * Distance from points to mesh
+  * Centroid (center of mass)
+  * Surface area
+  * Volume
+  * Vertex normals
+  * Randomly sampling points on a mesh
+
+The package also calculates surface distance and volume-overlap based similarity metrics for a given pair of 3D surface meshes (see [dkfz metrics reloaded](https://metrics-reloaded.dkfz.de/metric-library)).
+
+# Background
+
+This package includes code adapted from packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Currently, only a subset of the functionality of these packages is provided in `SurfaceMesh`.
+
+A fork / adaptation of packages [`Boov`](https://github.com/stla/Boov/), [`PolygonSoup`](https://github.com/stla/PolygonSoup/), and [`cgalMeshes`](https://github.com/stla/cgalMeshes/) was carried out as upstream changes to CGAL introduced incompatibilities, and the packages were archived from [CRAN](https://cran.r-project.org/).
+
+The design was chosen such that mesh data resides in R space. This means that for each mesh operation, data is first transferred to the C++ side (using `Rcpp`), converted to a CGAL surface mesh, processed with CGAL functions, and then transferred back to R. The package does not maintain a pointer to a C++ data structure to keep the mesh data there - unlike packages such as [`terra`](https://cran.r-project.org/package=terra) or [`cgalMeshes`](https://github.com/stla/cgalMeshes/). This approach carries a performance penalty, but from an R perspective, it is more straightforward. In particular, there are no serialization issues (saving meshes). Furthermore, memory management is easier.
+
+# Included Data
+## Human Hearts
+
+Whole heart delineated by two observers in the same set of CT image slices. Class `CGALmesh`. To show using package `rgl`, first convert to class `mesh3d`.
+
+```{r}
+heart1_rgl <- toRGL(dataHeart1)
+wire3d(heart1_rgl)
+```
+
+```{r}
+heart2_rgl <- toRGL(dataHeart2)
+wire3d(heart2_rgl)
+```
+
+## Geometric forms
+
+Hopf Torus. Class `mesh3d` from package `rgl`.
+
+```{r}
+view3d(30, 0, zoom=0.8)
+wire3d(dataHopfTorus)
+```
+
+Oloid. Class `CGALmesh`. To view using package `rgl`, first convert to class `mesh3d`.
+
+```{r}
+oloid_rgl <- toRGL(dataOloid)
+view3d(30, 30, zoom=0.8)
+wire3d(oloid_rgl)
+```
+
+Pentagrammic prism. A list with components `vertices`, `faces`. To view using package `rgl`, first make a `CGALmesh` object and convert to class `mesh3d`.
+
+```{r}
+pentaPrism     <- makeMesh(dataPentaPrism, triangulate=TRUE)
+pentaPrism_rgl <- toRGL(pentaPrism)
+view3d(0, 30, zoom=0.8)
+wire3d(pentaPrism_rgl)
+```
+
+Septuaginta, i.e. a polyhedron with 72 faces like a sphere based on the drawing by Leonardo da Vinci. Class `mesh3d` from package `rgl`.
+
+```{r}
+view3d(30, 30, zoom=0.8)
+wire3d(dataSeptuaginta)
+```
+
+Truncated icosahedron. A list with components `vertices`, `faces`. To view using package `rgl`, first make a `CGALmesh` object and convert to class `mesh3d`.
+
+```{r}
+truncIcosahedron     <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+truncIcosahedron_rgl <- toRGL(truncIcosahedron)
+view3d(30, 30, zoom=0.8)
+wire3d(truncIcosahedron_rgl)
+```
+
+Tubular knot. Class `mesh3d` from package `rgl`.
+
+```{r}
+view3d(0, 0, zoom=0.8)
+wire3d(dataTubularKnot)
+```
+
+# Create Surface Meshes
+## Read Mesh / Polygon Soup Files
+
+```{r}
+f_mesh   <- system.file("extdata", "dataHeart3.ply", package="SurfaceMesh")
+mesh     <- makeMesh(f_mesh, verbose=FALSE)
+mesh_rgl <- toRGL(mesh)
+
+wire3d(mesh_rgl)
+```
+
+## Create Surface Mesh based on `mesh3d` Object
+
+```{r}
+mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE)
+mesh
+```
+
+## Vertex normals
+
+```{r}
+mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=TRUE)
+mesh
+```
+
+Or
+
+```{r}
+mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=FALSE)
+mesh
+
+mesh_n <- assignNormals(mesh)
+mesh_n
+```
+
+# Mesh Repair
+
+See [`CGAL` mesh repair](https://doc.cgal.org/latest/PMP_Mesh_repair/)
+
+## Fill Boundary Holes
+
+```{r}
+f_mesh <- system.file("extdata", "dataCornerHole.ply", package="SurfaceMesh")
+mesh   <- makeMesh(f_mesh, triangulate=TRUE, verbose=TRUE)
+mesh_rgl      <- toRGL(mesh)
+mesh_fill     <- fillBoundaryHoles(mesh, verbose=TRUE)
+mesh_fill_rgl <- toRGL(mesh_fill)
+
+mfrow3d(1, 2)
+view3d(30, -45, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(30, -45, zoom=0.8)
+wire3d(mesh_fill_rgl)
+```
+
+## Remove Self-Intersections
+
+TODO mesh with self-intersections.
+
+```{r}
+mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_nsi <- removeSelfIntersections(mesh)
+getVolume(mesh_nsi)
+```
+
+## Randomly Sample Points on a Mesh
+
+```{r}
+mesh      <- makeMesh(dataPentaPrism, triangulate=TRUE)
+ptsOnMesh <- samplePoints(mesh, ptsOnFaces=2L)
+head(ptsOnMesh)
+```
+
+# Boolean Mesh Operations on Bounded Volumes
+
+See [`CGAL` Boolean operations](https://doc.cgal.org/latest/PMP_Boolean_operations/)
+
+## Union
+
+```{r}
+# mesh one: a cube
+mesh1_rgl  <- cube3d()   # (from the rgl package)
+mesh2_rgl  <- translate3d(cube3d(), 1, 1, 1)
+mesh_u     <- boolUnion(list(mesh1_rgl, mesh2_rgl))
+mesh_u_rgl <- toRGL(mesh_u)
+
+shade3d(mesh_u_rgl, color="red")
+plotEdges(vertices         =mesh_u[["vertices"]],
+          edges            =mesh_u[["exteriorEdges"]],
+          edgesAsTubes     =TRUE,
+          verticesAsSpheres=TRUE)
+```
+
+## Difference
+
+```{r}
+mesh1_rgl  <- cube3d()   # (from the rgl package)
+mesh2_rgl  <- translate3d(cube3d(), 1, 1, 0)
+mesh_d     <- boolDifference(mesh1_rgl, mesh2_rgl)
+mesh_d_rgl <- toRGL(mesh_d)
+
+shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
+shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
+shade3d(mesh_d_rgl, color="red")
+plotEdges(vertices         =mesh_d[["vertices"]],
+          edges            =mesh_d[["exteriorEdges"]],
+          edgesAsTubes     =TRUE,
+          verticesAsSpheres=TRUE)
+```
+
+## Intersection
+
+```{r}
+mesh1      <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+mesh1_rgl  <- toRGL(mesh1)
+mesh2_rgl  <- translate3d(cube3d(), 2, 0, 0)
+mesh2      <- makeMesh(mesh2_rgl, triangulate=TRUE)
+mesh_i     <- boolIntersection(list(mesh1, mesh2))
+mesh_i_rgl <- toRGL(mesh_i)
+
+shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
+shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
+shade3d(mesh_i_rgl, color="red")
+plotEdges(vertices         =mesh_i[["vertices"]],
+          edges            =mesh_i[["exteriorEdges"]],
+          edgesAsTubes     =FALSE,
+          lwd              =3,
+          verticesAsSpheres=FALSE)
+```
+
+# Remeshing
+
+See [`CGAL` remeshing](https://doc.cgal.org/latest/PMP_Remeshing/)
+
+## Isotropic
+
+```{r}
+mesh         <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+mesh_rgl     <- toRGL(mesh)
+mesh_rem     <- remeshIsotropic(mesh, targetEdgeLen=1)
+mesh_rem_rgl <- toRGL(mesh_rem)
+
+mfrow3d(1, 2)
+view3d(0, 0, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 0, zoom=0.7)
+wire3d(mesh_rem_rgl)
+```
+
+## Triangulated Surface Mesh Simplification
+
+```{r}
+mesh       <- makeMesh(dataHopfTorus, triangulate=TRUE)
+mesh_rgl   <- toRGL(mesh)
+mesh_s     <- remeshSimplify(mesh, method="LT-R", stopUeRatio=0.1)
+mesh_s_rgl <- toRGL(mesh_s)
+
+mfrow3d(1, 2)
+view3d(0, 0, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 0, zoom=0.7)
+wire3d(mesh_s_rgl)
+```
+
+## Smoothing
+
+```{r}
+mesh       <- dataHeart1
+mesh_rgl   <- toRGL(mesh)
+mesh_s     <- remeshSmooth(mesh, nIter=5, time=1)
+mesh_s_rgl <- toRGL(mesh_s)
+
+mfrow3d(1, 2)
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_s_rgl)
+```
+
+# Subdivision
+
+See [`CGAL subdivision`](https://doc.cgal.org/latest/Subdivision_method_3/)
+
+## Catmull-Clark
+
+```{r}
+mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl    <- toRGL(mesh)
+mesh_cc     <- subdivideCatmullClark(mesh, nIter=2)
+mesh_cc_rgl <- toRGL(mesh_cc)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_cc_rgl)
+```
+
+## Doo-Sabin
+
+```{r}
+mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl    <- toRGL(mesh)
+mesh_ds     <- subdivideDooSabin(mesh, nIter=2)
+mesh_ds_rgl <- toRGL(mesh_ds)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_ds_rgl)
+```
+
+## Sqrt3
+
+```{r}
+mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl    <- toRGL(mesh)
+mesh_s3     <- subdivideSqrt3(mesh, nIter=2)
+mesh_s3_rgl <- toRGL(mesh_s3)
+
+mfrow3d(1, 2)
+view3d(30, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(30, 30, zoom=0.8)
+wire3d(mesh_s3_rgl)
+```
+
+## Loop
+
+```{r}
+mesh       <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl   <- toRGL(mesh)
+mesh_l     <- subdivideLoop(mesh, nIter=2)
+mesh_l_rgl <- toRGL(mesh_l)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_l_rgl)
+```
+
+# Surface Reconstruction
+## AFS
+
+See [`CGAL` AFS](https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/)
+
+```{r}
+mesh         <- dataHeart1
+mesh_rgl     <- toRGL(mesh)
+mesh_afs     <- reconstructAFS(mesh[["vertices"]], jetSmoothing=30)
+mesh_afs_rgl <- toRGL(mesh_afs)
+
+mfrow3d(1, 2)
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_afs_rgl)
+```
+
+## SSS
+
+See [`CGAL` SSS](https://doc.cgal.org/latest/Scale_space_reconstruction_3/)
+
+```{r}
+mesh     <- dataHeart1
+mesh_rgl <- toRGL(mesh)
+mesh_sss <- reconstructSSS(mesh[["vertices"]],
+                           scaleIterations=1L,
+                           forceManifold  =TRUE,
+                           neighbors      =6L)
+mesh_sss_rgl <- toRGL(mesh_sss)
+
+mfrow3d(1, 2)
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_sss_rgl)
+```
+
+## Poisson
+
+See [`CGAL` SSS](https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/)
+
+```{r}
+mesh     <- makeMesh(dataHopfTorus)
+mesh_rgl <- toRGL(mesh)
+mesh_psr <- reconstructPoisson(mesh[["vertices"]],
+                               normalsFun=getNormalsFun(6L),
+                               smAngle=10,
+                               smRadius=3,
+                               smDistance=0.3)
+mesh_psr_rgl <- toRGL(mesh_psr)
+
+mfrow3d(1, 2)
+wire3d(mesh_rgl)
+next3d()
+wire3d(mesh_psr_rgl)
+```
+
+## Alpha Wrapping
+
+See [`CGAL` Alpha Wrapping](https://doc.cgal.org/latest/Alpha_wrap_3/)
+
+```{r}
+mesh        <- dataHeart1
+mesh_rgl    <- toRGL(dataHeart1)
+mesh_aw     <- alphaWrap(mesh,
+                         alphaRel =5,
+                         offsetRel=300)
+mesh_aw_rgl <- toRGL(mesh_aw)
+
+mfrow3d(1, 2)
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_aw_rgl)
+```
+
+# Bounding Shapes
+## Axis-parallel Bounding Box
+
+```{r}
+mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl <- toRGL(mesh)
+bb       <- getBoundingBox(mesh)
+bb_rgl   <- toRGL(bb)
+
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+wire3d(bb_rgl)
+```
+
+## Optimal (Oriented) Bounding Box
+
+```{r}
+mesh     <- dataHeart1
+mesh_rgl <- toRGL(mesh)
+obb      <- getBoundingBoxOptimal(mesh)
+obb_rgl  <- toRGL(obb[["mesh"]])
+
+view3d(0, -90, zoom=0.8)
+wire3d(mesh_rgl)
+wire3d(obb_rgl)
+```
+
+## Convex Hull
+
+```{r}
+mesh     <- makeMesh(dataHopfTorus)
+mesh_rgl <- toRGL(mesh)
+hull     <- getConvexHull(mesh[["vertices"]])
+hull_rgl <- toRGL(hull)
+
+mfrow3d(1, 2)
+view3d(0, 0, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 0, zoom=0.8)
+wire3d(hull_rgl)
+```
+
+# Measurements
+## Centroid (Center of Mass)
+
+```{r}
+mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
+getCentroid(mesh)
+```
+
+## Surface Area
+
+```{r}
+mesh <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+getArea(mesh)
+```
+
+## Volume
+
+```{r}
+mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE)
+getVolume(mesh)
+```
+
+# Distace and Agreement Measures
+## Euclidean Distance from Points to a Mesh
+
+```{r}
+mesh   <- makeMesh(dataPentaPrism, triangulate=TRUE)
+points <- matrix(2*runif(3*4), ncol=3)
+getDistance(mesh, points)
+```
+
+## Surface Distance between two Meshes
+### Distance between the two respective centers of mass (DCOM)
+
+```{r}
+getDCOM(dataHeart1, dataHeart2)
+```
+
+### Hausdorff distance
+
+See [`CGAL` Hausdorff distance](https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance)
+
+Approximate
+
+```{r}
+getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE)
+```
+
+Bounded error
+
+```{r}
+getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE, errorBound=0.001)
+```
+
+Quantile (e.g., 'HD95')
+
+```{r}
+getHausdorffQuantile(dataHeart1, dataHeart2, p=0.95)
+```
+
+### Average symmetric surface distance (ASSD) and Root Mean Squared Error (RMSE)
+
+See [dkfz metric reloaded: ASSD](https://metrics-reloaded.dkfz.de/metric-library/assd)
+
+```{r}
+sd_heart <- getSurfaceDist(dataHeart1, dataHeart2, p=0.95, ptsOnFaces=100L)
+sd_heart[["ASSD"]]
+sd_heart[["RMSE"]]
+```
+
+## Volume-Overlap Based Similarity Measures
+
+  * [dkfz metric reloaded: Jaccard Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/intersection_over_union) (JSC, aka 'Intersection over Union', IoU)
+  * [dkfz metric reloaded: Dice Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/dsc) (DSC)
+
+```{r}
+mesh1_rgl <- cube3d()      # (from the rgl package)
+mesh2_rgl <- translate3d(cube3d(), 1, 1, 1)
+jsc_dsc   <- getJSCDSC(mesh1_rgl, mesh2_rgl)
+jsc_dsc[["JSC"]]
+jsc_dsc[["DSC"]]
+```
+
+```{r echo=FALSE, results="asis"}
+Sys.setenv("RGL_USE_WEBSHOT"=rgl_webshot_org)
+```

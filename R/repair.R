@@ -19,7 +19,8 @@
 #' @param verbose Boolean. Whether to print out messages about mesh processing.
 #' @returns \code{CGALmesh} object.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
-#' @details See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} for details.
+#' @details See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} and
+#'   \url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 #'   If faces are not triangle, the mesh is triangulated.
 #' @seealso See \code{\link[SurfaceMesh]{fillBoundaryHoles}} for filling
 #'   boundary holes.
@@ -57,7 +58,8 @@ removeSelfIntersections <- function(
 #' @param verbose Boolean. Whether to print out messages about mesh processing.
 #' @returns \code{CGALmesh} object.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
-#' @details See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} for details.
+#' @details See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} and
+#'   \url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 #'   If faces are not already triangle, the mesh is first triangulated.
 #' @seealso See \code{\link[SurfaceMesh]{removeSelfIntersections}} for removing
 #'   self-intersections.

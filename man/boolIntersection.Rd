@@ -34,15 +34,11 @@ See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
 library(SurfaceMesh)
 library(rgl)
 # mesh one: truncated icosahedron; we triangulate it
-mesh1 <- makeMesh(dataTruncIcosahedron,
-                  triangulate=TRUE,
-                  normals    = FALSE)
+mesh1 <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
 
 # mesh two: a cube
 mesh2_rgl <- translate3d(cube3d(), 2, 0, 0)
-mesh2     <- makeMesh(mesh2_rgl,
-                      triangulate=TRUE,
-                      normals    =FALSE)
+mesh2     <- makeMesh(mesh2_rgl, triangulate=TRUE)
 
 # compute the intersection
 mesh_i <- boolIntersection(list(mesh1, mesh2))
