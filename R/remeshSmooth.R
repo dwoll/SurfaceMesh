@@ -33,7 +33,7 @@
 #'
 #' mesh       <- dataHeart1
 #' mesh_rgl   <- toRGL(mesh)
-#' mesh_s     <- smoothShape(mesh, nIter=5, time=1)
+#' mesh_s     <- remeshSmooth(mesh, nIter=5, time=1)
 #' mesh_s_rgl <- toRGL(mesh_s)
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
@@ -45,7 +45,7 @@
 #' wire3d(mesh_s_rgl)
 #'
 #' @export
-smoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FALSE) {
+remeshSmooth <- function(x, indices, nIter = 1L, time = 0.001, normals = FALSE) {
   if(!inherits(x, "CGALmesh")) {
       stop("The `x` argument must be of class 'CGALmesh'",
            " (i.e., the output of the `makeMesh()` function).")
@@ -69,6 +69,6 @@ smoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FALSE) {
     indices <- unique(as.integer(indices)) - 1L
   }
   meshCPP <- fromR(x)
-  meshOut <- smoothShape_cpp(meshCPP, indices, as.integer(nIter), time, normals)
+  meshOut <- remeshSmooth_cpp(meshCPP, indices, as.integer(nIter), time, normals)
   fromCPP(meshOut)
 }

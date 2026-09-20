@@ -19,7 +19,7 @@
 #' @param stopUeCount \code{integer}. Stop predicate. For \code{method="LT-C"}, \code{"LT-BNCF"}.
 #'   Count of undirected edges left. If missing, set to (half of all edges) - 1.
 #'   Lower -> coarser.
-#' @param policy \code{character}. For \code{method="GH"}. Simplification strategy.
+#' @param policyGH \code{character}. For \code{method="GH"}. Simplification strategy.
 #'   One of \code{"CP"} (classic plane), \code{"CT"} (classic tri),
 #'   \code{"PP"} (prob plane), \code{"PT"} (prob tri), and
 #'   \code{"PL"} (plane and line).
@@ -52,7 +52,7 @@ remeshSimplify <- function(x,
                            method = c("LT-R", "LT-C", "LT-BNCF", "GH"),
                            stopUeRatio = 0.1,
                            stopUeCount,
-                           policy = c("CP", "CT", "PP", "PT", "PL"),
+                           policyGH = c("CP", "CT", "PP", "PT", "PL"),
                            normals = FALSE,
                            verbose = FALSE) {
     if(!inherits(x, "CGALmesh")) {
@@ -84,12 +84,12 @@ remeshSimplify <- function(x,
                      normals,
                      verbose)
     } else if(method == "GH") {
-      policy  <- match.arg(policy)
+      policyGH <- match.arg(policyGH)
       simplifyGH_cpp(meshCPP,
                      repairSoup,
                      repairMesh,
                      stopUeRatio,
-                     as.character(policy),
+                     as.character(policyGH),
                      normals,
                      verbose)
     }

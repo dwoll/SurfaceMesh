@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
-Rcpp::List smoothShape_cpp(
+Rcpp::List remeshSmooth_cpp(
   const Rcpp::List rmesh,
   const Rcpp::IntegerVector indices,
   const unsigned int nIter,

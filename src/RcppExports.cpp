@@ -593,9 +593,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// smoothShape_cpp
-Rcpp::List smoothShape_cpp(const Rcpp::List rmesh, const Rcpp::IntegerVector indices, const unsigned int nIter, const double time, const bool normals);
-RcppExport SEXP _SurfaceMesh_smoothShape_cpp(SEXP rmeshSEXP, SEXP indicesSEXP, SEXP nIterSEXP, SEXP timeSEXP, SEXP normalsSEXP) {
+// remeshSmooth_cpp
+Rcpp::List remeshSmooth_cpp(const Rcpp::List rmesh, const Rcpp::IntegerVector indices, const unsigned int nIter, const double time, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshSmooth_cpp(SEXP rmeshSEXP, SEXP indicesSEXP, SEXP nIterSEXP, SEXP timeSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -604,7 +604,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const unsigned int >::type nIter(nIterSEXP);
     Rcpp::traits::input_parameter< const double >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(smoothShape_cpp(rmesh, indices, nIter, time, normals));
+    rcpp_result_gen = Rcpp::wrap(remeshSmooth_cpp(rmesh, indices, nIter, time, normals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -705,7 +705,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_remeshIsoAdapt_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsoAdapt_cpp, 8},
     {"_SurfaceMesh_simplifyLT_cpp", (DL_FUNC) &_SurfaceMesh_simplifyLT_cpp, 8},
     {"_SurfaceMesh_simplifyGH_cpp", (DL_FUNC) &_SurfaceMesh_simplifyGH_cpp, 7},
-    {"_SurfaceMesh_smoothShape_cpp", (DL_FUNC) &_SurfaceMesh_smoothShape_cpp, 5},
+    {"_SurfaceMesh_remeshSmooth_cpp", (DL_FUNC) &_SurfaceMesh_remeshSmooth_cpp, 5},
     {"_SurfaceMesh_subdivideCatmullClark_cpp", (DL_FUNC) &_SurfaceMesh_subdivideCatmullClark_cpp, 3},
     {"_SurfaceMesh_subdivideDooSabin_cpp", (DL_FUNC) &_SurfaceMesh_subdivideDooSabin_cpp, 4},
     {"_SurfaceMesh_subdivideSqrt3_cpp", (DL_FUNC) &_SurfaceMesh_subdivideSqrt3_cpp, 3},
