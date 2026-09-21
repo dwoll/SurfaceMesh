@@ -18,7 +18,7 @@ Check if the given 3D surface mesh is a quad mesh.
 }
 \examples{
 library(SurfaceMesh)
-f_mesh <- system.file("extdata", "corner.off", package="SurfaceMesh")
+f_mesh <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
 mesh   <- makeMesh(f_mesh)
 isQuad(mesh)
 

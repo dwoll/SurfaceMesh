@@ -195,7 +195,7 @@ MeshT remove_selfint_mesh(const MeshT &mesh, const int method, const bool verbos
   std::vector<PointT> points;
   std::vector<std::vector<std::size_t>> polygons;
   PMP::polygon_mesh_to_polygon_soup(mesh, points, polygons);
-  const bool success = remove_selfint_soup<KernelT, PointT>(points, polygons, method, verbose);
+  remove_selfint_soup<KernelT, PointT>(points, polygons, method, verbose);
   MeshT mesh_out;
   PMP::orient_polygon_soup(points, polygons);
   if(PMP::is_polygon_soup_a_polygon_mesh(polygons)) {
@@ -217,5 +217,5 @@ MeshT remove_selfint_mesh(const MeshT &mesh, const int method, const bool verbos
   return mesh_out;
 }
 
-template Mesh3  remove_selfint_mesh<K,  Mesh3,  Point3>(const Mesh3&,   const int, const bool);
+template Mesh3  remove_selfint_mesh<K,  Mesh3,  Point3>(const  Mesh3&,  const int, const bool);
 template EMesh3 remove_selfint_mesh<EK, EMesh3, EPoint3>(const EMesh3&, const int, const bool);

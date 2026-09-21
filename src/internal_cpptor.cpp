@@ -273,32 +273,32 @@ void remove_properties(MeshT &mesh, const std::vector<std::string> &props) {
       std::optional<vertex_colors_map> pmap_ =
         mesh.template property_map<vertex_descriptor, std::string>("v:color");
       if(pmap_.has_value()) {
-        mesh.template remove_property_map(pmap_.value());
+        mesh.remove_property_map(pmap_.value());
       }
     } else if(prop == "f:color") {
       std::optional<face_colors_map> pmap_ =
         mesh.template property_map<face_descriptor, std::string>("f:color");
       if(pmap_.has_value()) {
-        mesh.template remove_property_map(pmap_.value());
+        mesh.remove_property_map(pmap_.value());
       }
     } else if(prop == "v:normal") {
       std::optional<vertex_normals_map> pmap_ =
         mesh.template property_map<vertex_descriptor, VectorT>("v:normal");
 
       if(pmap_.has_value()) {
-        mesh.template remove_property_map(pmap_.value());
+        mesh.remove_property_map(pmap_.value());
       }
     } else if(prop == "v:scalar") {
       std::optional<vertex_scalars_map> pmap_ =
         mesh.template property_map<vertex_descriptor, double>("v:scalar");
       if(pmap_.has_value()) {
-        mesh.template remove_property_map(pmap_.value());
+        mesh.remove_property_map(pmap_.value());
       }
     } else if(prop == "f:scalar") {
       std::optional<face_scalars_map> pmap_ =
         mesh.template property_map<face_descriptor, double>("f:scalar");
       if(pmap_.has_value()) {
-        mesh.template remove_property_map(pmap_.value());
+        mesh.remove_property_map(pmap_.value());
       }
     }
   }

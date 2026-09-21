@@ -51,7 +51,7 @@ normals are computed if requested, triangulation is performed if requested.
 library(SurfaceMesh)
 library(rgl)
 ## mesh from file
-f_mesh    <- system.file("extdata", "corner.off", package="SurfaceMesh")
+f_mesh    <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
 mesh1     <- makeMeshValid(f_mesh, soup=TRUE, triangulate=TRUE)
 mesh1_rgl <- toRGL(mesh1)
 
