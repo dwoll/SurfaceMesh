@@ -53,9 +53,9 @@ library(rgl)
 mesh     <- dataHeart1
 mesh_rgl <- toRGL(mesh)
 mesh_sss <- reconstructSSS(mesh[["vertices"]],
-                           scaleIterations=1,
+                           scaleIterations=1L,
                            forceManifold  =TRUE,
-                           neighbors      =6)
+                           neighbors      =6L)
 
 mesh_sss_rgl <- toRGL(mesh_sss)
 

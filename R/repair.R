@@ -66,6 +66,7 @@ removeSelfIntersections <- function(
 #'
 #' @examples
 #' library(SurfaceMesh)
+#' library(rgl)
 #' f_mesh <- system.file("extdata", "dataCornerHole.off", package="SurfaceMesh")
 #' mesh          <- makeMesh(f_mesh, triangulate=TRUE, verbose=TRUE)
 #' mesh_rgl      <- toRGL(mesh)

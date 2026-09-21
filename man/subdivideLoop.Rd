@@ -35,10 +35,8 @@ mesh_l_rgl <- toRGL(mesh_l)
 
 open3d(windowRect=50 + c(0, 0, 800, 400))
 mfrow3d(1, 2)
-view3d(0, 0, zoom=0.9)
 wire3d(mesh_rgl)
 next3d()
-view3d(0, 0, zoom=0.9)
 wire3d(mesh_l_rgl)
 
 }

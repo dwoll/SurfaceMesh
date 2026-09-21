@@ -28,7 +28,8 @@ removeSelfIntersections(
 Remove self intersections.
 }
 \details{
-See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} for details.
+See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} and
+\url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 If faces are not triangle, the mesh is triangulated.
 }
 \examples{

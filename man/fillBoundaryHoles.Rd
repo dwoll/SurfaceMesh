@@ -31,14 +31,25 @@ or \code{triangulate_and_refine_hole()} (\code{FALSE})?}
 Fill boundary holes.
 }
 \details{
-See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/}
-and \url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
+See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} and
+\url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 If faces are not already triangle, the mesh is first triangulated.
 }
 \examples{
 library(SurfaceMesh)
-mesh      <- makeMesh(dataPentaPrism, triangulate=TRUE)
-mesh_fill <- fillBoundaryHoles(mesh)
+library(rgl)
+f_mesh <- system.file("extdata", "dataCornerHole.off", package="SurfaceMesh")
+mesh          <- makeMesh(f_mesh, triangulate=TRUE, verbose=TRUE)
+mesh_rgl      <- toRGL(mesh)
+mesh_fill     <- fillBoundaryHoles(mesh)
+mesh_fill_rgl <- toRGL(mesh_fill)
+
+mfrow3d(1, 2)
+view3d(30, -45, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(30, -45, zoom=0.8)
+wire3d(mesh_fill_rgl)
 
 }
 \seealso{

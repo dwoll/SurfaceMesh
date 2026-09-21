@@ -1,7 +1,7 @@
 Type: Package
 Package: SurfaceMesh
 Title: 3D Surface Meshes Based on 'CGAL'
-Version: 0.0.1
+Version: 0.0.2
 Authors@R:
     c(person("Daniel", "Wollschlaeger",
              role=c("aut", "cre"),
