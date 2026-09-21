@@ -14,8 +14,9 @@ Description: Basic processing of 3D surface meshes based on the
     polygon soups.
     Supports mesh repair, remeshing (isotropic, smooth, simplify),
     subdivision, Boolean operations on bounded volumes, surface
-    reconstruction, (optimal) bounding box, convex hull as well as
-    distance and similarity metrics for two given meshes.
+    reconstruction, (optimal) bounding box, convex hull,
+    surface distance metrics (such as Hausdorff),
+    and volume-overlap similarity measures (such as 'JSC', 'DSC').
     Adapts code from packages 'Boov', 'PolygonSoup',
     and 'cgalMeshes' developed by Stephane Laurent.
 License: GPL-3
