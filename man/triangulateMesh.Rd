@@ -21,7 +21,7 @@ Triangulate a given 3D surface mesh.
 library(SurfaceMesh)
 library(rgl)
 ## quad mesh
-f_mesh   <- system.file("extdata", "corner.off", package="SurfaceMesh")
+f_mesh   <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
 mesh     <- makeMesh(f_mesh)
 mesh_rgl <- toRGL(mesh)
 isTriangle(mesh)

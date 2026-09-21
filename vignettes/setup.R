@@ -17,32 +17,3 @@ if (!requireNamespace("rmarkdown", quietly = TRUE) ||
 # screenshots; we don't want those. see https://github.com/rstudio/markdown/issues/115
 knitr::opts_chunk$set(screenshot.force = FALSE, snapshot = TRUE)
 # snapshot = TRUE for snapshots instead of dynamic
-
-backticked <- function(s) { paste0("`", s, "`") }
-
-# Write this once at the start of the document.
-cat('<style>
-    .nostripes tr.even {background-color: white;}
-    table {border-style: none;}
-    table th {border-style: none;}
-    table td {border-style: none;}
-    a[href^=".."] {text-decoration: underline;}
-    </style>
-    ')
-
-# This displays the string code as `r code` when entered
-# as `r rinline(code)`.  Due to Stephane Laurent
-rinline <- function(code, script = FALSE){
-  if (script)
-    html <- "`r CODE`"
-  else
-    html <- '<code  class="r">``` `r CODE` ```</code>'
-  sub("CODE", code, html)
-}
-
-# This sets up default "alt text" for screen readers.
-defaultAltText <- function() {
-  paste(knitr::opts_current$get("label"), "example.")
-}
-
-knitr::opts_chunk$set(fig.alt = quote(defaultAltText()))

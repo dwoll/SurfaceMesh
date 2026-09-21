@@ -66,8 +66,18 @@ removeSelfIntersections <- function(
 #'
 #' @examples
 #' library(SurfaceMesh)
-#' mesh      <- makeMesh(dataPentaPrism, triangulate=TRUE)
-#' mesh_fill <- fillBoundaryHoles(mesh)
+#' f_mesh <- system.file("extdata", "dataCornerHole.off", package="SurfaceMesh")
+#' mesh          <- makeMesh(f_mesh, triangulate=TRUE, verbose=TRUE)
+#' mesh_rgl      <- toRGL(mesh)
+#' mesh_fill     <- fillBoundaryHoles(mesh)
+#' mesh_fill_rgl <- toRGL(mesh_fill)
+#' 
+#' mfrow3d(1, 2)
+#' view3d(30, -45, zoom=0.8)
+#' wire3d(mesh_rgl)
+#' next3d()
+#' view3d(30, -45, zoom=0.8)
+#' wire3d(mesh_fill_rgl)
 #'
 #' @export
 fillBoundaryHoles <- function(

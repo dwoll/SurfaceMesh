@@ -3,10 +3,10 @@ Package: SurfaceMesh
 Title: 3D Surface Meshes Based on 'CGAL'
 Version: 0.0.1
 Authors@R:
-  c(person("Daniel", "Wollschlaeger",
-           role=c("aut", "cre"),
-           email="wollschlaeger@uni-mainz.de"),
-    person("Stephane", "Laurent", role=c("aut")))
+    c(person("Daniel", "Wollschlaeger",
+             role=c("aut", "cre"),
+             email="wollschlaeger@uni-mainz.de"),
+      person("Stephane", "Laurent", role=c("aut")))
 Maintainer: Daniel Wollschlaeger <wollschlaeger@uni-mainz.de>
 Description: Basic processing of 3D surface meshes based on the
     'C++' library 'CGAL' (<https://www.cgal.org/>).
@@ -34,10 +34,10 @@ LinkingTo:
     RcppEigen
 Encoding: UTF-8
 LazyData: true
-SystemRequirements: C++17, gmp, mpfr
+SystemRequirements: C++17, gmp, mpfr, pandoc (>=1.14)
 SystemRequirementsNote: 'MPFR' (MP Floating-Point Reliable Library,
-        https://www.mpfr.org/) and 'GMP' (GNU Multiple Precision
-        library, https://gmplib.org/)
+    https://www.mpfr.org/), 'GMP' (GNU Multiple Precision Library,
+    https://gmplib.org/)
 VignetteBuilder: knitr, rmarkdown
 Roxygen: list(markdown=TRUE)
 Config/roxygen2/version: 8.1.0

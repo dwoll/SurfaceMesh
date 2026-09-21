@@ -196,7 +196,7 @@ makeMesh <- function(x,
 #' library(SurfaceMesh)
 #' library(rgl)
 #' ## mesh from file
-#' f_mesh    <- system.file("extdata", "corner.off", package="SurfaceMesh")
+#' f_mesh    <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
 #' mesh1     <- makeMeshValid(f_mesh, soup=TRUE, triangulate=TRUE)
 #' mesh1_rgl <- toRGL(mesh1)
 #'
@@ -639,7 +639,7 @@ isClosed <- function(x) {
 #'
 #' @examples
 #' library(SurfaceMesh)
-#' f_mesh <- system.file("extdata", "corner.off", package="SurfaceMesh")
+#' f_mesh <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
 #' mesh   <- makeMesh(f_mesh)
 #' isQuad(mesh)
 #'
@@ -934,7 +934,7 @@ toRGL <- function(x, ...) {
 #' library(SurfaceMesh)
 #' library(rgl)
 #' ## quad mesh
-#' f_mesh   <- system.file("extdata", "corner.off", package="SurfaceMesh")
+#' f_mesh   <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
 #' mesh     <- makeMesh(f_mesh)
 #' mesh_rgl <- toRGL(mesh)
 #' isTriangle(mesh)

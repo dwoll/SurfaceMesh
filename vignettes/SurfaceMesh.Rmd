@@ -63,7 +63,7 @@ The design was chosen such that mesh data resides in R space. This means that fo
 # Included Data
 ## Human Hearts
 
-Whole heart delineated by two observers in the same set of CT image slices. Class `CGALmesh`. To show using package `rgl`, first convert to class `mesh3d`.
+Whole heart delineated by two observers in the same set of CT image slices. Class `CGALmesh`. To display using package `rgl`, first convert to class `mesh3d`.
 
 ```{r}
 heart1_rgl <- toRGL(dataHeart1)
@@ -80,7 +80,7 @@ wire3d(heart2_rgl)
 Hopf Torus. Class `mesh3d` from package `rgl`.
 
 ```{r}
-view3d(30, 0, zoom=0.8)
+view3d(25, 0, zoom=0.8)
 wire3d(dataHopfTorus)
 ```
 
@@ -132,14 +132,35 @@ f_mesh   <- system.file("extdata", "dataHeart3.ply", package="SurfaceMesh")
 mesh     <- makeMesh(f_mesh, verbose=FALSE)
 mesh_rgl <- toRGL(mesh)
 
+view3d(0, -90, zoom=0.8)
 wire3d(mesh_rgl)
 ```
 
-## Create Surface Mesh based on `mesh3d` Object
+## Create Surface Mesh Based on `mesh3d` Object
 
 ```{r}
-mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE)
+dataTubularKnot
+
+mesh <- makeMesh(dataTubularKnot)
 mesh
+```
+
+## Triangulate
+
+```{r}
+mesh     <- makeMesh(dataSeptuaginta, verbose=FALSE)
+mesh_rgl <- toRGL(mesh)
+isTriangle(mesh)
+
+mesh_tri     <- triangulateMesh(mesh)
+mesh_tri_rgl <- toRGL(mesh_tri)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_tri_rgl)
 ```
 
 ## Vertex normals
@@ -165,11 +186,13 @@ See [`CGAL` mesh repair](https://doc.cgal.org/latest/PMP_Mesh_repair/)
 
 ## Fill Boundary Holes
 
+Note: Hole is easier to see in interactive version shown with `example(fillBoundaryHoles)`.
+
 ```{r}
-f_mesh <- system.file("extdata", "dataCornerHole.ply", package="SurfaceMesh")
+f_mesh <- system.file("extdata", "dataCornerHole.off", package="SurfaceMesh")
 mesh   <- makeMesh(f_mesh, triangulate=TRUE, verbose=TRUE)
-mesh_rgl      <- toRGL(mesh)
-mesh_fill     <- fillBoundaryHoles(mesh, verbose=TRUE)
+mesh_rgl  <- toRGL(mesh)
+mesh_fill <- fillBoundaryHoles(mesh, verbose=TRUE)
 mesh_fill_rgl <- toRGL(mesh_fill)
 
 mfrow3d(1, 2)
@@ -182,7 +205,7 @@ wire3d(mesh_fill_rgl)
 
 ## Remove Self-Intersections
 
-TODO mesh with self-intersections.
+TODO: Use a mesh with self-intersections.
 
 ```{r}
 mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
@@ -212,10 +235,6 @@ mesh_u     <- boolUnion(list(mesh1_rgl, mesh2_rgl))
 mesh_u_rgl <- toRGL(mesh_u)
 
 shade3d(mesh_u_rgl, color="red")
-plotEdges(vertices         =mesh_u[["vertices"]],
-          edges            =mesh_u[["exteriorEdges"]],
-          edgesAsTubes     =TRUE,
-          verticesAsSpheres=TRUE)
 ```
 
 ## Difference
@@ -229,10 +248,6 @@ mesh_d_rgl <- toRGL(mesh_d)
 shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
 shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
 shade3d(mesh_d_rgl, color="red")
-plotEdges(vertices         =mesh_d[["vertices"]],
-          edges            =mesh_d[["exteriorEdges"]],
-          edgesAsTubes     =TRUE,
-          verticesAsSpheres=TRUE)
 ```
 
 ## Intersection
@@ -248,11 +263,6 @@ mesh_i_rgl <- toRGL(mesh_i)
 shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
 shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
 shade3d(mesh_i_rgl, color="red")
-plotEdges(vertices         =mesh_i[["vertices"]],
-          edges            =mesh_i[["exteriorEdges"]],
-          edgesAsTubes     =FALSE,
-          lwd              =3,
-          verticesAsSpheres=FALSE)
 ```
 
 # Remeshing
@@ -352,10 +362,10 @@ mesh_s3     <- subdivideSqrt3(mesh, nIter=2)
 mesh_s3_rgl <- toRGL(mesh_s3)
 
 mfrow3d(1, 2)
-view3d(30, 30, zoom=0.8)
+view3d(0, 30, zoom=0.8)
 wire3d(mesh_rgl)
 next3d()
-view3d(30, 30, zoom=0.8)
+view3d(0, 30, zoom=0.8)
 wire3d(mesh_s3_rgl)
 ```
 
@@ -459,12 +469,12 @@ wire3d(mesh_aw_rgl)
 ## Axis-parallel Bounding Box
 
 ```{r}
-mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh     <- dataOloid
 mesh_rgl <- toRGL(mesh)
 bb       <- getBoundingBox(mesh)
 bb_rgl   <- toRGL(bb)
 
-view3d(0, 30, zoom=0.8)
+view3d(0, 30, zoom=0.9)
 wire3d(mesh_rgl)
 wire3d(bb_rgl)
 ```
