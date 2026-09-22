@@ -79,7 +79,7 @@ boolIntersection <- function(x, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
 }
 
 #' @title Difference between two meshes
-#' @description Compute the difference between two meshes.
+#' @description Compute the difference \code{mesh1} - \code{mesh2}.
 #'
 #' @param mesh1 A mesh, either being given a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,

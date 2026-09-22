@@ -22,7 +22,7 @@
 #' @param errorBound A positive number. Upper bound on the error of the
 #'   estimate. If missing, the approximate distance is returned.
 #' @returns A number. For the apprixmate distance, the algorithm uses
-#'   simulation and thus the result can vary.
+#'   simulation, and thus the result can vary.
 #' @details See \url{https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance} for details.
 #'   The approximate distance uses random uniform vertex sampling, edge sampling, face sampling. See
 #'   \url{https://doc.cgal.org/latest/Polygon_mesh_processing/group__PMP__distance__grp.html}
@@ -74,7 +74,7 @@ getHausdorff <- function(mesh1, mesh2, symmetric = TRUE, n, errorBound) {
 #'   before taking the quantile.
 #' @param p A number in \eqn{[0, 1]}. The quantile probability, defaults
 #'   to \code{0.95}.
-#' @param ... Sampling options passed on to \code{\link[SurfaceMesh]{getSurfaceDist}}.
+#' @param ... Sampling options passed to \code{\link[SurfaceMesh]{getSurfaceDist}}.
 #' @returns A number: the requested quantile of the sampled point-to-mesh
 #'   distances. The algorithm uses random sampling, so the result can vary.
 #' @details See \url{https://metrics-reloaded.dkfz.de/metric-library/xhd} for details.
@@ -119,17 +119,23 @@ getHausdorffQuantile <- function(mesh1, mesh2, symmetric = TRUE, p = 0.95, ...) 
 #' @param sampleVerts Boolean. Do sample vertices?
 #' @param sampleEdges Boolean. Do sample edges?
 #' @param sampleFaces Boolean. Do sample faces?
-#' @param gridSpacing \code{numeric}.
+#' @param gridSpacing \code{numeric}. The grid spacing for \code{method="grid"}.
 #' @param ptsOnEdges \code{integer}. For the random sampling method as the
 #'   number of points to pick exclusively on edges.
 #'   If missing, the number of edges is used.
 #' @param ptsOnFaces \code{integer}. For the random sampling method as the
 #'   number of points to pick on the surface.
 #'   If missing, the number of vertices is used.
-#' @param ptsPerDist \code{numeric}.
-#' @param ptsPerEdge \code{integer}.
-#' @param ptsPerArea \code{numeric}.
-#' @param ptsPerFace \code{integer}.
+#' @param ptsPerDist \code{numeric}. Points per distance unit. Used for
+#'   \code{method="random"} and \code{"mc"} to respectively
+#'   determine the total number of points on edges and the number of points per edge.
+#' @param ptsPerEdge \code{integer}. Points per edge. Used for \code{method="mc"}
+#'   as the number of points per edge to pick.
+#' @param ptsPerArea \code{numeric}. Points per area unit. Used for
+#'   \code{method="random"} and \code{"mc"} to respectively determine
+#'   the total number of points inside faces and the number of points per face.
+#' @param ptsPerFace \code{integer}. Points per face. Used for \code{method="mc"}
+#'   as the number of points per face to pick.
 #' @returns A list with components \code{"HDq"} (quantile Hausdorff distance),
 #'   \code{"ASSD"} (average symmetric surface distance),
 #'   \code{"RMSE"} (root mean squared error).

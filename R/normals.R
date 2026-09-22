@@ -14,9 +14,9 @@
 #' @description Returns a function which computes normals for a
 #'   3D point cloud.
 #' @param x \code{integer}. Number of neighbors used to compute the normals.
-#' @param method One of \code{"pca"} to estimate the normal direction at
+#' @param method One of \code{"PCA"} to estimate the normal direction at
 #'   each point by linear least squares fitting of a plane over its nearest
-#'   neighbors, or \code{"jet"} to estimate the normal direction at each
+#'   neighbors, or \code{"Jet"} to estimate the normal direction at each
 #'   point by fitting a jet surface over its nearest neighbors). See details.
 #' @returns A function which takes just one argument: a numeric matrix with
 #'   three columns, each row represents a point, and the function returns a

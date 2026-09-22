@@ -265,12 +265,10 @@ makeMeshValid <- function(x,
 #'
 #' @examples
 #' library(SurfaceMesh)
-#' library(rgl)
-#' mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
-#' mesh_vn     <- assignNormals(mesh)
-#' mesh_vn_rgl <- toRGL(mesh_vn)
-#' open3d(windowRect=c(50, 50, 562, 562))
-#' wire3d(mesh_vn_rgl)
+#' mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=FALSE)
+#' mesh
+#' mesh_wn <- assignNormals(mesh)
+#' mesh_wn
 #'
 #' @export
 assignNormals <- function(x) {
@@ -564,7 +562,7 @@ getDistance <- function(x, points) {
 }
 
 #' @title Get mesh volume
-#' @description Get the volume of a given 3D surface mesh.
+#' @description Get the volume bounded by a closed 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{numeric}. The mesh volume - if mesh bounds a volume.
 #' @seealso See \code{\link[SurfaceMesh]{getArea}} for the mesh area.
@@ -675,7 +673,7 @@ isTriangle <- function(x) {
 }
 
 #' @title Is mesh a valid mesh?
-#' @description Check if the given mesh is a valid 3D surface mesh.#'
+#' @description Check if the given mesh is a valid 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
 #' @seealso See \code{\link[SurfaceMesh]{hasGarbage}} to check if mesh has garbage.

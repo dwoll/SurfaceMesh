@@ -1,7 +1,7 @@
 Type: Package
 Package: SurfaceMesh
 Title: 3D Surface Meshes Based on 'CGAL'
-Version: 0.0.2
+Version: 0.0.3
 Authors@R:
     c(person("Daniel", "Wollschlaeger",
              role=c("aut", "cre"),
@@ -38,7 +38,7 @@ LazyData: true
 SystemRequirements: C++17, gmp, mpfr, pandoc (>=1.14)
 SystemRequirementsNote: 'MPFR' (MP Floating-Point Reliable Library,
     https://www.mpfr.org/), 'GMP' (GNU Multiple Precision Library,
-    https://gmplib.org/)
+    https://gmplib.org/), Pandoc for vignette building
 VignetteBuilder: knitr, rmarkdown
 Roxygen: list(markdown=TRUE)
 Config/roxygen2/version: 8.1.0

@@ -35,7 +35,7 @@
 #'
 #' @seealso See also \code{\link[SurfaceMesh]{reconstructAFS}},
 #'    \code{\link[SurfaceMesh]{reconstructSSS}},
-#'    \code{\link[SurfaceMesh]{reconstructPoisson}} for other surface Reconstruction
+#'    \code{\link[SurfaceMesh]{reconstructPoisson}} for other surface reconstruction
 #'    methods.
 #'
 #' @examples

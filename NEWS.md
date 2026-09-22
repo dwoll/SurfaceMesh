@@ -1,3 +1,3 @@
-# SurfaceMesh 0.0.1 (2026-09-21)
+# SurfaceMesh 0.0.3 (2026-09-22)
 
-Initial release.
+Initial release to CRAN.
