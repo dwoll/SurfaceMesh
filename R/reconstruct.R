@@ -19,9 +19,9 @@
 #'   this integer as the number of neighbors for the smoothing. Note that this
 #'   smoothing preprocessing relocates the points and then should not be used
 #'   if the points have been sampled without noise on the surface.
-#' @param repairSoup Boolean. Whether to clean the mesh (merging
-#'   duplicated vertices, duplicated faces, removing isolated vertices).
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param repairSoup Boolean. Clean the mesh (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices)?
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/}
 #'   for details.
@@ -89,7 +89,7 @@ reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
 #' @param smAngle Bound for the minimum facet angle in degrees.
 #' @param smRadius Relative bound for the radius of the surface Delaunay balls.
 #' @param smDistance Relative bound for the center-center distances.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/}
 #'   for details.
@@ -167,12 +167,12 @@ reconstructPoisson <- function(
 #' @param scaleIterations Positive integer. Number of iterations used to increase the scale.
 #' @param neighbors Positive integer. Number of neighbors used to smooth the point cloud.
 #' @param samples Positive integer. Number of samples used to smooth the point cloud.
-#' @param separateShells Boolean. whether to separate the shells.
-#' @param forceManifold Boolean. whether to force a manifold output mesh.
+#' @param separateShells Boolean. Separate the shells?
+#' @param forceManifold Boolean. Force a manifold output mesh?
 #' @param borderAngle Bound on the angle in degrees used to detect border edges.
-#' @param repairSoup Boolean. Whether to clean the mesh (merging
-#'   duplicated vertices, duplicated faces, removing isolated vertices).
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param repairSoup Boolean. Clean the mesh (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices)?
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
 #' @details See \url{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}
 #'   for details.

@@ -16,7 +16,7 @@
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
 #' @param nIter Positive \code{integer}: Number of iterations.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Subdivision_method_3/} for details.
 #' @seealso See \code{\link[SurfaceMesh]{subdivideDooSabin}} for Doo-Sabin subdivision,
@@ -58,8 +58,8 @@ subdivideCatmullClark <- function(x, nIter = 1L, normals = FALSE) {
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
 #' @param nIter Positive \code{integer}: Number of iterations.
-#' @param triangulate Boolean. Whether to triangulate the resulting mesh.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param triangulate Boolean. Triangulate the resulting mesh?
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Subdivision_method_3/} for details.
 #' @seealso See \code{\link[SurfaceMesh]{subdivideCatmullClark}} for Catmull-Clark subdivision,
@@ -102,7 +102,7 @@ subdivideDooSabin <- function(x, nIter = 1L, triangulate = TRUE, normals = FALSE
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
 #' @param nIter Positive \code{integer}: Number of iterations.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Subdivision_method_3/} for details.
 #' @seealso See \code{\link[SurfaceMesh]{subdivideDooSabin}} for Doo-Sabin subdivision,
@@ -144,7 +144,7 @@ subdivideSqrt3 <- function(x, nIter = 1L, normals = FALSE) {
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
 #' @param nIter Positive \code{integer}: Number of iterations.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Subdivision_method_3/} for details.
 #' @seealso See \code{\link[SurfaceMesh]{subdivideDooSabin}} for Doo-Sabin subdivision,

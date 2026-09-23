@@ -6,9 +6,9 @@
 #' @title Triangulated Surface Mesh Simplification
 #' @description Simplification of a triangular 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Whether to clean the mesh (merging duplicated
-#'   vertices and duplicated faces, removing isolated vertices).
-#' @param repairMesh Boolean. Whether to try to remove self-intersections from output mesh.
+#' @param repairSoup Boolean. Clean the mesh (merging duplicated
+#'   vertices and duplicated faces, removing isolated vertices)?
+#' @param repairMesh Boolean. Try to remove self-intersections from output mesh?
 #' @param method \code{character}. Cost and placement strategy. One of
 #'   \code{"LT-R"} (Lindstrom-Turk using undirected edge ratio as stop predicate),
 #'   \code{"LT-C"} (Lindstrom-Turk using undirected edge count as stop predicate),
@@ -23,12 +23,11 @@
 #'   One of \code{"CP"} (classic plane), \code{"CT"} (classic tri),
 #'   \code{"PP"} (prob plane), \code{"PT"} (prob tri), and
 #'   \code{"PL"} (plane and line).
-#' @param normals Boolean. Whether to return vertex normals.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param normals Boolean. Return vertex normals?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @return A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Surface_mesh_simplification/} for details.
 #' @seealso \code{\link[SurfaceMesh]{remeshIsotropic}}
-#' @author Daniel Wollschlaeger.
 #'
 #' @examples
 #' library(SurfaceMesh)

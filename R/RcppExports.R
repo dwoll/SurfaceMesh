@@ -169,8 +169,16 @@ simplifyGH_cpp <- function(rmesh, repairSoup, repairMesh, ueRatio, policy, norma
     .Call(`_SurfaceMesh_simplifyGH_cpp`, rmesh, repairSoup, repairMesh, ueRatio, policy, normals, verbose)
 }
 
-remeshSmooth_cpp <- function(rmesh, indices, nIter, time, normals) {
-    .Call(`_SurfaceMesh_remeshSmooth_cpp`, rmesh, indices, nIter, time, normals)
+remeshSmoothShape_cpp <- function(rmesh, indices, nIter, time, normals) {
+    .Call(`_SurfaceMesh_remeshSmoothShape_cpp`, rmesh, indices, nIter, time, normals)
+}
+
+remeshSmoothAA_cpp <- function(rmesh, nIter, dihedralAngle, useAngleSmooth, useAreaSmooth, useSafeConstr, useDelaunay, doProject, normals) {
+    .Call(`_SurfaceMesh_remeshSmoothAA_cpp`, rmesh, nIter, dihedralAngle, useAngleSmooth, useAreaSmooth, useSafeConstr, useDelaunay, doProject, normals)
+}
+
+remeshSmoothTR_cpp <- function(rmesh, nIter, relaxConstr, normals) {
+    .Call(`_SurfaceMesh_remeshSmoothTR_cpp`, rmesh, nIter, relaxConstr, normals)
 }
 
 subdivideCatmullClark_cpp <- function(rmesh, nIter, normals) {

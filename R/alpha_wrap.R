@@ -25,7 +25,7 @@
 #'   is defined as the length of the diagonal of the bounding box of the
 #'   point cloud divided by the relative offset parameter. Increase for
 #'   output that is closer to input mesh.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #'
 #' @returns A \code{CGALmesh} object.
 #'

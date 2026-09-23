@@ -16,13 +16,12 @@
 #' @param x A list of meshes, each being either a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Whether to clean the meshes (merging
-#'   duplicated vertices, duplicated faces, removing isolated vertices).
+#' @param repairSoup Boolean. Clean the meshes (merging
+#'   duplicated vertices, duplicated faces, removing isolated vertices)?
 #'   Set to \code{FALSE} if you know the meshes are clean, to
 #'   gain some speed.
-#' @param normals Boolean. Whether to return the vertex normals of the
-#'   output mesh.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param normals Boolean. Return vertex normals of the output mesh?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
@@ -87,12 +86,11 @@ boolIntersection <- function(x, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
 #' @param mesh2 A mesh, either being given a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Whether to clean the meshes (merging duplicated
-#'   vertices, duplicated faces, removing isolated vertices). Set to
+#' @param repairSoup Boolean. Clean the meshes (merging duplicated
+#'   vertices, duplicated faces, removing isolated vertices)? Set to
 #'   \code{FALSE} if you know the meshes are clean to gain some speed.
-#' @param normals Boolean. Whether to return the vertex normals of the
-#'   output mesh.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param normals Boolean. Return vertex normals of the output mesh?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
 #' @seealso See also \code{\link[SurfaceMesh]{boolIntersection}} and
@@ -155,13 +153,11 @@ boolDifference <- function(
 #' @param x A list of meshes, each being either a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Whether to clean the meshes (merging
-#'   duplicated vertices, duplicated faces, removing isolated vertices).
-#'   Set to \code{FALSE} if you know the meshes are clean, to
-#'   gain some speed.
-#' @param normals Boolean. Whether to return the vertex normals of the
-#'   output mesh.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param repairSoup Boolean. Clean the meshes (merging duplicated
+#'   vertices, duplicated faces, removing isolated vertices)? Set to
+#'   \code{FALSE} if you know the meshes are clean to gain some speed.
+#' @param normals Boolean. Return vertex normals of the output mesh?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.
 #' @seealso See also \code{\link[SurfaceMesh]{boolIntersection}} and
@@ -220,11 +216,10 @@ boolUnion <- function(x, repairSoup = TRUE, normals = FALSE, verbose = FALSE) {
 #' @param mesh2 Either a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Whether to clean the meshes (merging
-#'   duplicated vertices, duplicated faces, removing isolated vertices).
-#'   Set to \code{FALSE} if you know the meshes are clean, to
-#'   gain some speed.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param repairSoup Boolean. Clean the meshes (merging duplicated
+#'   vertices, duplicated faces, removing isolated vertices)? Set to
+#'   \code{FALSE} if you know the meshes are clean to gain some speed.
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A \code{list} with five components: \code{"Vol1"}, \code{"Vol2"},
 #'   \code{"VolI"}, \code{"VolU"}, \code{"JSC"} (IoU) and \code{"DSC"}.
 #' @details See \url{https://metrics-reloaded.dkfz.de/metric-library/dsc} and

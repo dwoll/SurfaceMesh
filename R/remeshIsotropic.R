@@ -28,7 +28,7 @@
 #' @param nIter Positive \code{integer}: Number of iterations.
 #' @param nRelaxSteps Positive \code{integer}: Number of relaxation steps.
 #' @param protectConstraints Boolean. Protect constraints? See details.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @return A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

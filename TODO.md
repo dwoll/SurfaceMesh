@@ -5,12 +5,8 @@
 
 # Wishlist
 
-  * smoothing
-      * `PMP::angle_and_area_smoothing()`
-      * `PMP::tangential_relaxation()`
   * remeshing
-      * https://www.cgal.org/2025/05/22/Surface_remeshing/
-      * https://doc.cgal.org/latest/PMP_Remeshing/index.html#Chapter_PMPRemeshing
+      * https://doc.cgal.org/latest/PMP_Remeshing/
       * `approximated_centroidal_Voronoi_diagram_remeshing()`
       * `surface_Delaunay_remeshing()`
       * `PMP::remesh_planar_patches()`

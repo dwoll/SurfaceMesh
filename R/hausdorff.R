@@ -15,8 +15,7 @@
 #'   approximate distance, or the distance estimate with a given error bound.
 #' @param mesh1 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param mesh2 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param symmetric Boolean. Whether to consider the symmetric Hausdorff
-#'   distance.
+#' @param symmetric Boolean. Report the symmetric Hausdorff distance?
 #' @param n \code{integer}. Number of points sampled for the approximate Hausdorff distance.
 #'   If missing and \code{errorBound} is missing as well, the number of vertices is used.
 #' @param errorBound A positive number. Upper bound on the error of the
@@ -69,9 +68,7 @@ getHausdorff <- function(mesh1, mesh2, symmetric = TRUE, n, errorBound) {
 #'   outlying regions than the full Hausdorff distance.
 #' @param mesh1 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param mesh2 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param symmetric Boolean. Whether to pool the sampled distances from
-#'   \code{mesh1} to \code{mesh2} with those from \code{mesh2} to \code{mesh1}
-#'   before taking the quantile.
+#' @param symmetric Boolean. Report the symmetric quantile Hausdorff distance?
 #' @param p A number in \eqn{[0, 1]}. The quantile probability, defaults
 #'   to \code{0.95}.
 #' @param ... Sampling options passed to \code{\link[SurfaceMesh]{getSurfaceDist}}.
@@ -108,9 +105,7 @@ getHausdorffQuantile <- function(mesh1, mesh2, symmetric = TRUE, p = 0.95, ...) 
 #' @param mesh1 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param mesh2 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param returnDists Boolean. Return the sampled distances from mesh 1 to 2, and from 2 to 1?
-#' @param symmetric Boolean. Whether to pool the sampled distances from
-#'   \code{mesh1} to \code{mesh2} with those from \code{mesh2} to \code{mesh1}
-#'   before taking the quantile.
+#' @param symmetric Boolean. Report the symmetric quantile Hausdorff distance?
 #' @param p A number in \eqn{[0, 1]}. The quantile probability, defaults
 #'   to \code{0.95}.
 #' @param method \code{character}. \code{"random"} for random uniform sampling,

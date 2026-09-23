@@ -27,21 +27,21 @@
 #'   matrix (each row provides the vertex indices of the corresponding face) or a
 #'   list of integer vectors, each one providing the vertex indices of the
 #'   corresponding face.
-#' @param triangulate Boolean. Whether to triangulate the faces. Ignored if faces
+#' @param triangulate Boolean. Triangulate the faces? Ignored if faces
 #'   are already triangle.
-#' @param repairSoup Boolean. Whether to clean the mesh (merging duplicated
-#'   vertices and duplicated faces, removing isolated vertices).
-#' @param removeIntersections Boolean. Whether to attempt to remove self-intersections.
+#' @param repairSoup Boolean. Clean the mesh (merging duplicated
+#'   vertices and duplicated faces, removing isolated vertices)?
+#' @param removeIntersections Boolean. Try to remove self-intersections?
 #' @param removeMethod \code{character}. Method for removing self-intersections.
 #'   One of \code{"auto"} (for auto-refine)
 #'   and \code{"auto_snap"} (auto-refine with iterative snap).
-#' @param fillHoles Boolean. Whether to attempt to fill boundary holes.
+#' @param fillHoles Boolean. Try to fill boundary holes?
 #' @param fairHole Boolean. Use CGAL \code{triangulate_refine_and_fair_hole()}
 #'   (\code{TRUE}) or \code{triangulate_and_refine_hole()} (\code{FALSE})
 #'   when filling holes?
 #' @param maxNumHoles \code{integer}. Maximum number of holes to be filled. May be 0.
-#' @param normals Boolean. Whether to compute vertex normals.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param normals Boolean. Compute vertex normals?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A list of class \code{CGALmesh} giving the vertices, the edges, the faces
 #'   of the mesh, the exterior edges, the exterior vertices, and optionally the
 #'   vertex normals.
@@ -176,12 +176,12 @@ makeMesh <- function(x,
 #'   matrix (each row provides the vertex indices of the corresponding face) or a
 #'   list of integer vectors, each one providing the vertex indices of the
 #'   corresponding face.
-#' @param soup Boolean. Whether to assume a polygon soup. If \code{FALSE}, assume
+#' @param soup Boolean. Assume a polygon soup? If \code{FALSE}, assume
 #'   correctly oriented faces - which is a bit faster.
-#' @param triangulate Boolean. Whether to triangulate the faces. Ignored if faces
+#' @param triangulate Boolean. Triangulate the faces? Ignored if faces
 #'   are already triangle.
-#' @param normals Boolean. Whether to compute vertex normals.
-#' @param verbose Boolean. Whether to print out messages about mesh processing.
+#' @param normals Boolean. Compute vertex normals?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A list of class \code{CGALmesh} giving the vertices, the edges, the faces
 #'   of the mesh, the exterior edges, the exterior vertices, and optionally the normals.
 #' @seealso See \code{\link[SurfaceMesh]{plotEdges}} for details about the edges
@@ -353,8 +353,8 @@ getArea <- function(x) {
 #' @title Get axis-parallel bounding box
 #' @description Get the axis-parallel bounding box of a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param triangulate Boolean. Whether to triangulate the faces of the bounding box.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param triangulate Boolean. Triangulate the faces of the bounding box?
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @seealso See \code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for the optimal
 #'   (oriented) bounding box and \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
@@ -398,8 +398,8 @@ getBoundingBox <- function(x, triangulate = FALSE, normals = FALSE) {
 #' @title Get optimal bounding box
 #' @description Get the optimal (oriented) bounding box of a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param triangulate Boolean. Whether to triangulate the faces of the bounding box.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param triangulate Boolean. Triangulate the faces of the bounding box?
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Optimal_bounding_box/} for details.
 #' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}} for the axis-aligned bounding
@@ -457,7 +457,7 @@ getCentroid <- function(x) {
 #' @description Get the convex hull of a given set of 3D points
 #'   using the quickhull algorithm.
 #' @param x \code{numeric} matrix with 3 columns with one point per row.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}},
 #' \code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for bounding box functions.
@@ -697,7 +697,7 @@ isValid <- function(x) {
 #' @title Orient mesh to bound a volume
 #' @description Orient a given 3D surface mesh to bound a volume.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @seealso \code{\link[SurfaceMesh]{doesBoundVolume}} to check if mesh
 #'   bounds a volume and \code{\link[SurfaceMesh]{getVolume}} to get the
@@ -729,9 +729,9 @@ orientToBoundVolume <- function(x, normals = FALSE) {
 #'   vertex indices.
 #' @param color \code{character}. Color for the edges.
 #' @param lwd Positive number. Line width. Ignored if \code{edgesAsTubes=TRUE}.
-#' @param edgesAsTubes Boolean. Whether to draw the edges as tubes.
+#' @param edgesAsTubes Boolean. Draw edges as tubes?
 #' @param tubesRadius Positive number. Radius of the tubes when \code{edgesAsTubes=TRUE}.
-#' @param verticesAsSpheres Boolean. Whether to draw the vertices as spheres.
+#' @param verticesAsSpheres Boolean. Draw vertices as spheres?
 #' @param only \code{integer} vector with the indices of the vertices
 #'   to plot as spheres. If missing, all vertices are plotted as spheres.
 #' @param spheresRadius The radius of the spheres when
@@ -924,7 +924,7 @@ toRGL <- function(x, ...) {
 #' @title Triangulate mesh
 #' @description Triangulate a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param normals Boolean. Whether to return vertex normals.
+#' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'

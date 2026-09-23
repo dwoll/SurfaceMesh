@@ -302,11 +302,44 @@ wire3d(mesh_s_rgl)
 ```
 
 ## Smoothing
+### Smooth Shape
 
 ```{r}
 mesh       <- dataHeart1
 mesh_rgl   <- toRGL(mesh)
-mesh_s     <- remeshSmooth(mesh, nIter=5, time=1)
+mesh_s     <- remeshSmoothShape(mesh, nIter=5, time=1)
+mesh_s_rgl <- toRGL(mesh_s)
+
+mfrow3d(1, 2)
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_s_rgl)
+```
+
+### Area and Angle Smoothing
+
+```{r}
+mesh       <- dataHeart1
+mesh_rgl   <- toRGL(mesh)
+mesh_s     <- remeshSmoothAngleArea(mesh, nIter=5)
+mesh_s_rgl <- toRGL(mesh_s)
+
+mfrow3d(1, 2)
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, -90, zoom=0.7)
+wire3d(mesh_s_rgl)
+```
+
+### Tangential Relaxation
+
+```{r}
+mesh       <- dataHeart1
+mesh_rgl   <- toRGL(mesh)
+mesh_s     <- remeshSmoothTangentRelax(mesh, nIter=5)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
