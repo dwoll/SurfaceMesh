@@ -173,8 +173,8 @@ remeshSmoothShape_cpp <- function(rmesh, indices, nIter, time, normals) {
     .Call(`_SurfaceMesh_remeshSmoothShape_cpp`, rmesh, indices, nIter, time, normals)
 }
 
-remeshSmoothAA_cpp <- function(rmesh, nIter, dihedralAngle, useAngleSmooth, useAreaSmooth, useSafeConstr, useDelaunay, doProject, normals) {
-    .Call(`_SurfaceMesh_remeshSmoothAA_cpp`, rmesh, nIter, dihedralAngle, useAngleSmooth, useAreaSmooth, useSafeConstr, useDelaunay, doProject, normals)
+remeshSmoothAA_cpp <- function(rmesh, dihedralAngle, nIter, useSafeConstr, doProject, normals) {
+    .Call(`_SurfaceMesh_remeshSmoothAA_cpp`, rmesh, dihedralAngle, nIter, useSafeConstr, doProject, normals)
 }
 
 remeshSmoothTR_cpp <- function(rmesh, nIter, relaxConstr, normals) {

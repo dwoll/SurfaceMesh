@@ -21,7 +21,7 @@ is defined as the length of the diagonal of the bounding box of the
 point cloud divided by the relative offset parameter. Increase for
 output that is closer to input mesh.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.
@@ -53,7 +53,7 @@ wire3d(mesh_alwrap_rgl)
 \seealso{
 See also \code{\link[SurfaceMesh]{reconstructAFS}},
 \code{\link[SurfaceMesh]{reconstructSSS}},
-\code{\link[SurfaceMesh]{reconstructPoisson}} for other surface Reconstruction
+\code{\link[SurfaceMesh]{reconstructPoisson}} for other surface reconstruction
 methods.
 }
 \author{

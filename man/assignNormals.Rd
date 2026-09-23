@@ -18,12 +18,10 @@ Currently, only vertex normals are supported.
 }
 \examples{
 library(SurfaceMesh)
-library(rgl)
-mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
-mesh_vn     <- assignNormals(mesh)
-mesh_vn_rgl <- toRGL(mesh_vn)
-open3d(windowRect=c(50, 50, 562, 562))
-wire3d(mesh_vn_rgl)
+mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=FALSE)
+mesh
+mesh_wn <- assignNormals(mesh)
+mesh_wn
 
 }
 \author{

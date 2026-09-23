@@ -25,15 +25,15 @@ matrix (each row provides the vertex indices of the corresponding face) or a
 list of integer vectors, each one providing the vertex indices of the
 corresponding face.}
 
-\item{soup}{Boolean. Whether to assume a polygon soup. If \code{FALSE}, assume
+\item{soup}{Boolean. Assume a polygon soup? If \code{FALSE}, assume
 correctly oriented faces - which is a bit faster.}
 
-\item{triangulate}{Boolean. Whether to triangulate the faces. Ignored if faces
+\item{triangulate}{Boolean. Triangulate the faces? Ignored if faces
 are already triangle.}
 
-\item{normals}{Boolean. Whether to compute vertex normals.}
+\item{normals}{Boolean. Compute vertex normals?}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 A list of class \code{CGALmesh} giving the vertices, the edges, the faces

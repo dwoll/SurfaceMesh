@@ -15,12 +15,11 @@ i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 from package \strong{rgl}, or a \code{CGALmesh} object,
 i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{repairSoup}{Boolean. Whether to clean the meshes (merging
-duplicated vertices, duplicated faces, removing isolated vertices).
-Set to \code{FALSE} if you know the meshes are clean, to
-gain some speed.}
+\item{repairSoup}{Boolean. Clean the meshes (merging duplicated
+vertices, duplicated faces, removing isolated vertices)? Set to
+\code{FALSE} if you know the meshes are clean to gain some speed.}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 A \code{list} with five components: \code{"Vol1"}, \code{"Vol2"},

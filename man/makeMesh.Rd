@@ -30,19 +30,19 @@ matrix (each row provides the vertex indices of the corresponding face) or a
 list of integer vectors, each one providing the vertex indices of the
 corresponding face.}
 
-\item{triangulate}{Boolean. Whether to triangulate the faces. Ignored if faces
+\item{triangulate}{Boolean. Triangulate the faces? Ignored if faces
 are already triangle.}
 
-\item{repairSoup}{Boolean. Whether to clean the mesh (merging duplicated
-vertices and duplicated faces, removing isolated vertices).}
+\item{repairSoup}{Boolean. Clean the mesh (merging duplicated
+vertices and duplicated faces, removing isolated vertices)?}
 
-\item{removeIntersections}{Boolean. Whether to attempt to remove self-intersections.}
+\item{removeIntersections}{Boolean. Try to remove self-intersections?}
 
 \item{removeMethod}{\code{character}. Method for removing self-intersections.
 One of \code{"auto"} (for auto-refine)
 and \code{"auto_snap"} (auto-refine with iterative snap).}
 
-\item{fillHoles}{Boolean. Whether to attempt to fill boundary holes.}
+\item{fillHoles}{Boolean. Try to fill boundary holes?}
 
 \item{fairHole}{Boolean. Use CGAL \code{triangulate_refine_and_fair_hole()}
 (\code{TRUE}) or \code{triangulate_and_refine_hole()} (\code{FALSE})
@@ -50,9 +50,9 @@ when filling holes?}
 
 \item{maxNumHoles}{\code{integer}. Maximum number of holes to be filled. May be 0.}
 
-\item{normals}{Boolean. Whether to compute vertex normals.}
+\item{normals}{Boolean. Compute vertex normals?}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 A list of class \code{CGALmesh} giving the vertices, the edges, the faces

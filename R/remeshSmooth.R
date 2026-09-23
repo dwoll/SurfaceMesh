@@ -74,23 +74,24 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
   fromCPP(meshOut)
 }
 
-#' @title Smooth angle and area
-#' @description Smoothing by angle and area optimization.
+#' @title Smooth angle
+#' @description Smoothing by angle optimization.
 #'   Includes triangulation if mesh is not already triangle.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
-#' @param dihedralAngle Positive number. Constrain edges with a dihedral angle
-#'   over given value.
+#' @param dihedralAngle Positive number. Constrain edges with a dihedral
+#'   angle over given value.
 #' @param nIter Positive \code{integer}: Number of iterations.
-#' @param useAngleSmooth Boolean. Do angle-based smoothing?
-#' @param useAreaSmooth Boolean. Do area-based smoothing?
 #' @param useSafeConstr Boolean. Use safety constraints for moving vertices?
-#' @param useDelaunay Boolean. If \code{TRUE}, area-based smoothing will be
-#'   completed by a phase of Delaunay-based edge-flips to prevent the
-#'   creation of elongated triangles.
+#' @param doProject Boolean. Project points onto initial surface after
+#'   each iteration?
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
+#'   Note that CGAL `angle_and_area_smoothing()` supports smoothing by area
+#'   optimization as well. However, this feature requires the external
+#'   Ceres library (\url{http://ceres-solver.org/}) and is thus currently
+#'   not enabled here.
 #'
 #' @examples
 #' library(SurfaceMesh)
@@ -98,7 +99,7 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 #'
 #' mesh       <- dataHeart1
 #' mesh_rgl   <- toRGL(mesh)
-#' mesh_s     <- remeshSmoothAngleArea(mesh, nIter=5)
+#' mesh_s     <- remeshSmoothAngle(mesh, nIter=5)
 #' mesh_s_rgl <- toRGL(mesh_s)
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
@@ -110,32 +111,26 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 #' wire3d(mesh_s_rgl)
 #'
 #' @export
-remeshSmoothAngleArea <- function(x,
-                                  dihedralAngle = 60,
-                                  nIter = 1L,
-                                  useAngleSmooth = TRUE,
-                                  useAreaSmooth = TRUE,
-                                  useSafeConstr = FALSE,
-                                  useDelaunay = TRUE,
-                                  doProject = TRUE,
-                                  normals = FALSE) {
+remeshSmoothAngle <- function(x,
+                              dihedralAngle = 60,
+                              nIter = 1L,
+                              useSafeConstr = FALSE,
+                              doProject = TRUE,
+                              normals = FALSE) {
   if(!inherits(x, "CGALmesh")) {
       stop("The `x` argument must be of class 'CGALmesh'",
            " (i.e., the output of the `makeMesh()` function).")
   }
-  stopifnot(isStrictPositiveInteger(nIter))
   stopifnot(isPositiveNumber(dihedralAngle))
+  stopifnot(isStrictPositiveInteger(nIter))
   stopifnot(isBoolean(useSafeConstr))
   stopifnot(isBoolean(normals))
   storage.model(dihedralAngle) <- "double"
   meshCPP <- fromR(x)
   meshOut <- remeshSmoothAA_cpp(meshCPP,
-                                as.integer(nIter),
                                 dihedralAngle,
-                                useAngleSmooth,
-                                useAreaSmooth,
+                                as.integer(nIter),
                                 useSafeConstr,
-                                useDelaunay,
                                 doProject,
                                 normals)
   fromCPP(meshOut)
@@ -181,8 +176,8 @@ remeshSmoothTangentRelax <- function(x,
            " (i.e., the output of the `makeMesh()` function).")
   }
   stopifnot(isStrictPositiveInteger(nIter))
-  stopifnot(isBoolean(normals))
   stopifnot(isBoolean(relaxConstr))
+  stopifnot(isBoolean(normals))
   meshCPP <- fromR(x)
   meshOut <- remeshSmoothTR_cpp(
     meshCPP, as.integer(nIter), relaxConstr, normals)

@@ -318,12 +318,12 @@ view3d(0, -90, zoom=0.7)
 wire3d(mesh_s_rgl)
 ```
 
-### Area and Angle Smoothing
+### Angle Smoothing
 
 ```{r}
 mesh       <- dataHeart1
 mesh_rgl   <- toRGL(mesh)
-mesh_s     <- remeshSmoothAngleArea(mesh, nIter=5)
+mesh_s     <- remeshSmoothAngle(mesh, nIter=5)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
@@ -333,6 +333,11 @@ next3d()
 view3d(0, -90, zoom=0.7)
 wire3d(mesh_s_rgl)
 ```
+
+Note that CGAL `angle_and_area_smoothing()` supports smoothing by area
+optimization as well. However, this feature requires the external
+[Ceres library](http://ceres-solver.org}) and is thus currently
+not enabled here.
 
 ### Tangential Relaxation
 

@@ -43,7 +43,7 @@ The target edge length of the remeshed mesh.}
 
 \item{protectConstraints}{Boolean. Protect constraints? See details.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.

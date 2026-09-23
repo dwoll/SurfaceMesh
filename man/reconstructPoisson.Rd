@@ -31,7 +31,7 @@ a reasonable default value: an average spacing that is stored in the
 
 \item{smDistance}{Relative bound for the center-center distances.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.

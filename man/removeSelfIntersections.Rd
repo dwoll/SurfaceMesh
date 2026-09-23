@@ -17,9 +17,9 @@ removeSelfIntersections(
 \item{method}{\code{character}. One of \code{"auto"} (for auto-refine) and
 \code{"auto_snap"} (auto-refine with iterative snap). See details.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 \code{CGALmesh} object.

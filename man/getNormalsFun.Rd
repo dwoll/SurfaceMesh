@@ -9,9 +9,9 @@ getNormalsFun(x, method = c("PCA", "Jet"))
 \arguments{
 \item{x}{\code{integer}. Number of neighbors used to compute the normals.}
 
-\item{method}{One of \code{"pca"} to estimate the normal direction at
+\item{method}{One of \code{"PCA"} to estimate the normal direction at
 each point by linear least squares fitting of a plane over its nearest
-neighbors, or \code{"jet"} to estimate the normal direction at each
+neighbors, or \code{"Jet"} to estimate the normal direction at each
 point by fitting a jet surface over its nearest neighbors). See details.}
 }
 \value{

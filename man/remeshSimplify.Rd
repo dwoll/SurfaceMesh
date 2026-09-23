@@ -19,10 +19,10 @@ remeshSimplify(
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{repairSoup}{Boolean. Whether to clean the mesh (merging duplicated
-vertices and duplicated faces, removing isolated vertices).}
+\item{repairSoup}{Boolean. Clean the mesh (merging duplicated
+vertices and duplicated faces, removing isolated vertices)?}
 
-\item{repairMesh}{Boolean. Whether to try to remove self-intersections from output mesh.}
+\item{repairMesh}{Boolean. Try to remove self-intersections from output mesh?}
 
 \item{method}{\code{character}. Cost and placement strategy. One of
 \code{"LT-R"} (Lindstrom-Turk using undirected edge ratio as stop predicate),
@@ -42,9 +42,9 @@ One of \code{"CP"} (classic plane), \code{"CT"} (classic tri),
 \code{"PP"} (prob plane), \code{"PT"} (prob tri), and
 \code{"PL"} (plane and line).}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 A \code{CGALmesh} object.
@@ -73,7 +73,4 @@ wire3d(mesh_s_rgl)
 }
 \seealso{
 \code{\link[SurfaceMesh]{remeshIsotropic}}
-}
-\author{
-Daniel Wollschlaeger.
 }

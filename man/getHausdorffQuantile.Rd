@@ -11,14 +11,12 @@ getHausdorffQuantile(mesh1, mesh2, symmetric = TRUE, p = 0.95, ...)
 
 \item{mesh2}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{symmetric}{Boolean. Whether to pool the sampled distances from
-\code{mesh1} to \code{mesh2} with those from \code{mesh2} to \code{mesh1}
-before taking the quantile.}
+\item{symmetric}{Boolean. Report the symmetric quantile Hausdorff distance?}
 
 \item{p}{A number in \eqn{[0, 1]}. The quantile probability, defaults
 to \code{0.95}.}
 
-\item{...}{Sampling options passed on to \code{\link[SurfaceMesh]{getSurfaceDist}}.}
+\item{...}{Sampling options passed to \code{\link[SurfaceMesh]{getSurfaceDist}}.}
 }
 \value{
 A number: the requested quantile of the sampled point-to-mesh

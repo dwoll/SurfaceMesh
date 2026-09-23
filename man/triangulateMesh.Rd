@@ -9,7 +9,7 @@ triangulateMesh(x, normals = FALSE)
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.

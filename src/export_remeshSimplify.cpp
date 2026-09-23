@@ -1,5 +1,6 @@
 // ----------------------------------------------------------------------- //
 // Daniel Wollschlaeger
+// code adapted from
 // https://doc.cgal.org/latest/Surface_mesh_simplification/examples.html
 // License: GPL-3
 // ----------------------------------------------------------------------- //

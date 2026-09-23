@@ -39,6 +39,9 @@ typedef SSS_reconstruction::Facet_const_iterator                     SSS_facet_i
 typedef SSS_reconstruction::Point_const_iterator                     SSS_point_iterator;
 
 // ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/Advancing_front_surface_reconstruction_2reconstruction_class_8cpp-example.html
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List reconstructAFS_cpp(const Rcpp::NumericMatrix pts,
                               const int nNeighbors,
@@ -57,7 +60,8 @@ Rcpp::List reconstructAFS_cpp(const Rcpp::NumericMatrix pts,
   vertices.reserve(pts.ncol());
   std::size_t counter = 0;
   for(AFS_tds2::Face_iterator fit = tds.faces_begin();
-      fit != tds.faces_end(); ++fit) {
+      fit != tds.faces_end();
+      ++fit) {
     if(reconstruction.has_on_surface(fit)) {
       counter++;
       AFS_triangulation3::Facet f = fit->facet();
@@ -113,6 +117,9 @@ Rcpp::List reconstructAFS_cpp(const Rcpp::NumericMatrix pts,
   return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, normals);
 }
 
+// ----------------------------------------------------------------------- //
+// code adapated from
+// https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/Poisson_surface_reconstruction_3_2poisson_reconstruction_function_8cpp-example.html
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List reconstructPoisson_cpp(const Rcpp::NumericMatrix pts,
@@ -183,6 +190,9 @@ Rcpp::List reconstructPoisson_cpp(const Rcpp::NumericMatrix pts,
 }
 
 // ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Scale_space_reconstruction_3/Scale_space_reconstruction_3_2scale_space_sm_8cpp-example.html
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List reconstructSSS_cpp(
   const Rcpp::NumericMatrix pts,
@@ -199,8 +209,7 @@ Rcpp::List reconstructSSS_cpp(
   SSS_smoother smoother(nNeighbors, nSamples);
   SSSR.increase_scale(scaleIterations, smoother);
   SSS_mesher mesher(
-    smoother.squared_radius(), separateShells, forceManifold, borderAngle
-  );
+    smoother.squared_radius(), separateShells, forceManifold, borderAngle);
   SSSR.reconstruct_surface(mesher);
   SSS_reconstruction::Point_range smoothed(SSSR.points());
   SSS_reconstruction::Facet_range polygons(SSSR.facets());

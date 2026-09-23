@@ -9,7 +9,7 @@ getConvexHull(x, normals = TRUE)
 \arguments{
 \item{x}{\code{numeric} matrix with 3 columns with one point per row.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.

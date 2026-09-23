@@ -14,9 +14,9 @@ readMeshFile(x, method = c("soup", "mesh"), normals = FALSE, verbose = FALSE)
 or \code{"mesh"} when the file is known to be a valid mesh with
 correct face orientations.}
 
-\item{normals}{Boolean. Whether to return vertex normals for \code{method="mesh"}.}
+\item{normals}{Boolean. Return vertex normals for \code{method="mesh"}?}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 For \code{method="soup"}: A list with two components: \code{vertices},

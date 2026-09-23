@@ -15,10 +15,10 @@ this integer as the number of neighbors for the smoothing. Note that this
 smoothing preprocessing relocates the points and then should not be used
 if the points have been sampled without noise on the surface.}
 
-\item{repairSoup}{Boolean. Whether to clean the mesh (merging
-duplicated vertices, duplicated faces, removing isolated vertices).}
+\item{repairSoup}{Boolean. Clean the mesh (merging
+duplicated vertices, duplicated faces, removing isolated vertices)?}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.

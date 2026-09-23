@@ -25,16 +25,16 @@ reconstructSSS(
 
 \item{samples}{Positive integer. Number of samples used to smooth the point cloud.}
 
-\item{separateShells}{Boolean. whether to separate the shells.}
+\item{separateShells}{Boolean. Separate the shells?}
 
-\item{forceManifold}{Boolean. whether to force a manifold output mesh.}
+\item{forceManifold}{Boolean. Force a manifold output mesh?}
 
 \item{borderAngle}{Bound on the angle in degrees used to detect border edges.}
 
-\item{repairSoup}{Boolean. Whether to clean the mesh (merging
-duplicated vertices, duplicated faces, removing isolated vertices).}
+\item{repairSoup}{Boolean. Clean the mesh (merging
+duplicated vertices, duplicated faces, removing isolated vertices)?}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.

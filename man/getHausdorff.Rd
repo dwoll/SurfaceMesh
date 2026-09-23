@@ -11,8 +11,7 @@ getHausdorff(mesh1, mesh2, symmetric = TRUE, n, errorBound)
 
 \item{mesh2}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{symmetric}{Boolean. Whether to consider the symmetric Hausdorff
-distance.}
+\item{symmetric}{Boolean. Report the symmetric Hausdorff distance?}
 
 \item{n}{\code{integer}. Number of points sampled for the approximate Hausdorff distance.
 If missing and \code{errorBound} is missing as well, the number of vertices is used.}
@@ -22,7 +21,7 @@ estimate. If missing, the approximate distance is returned.}
 }
 \value{
 A number. For the apprixmate distance, the algorithm uses
-simulation and thus the result can vary.
+simulation, and thus the result can vary.
 }
 \description{
 Hausdorff distance between two meshes. Either the

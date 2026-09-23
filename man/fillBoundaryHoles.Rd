@@ -20,9 +20,9 @@ or \code{triangulate_and_refine_hole()} (\code{FALSE})?}
 
 \item{maxNumHoles}{\code{integer}. Maximum number of holes to be filled. May be 0.}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 
-\item{verbose}{Boolean. Whether to print out messages about mesh processing.}
+\item{verbose}{Boolean. Print out messages about mesh processing?}
 }
 \value{
 \code{CGALmesh} object.

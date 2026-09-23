@@ -13,7 +13,7 @@ getVolume(x)
 \code{numeric}. The mesh volume - if mesh bounds a volume.
 }
 \description{
-Get the volume of a given 3D surface mesh.
+Get the volume bounded by a closed 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)

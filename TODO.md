@@ -1,5 +1,7 @@
 # TODO
 
+  * Poisson reconstruction
+      * does not work well
   * `remeshIsotropic()`
       * does not work well for pentagrammic prism - why? (`Rvcg::vcgIsotropicRemeshing()` works)
 
@@ -16,7 +18,7 @@
       * bounding spheres
   * `fill_boundary_hole()`
       * pass more parameters (small holes)
-  * clip
+  * clip (plane, ...)
   * isosurfacing https://doc.cgal.org/latest/Isosurfacing_3/
       * Marching cubes
       * Topologically correct marching cubes

@@ -27,11 +27,11 @@ vertex indices.}
 
 \item{lwd}{Positive number. Line width. Ignored if \code{edgesAsTubes=TRUE}.}
 
-\item{edgesAsTubes}{Boolean. Whether to draw the edges as tubes.}
+\item{edgesAsTubes}{Boolean. Draw edges as tubes?}
 
 \item{tubesRadius}{Positive number. Radius of the tubes when \code{edgesAsTubes=TRUE}.}
 
-\item{verticesAsSpheres}{Boolean. Whether to draw the vertices as spheres.}
+\item{verticesAsSpheres}{Boolean. Draw vertices as spheres?}
 
 \item{only}{\code{integer} vector with the indices of the vertices
 to plot as spheres. If missing, all vertices are plotted as spheres.}

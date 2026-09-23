@@ -13,7 +13,7 @@ isValid(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Check if the given mesh is a valid 3D surface mesh.#'
+Check if the given mesh is a valid 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)

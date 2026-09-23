@@ -20,6 +20,8 @@
 #include <CGAL/Polygon_mesh_processing/tangential_relaxation.h>
 
 // ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/PMP_Remeshing/PMP_Remeshing_2shape_smoothing_example_8cpp-example.html
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List remeshSmoothShape_cpp(
@@ -67,19 +69,20 @@ Rcpp::List remeshSmoothShape_cpp(
 }
 
 // ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
+// code adapted from
 // https://doc.cgal.org/latest/PMP_Remeshing/PMP_Remeshing_2mesh_smoothing_example_8cpp-example.html
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List remeshSmoothAA_cpp(
   const Rcpp::List rmesh,
-  const unsigned int nIter,
   const double dihedralAngle,
-  const bool useAngleSmooth,
-  const bool useAreaSmooth,
+  const unsigned int nIter,
   const bool useSafeConstr,
-  const bool useDelaunay,
   const bool doProject,
   const bool normals) {
+    const bool useAngleSmooth = true;
+    const bool useAreaSmooth  = false;      // Ceres library required
+    // const bool useDelaunay,    // for area smoothing
     Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
         rmesh,
         true,        // soup
@@ -100,9 +103,9 @@ Rcpp::List remeshSmoothAA_cpp(
     PMP::angle_and_area_smoothing(mesh,
                                   CGAL::parameters::number_of_iterations(nIter)
                                                    .use_angle_smoothing(useAngleSmooth)
-                                                   .use_area_smoothing(useAreaSmooth)
+                                                   .use_area_smoothing(useAreaSmooth)     // Ceres library required
                                                    .use_safety_constraints(useSafeConstr) // false: authorize all moves
-                                                   .use_Delaunay_flips(useDelaunay)
+                                                   // .use_Delaunay_flips(useDelaunay) for area smoothing
                                                    .do_project(doProject)
                                                    .edge_is_constrained_map(eif));
 
@@ -112,8 +115,9 @@ Rcpp::List remeshSmoothAA_cpp(
 }
 
 // ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
+// code adapted from
 // https://doc.cgal.org/latest/PMP_Remeshing/PMP_Remeshing_2tangential_relaxation_example_8cpp-example.html
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List remeshSmoothTR_cpp(
   const Rcpp::List rmesh,

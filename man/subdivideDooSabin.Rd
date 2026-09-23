@@ -12,9 +12,9 @@ The mesh must be triangle or be able to be made triangle.}
 
 \item{nIter}{Positive \code{integer}: Number of iterations.}
 
-\item{triangulate}{Boolean. Whether to triangulate the resulting mesh.}
+\item{triangulate}{Boolean. Triangulate the resulting mesh?}
 
-\item{normals}{Boolean. Whether to return vertex normals.}
+\item{normals}{Boolean. Return vertex normals?}
 }
 \value{
 A \code{CGALmesh} object.

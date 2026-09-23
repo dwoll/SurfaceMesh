@@ -17,6 +17,9 @@
 #include <CGAL/alpha_wrap_3.h>
 
 // ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Alpha_wrap_3/Alpha_wrap_3_2triangle_soup_wrap_8cpp-example.html
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List alphaWrapPoints_cpp(
     const Rcpp::NumericMatrix pts,
@@ -35,6 +38,9 @@ Rcpp::List alphaWrapPoints_cpp(
   return get_rmesh<K, Mesh3, Point3, Vector3>(mesh_wrap, false, normals);
 }
 
+// ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Alpha_wrap_3/Alpha_wrap_3_2triangle_mesh_wrap_8cpp-example.html
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List alphaWrapMesh_cpp(

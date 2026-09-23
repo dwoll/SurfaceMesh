@@ -18,6 +18,8 @@
 #include <CGAL/Polygon_mesh_processing/Adaptive_sizing_field.h>
 
 // ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/PMP_Remeshing/PMP_Remeshing_2isotropic_remeshing_example_8cpp-example.html
 // ----------------------------------------------------------------------- //
 struct halfedge2edge {
   halfedge2edge(const Mesh3& m, std::vector<dg_dscrptr>& edges)

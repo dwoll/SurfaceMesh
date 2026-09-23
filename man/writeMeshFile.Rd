@@ -18,8 +18,7 @@ the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 \item{precision}{Positive integer. Number of decimal digits for the
 vertex coordinates.}
 
-\item{binary}{Boolean. Whether to write a binary file (instead of
-an ASCII file).}
+\item{binary}{Boolean. Write a binary file (instead of a plain text ASCII file)?}
 }
 \value{
 No value. Just generates the file.

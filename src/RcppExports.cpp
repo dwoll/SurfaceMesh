@@ -609,21 +609,18 @@ BEGIN_RCPP
 END_RCPP
 }
 // remeshSmoothAA_cpp
-Rcpp::List remeshSmoothAA_cpp(const Rcpp::List rmesh, const unsigned int nIter, const double dihedralAngle, const bool useAngleSmooth, const bool useAreaSmooth, const bool useSafeConstr, const bool useDelaunay, const bool doProject, const bool normals);
-RcppExport SEXP _SurfaceMesh_remeshSmoothAA_cpp(SEXP rmeshSEXP, SEXP nIterSEXP, SEXP dihedralAngleSEXP, SEXP useAngleSmoothSEXP, SEXP useAreaSmoothSEXP, SEXP useSafeConstrSEXP, SEXP useDelaunaySEXP, SEXP doProjectSEXP, SEXP normalsSEXP) {
+Rcpp::List remeshSmoothAA_cpp(const Rcpp::List rmesh, const double dihedralAngle, const unsigned int nIter, const bool useSafeConstr, const bool doProject, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshSmoothAA_cpp(SEXP rmeshSEXP, SEXP dihedralAngleSEXP, SEXP nIterSEXP, SEXP useSafeConstrSEXP, SEXP doProjectSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type nIter(nIterSEXP);
     Rcpp::traits::input_parameter< const double >::type dihedralAngle(dihedralAngleSEXP);
-    Rcpp::traits::input_parameter< const bool >::type useAngleSmooth(useAngleSmoothSEXP);
-    Rcpp::traits::input_parameter< const bool >::type useAreaSmooth(useAreaSmoothSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nIter(nIterSEXP);
     Rcpp::traits::input_parameter< const bool >::type useSafeConstr(useSafeConstrSEXP);
-    Rcpp::traits::input_parameter< const bool >::type useDelaunay(useDelaunaySEXP);
     Rcpp::traits::input_parameter< const bool >::type doProject(doProjectSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(remeshSmoothAA_cpp(rmesh, nIter, dihedralAngle, useAngleSmooth, useAreaSmooth, useSafeConstr, useDelaunay, doProject, normals));
+    rcpp_result_gen = Rcpp::wrap(remeshSmoothAA_cpp(rmesh, dihedralAngle, nIter, useSafeConstr, doProject, normals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -739,7 +736,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_simplifyLT_cpp", (DL_FUNC) &_SurfaceMesh_simplifyLT_cpp, 8},
     {"_SurfaceMesh_simplifyGH_cpp", (DL_FUNC) &_SurfaceMesh_simplifyGH_cpp, 7},
     {"_SurfaceMesh_remeshSmoothShape_cpp", (DL_FUNC) &_SurfaceMesh_remeshSmoothShape_cpp, 5},
-    {"_SurfaceMesh_remeshSmoothAA_cpp", (DL_FUNC) &_SurfaceMesh_remeshSmoothAA_cpp, 9},
+    {"_SurfaceMesh_remeshSmoothAA_cpp", (DL_FUNC) &_SurfaceMesh_remeshSmoothAA_cpp, 6},
     {"_SurfaceMesh_remeshSmoothTR_cpp", (DL_FUNC) &_SurfaceMesh_remeshSmoothTR_cpp, 4},
     {"_SurfaceMesh_subdivideCatmullClark_cpp", (DL_FUNC) &_SurfaceMesh_subdivideCatmullClark_cpp, 3},
     {"_SurfaceMesh_subdivideDooSabin_cpp", (DL_FUNC) &_SurfaceMesh_subdivideDooSabin_cpp, 4},
