@@ -67,12 +67,12 @@ Whole heart delineated by two observers in the same set of CT image slices. Clas
 
 ```{r}
 heart1_rgl <- toRGL(dataHeart1)
-wire3d(heart1_rgl)
+shade3d(heart1_rgl, col="gray")
 ```
 
 ```{r}
 heart2_rgl <- toRGL(dataHeart2)
-wire3d(heart2_rgl)
+shade3d(heart2_rgl, col="gray")
 ```
 
 ## Geometric forms
@@ -105,7 +105,7 @@ Septuaginta, i.e. a polyhedron with 72 faces like a sphere based on the drawing 
 
 ```{r}
 view3d(30, 30, zoom=0.8)
-wire3d(dataSeptuaginta)
+shade3d(dataSeptuaginta, col="gray")
 ```
 
 Truncated icosahedron. A list with components `vertices`, `faces`. To view using package `rgl`, first make a `CGALmesh` object and convert to class `mesh3d`.
@@ -114,14 +114,14 @@ Truncated icosahedron. A list with components `vertices`, `faces`. To view using
 truncIcosahedron     <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
 truncIcosahedron_rgl <- toRGL(truncIcosahedron)
 view3d(30, 30, zoom=0.8)
-wire3d(truncIcosahedron_rgl)
+shade3d(truncIcosahedron_rgl, col="gray")
 ```
 
 Tubular knot. Class `mesh3d` from package `rgl`.
 
 ```{r}
 view3d(0, 0, zoom=0.8)
-wire3d(dataTubularKnot)
+shade3d(dataTubularKnot, col="gray")
 ```
 
 # Create Surface Meshes
@@ -133,7 +133,7 @@ mesh     <- makeMesh(f_mesh, verbose=FALSE)
 mesh_rgl <- toRGL(mesh)
 
 view3d(0, -90, zoom=0.8)
-wire3d(mesh_rgl)
+shade3d(mesh_rgl, col="gray")
 ```
 
 ## Create Surface Mesh Based on `mesh3d` Object
@@ -173,11 +173,15 @@ mesh
 Or
 
 ```{r}
-mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=FALSE)
-mesh
-
+mesh   <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=FALSE)
 mesh_n <- assignNormals(mesh)
-mesh_n
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+shade3d(toRGL(mesh), col="gray")
+next3d()
+view3d(0, 30, zoom=0.8)
+shade3d(toRGL(mesh_n), col="gray")
 ```
 
 # Mesh Repair
@@ -196,11 +200,11 @@ mesh_fill <- fillBoundaryHoles(mesh, verbose=TRUE)
 mesh_fill_rgl <- toRGL(mesh_fill)
 
 mfrow3d(1, 2)
-view3d(30, -45, zoom=0.8)
-wire3d(mesh_rgl)
+view3d(70, 15, zoom=0.8)
+shade3d(mesh_rgl, col="gray")
 next3d()
-view3d(30, -45, zoom=0.8)
-wire3d(mesh_fill_rgl)
+view3d(70, 15, zoom=0.8)
+shade3d(mesh_fill_rgl, col="gray")
 ```
 
 ## Remove Self-Intersections
@@ -312,47 +316,47 @@ mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_rgl)
+shade3d(mesh_rgl, col="gray")
 next3d()
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_s_rgl)
+shade3d(mesh_s_rgl, col="gray")
 ```
 
 ### Angle Smoothing
 
 ```{r}
-mesh       <- dataHeart1
+mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
 mesh_s     <- remeshSmoothAngle(mesh, nIter=5)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
-view3d(0, -90, zoom=0.7)
-wire3d(mesh_rgl)
+view3d(45, -45, zoom=0.7)
+shade3d(mesh_rgl, col="gray")
 next3d()
-view3d(0, -90, zoom=0.7)
-wire3d(mesh_s_rgl)
+view3d(45, -45, zoom=0.7)
+shade3d(mesh_s_rgl, col="gray")
 ```
 
 Note that CGAL `angle_and_area_smoothing()` supports smoothing by area
 optimization as well. However, this feature requires the external
-[Ceres library](http://ceres-solver.org}) and is thus currently
+[Ceres library](http://ceres-solver.org) and is thus currently
 not enabled here.
 
 ### Tangential Relaxation
 
 ```{r}
-mesh       <- dataHeart1
+mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
 mesh_s     <- remeshSmoothTangentRelax(mesh, nIter=5)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
-view3d(0, -90, zoom=0.7)
-wire3d(mesh_rgl)
+view3d(45, -45, zoom=0.7)
+shade3d(mesh_rgl, col="gray")
 next3d()
-view3d(0, -90, zoom=0.7)
-wire3d(mesh_s_rgl)
+view3d(45, -45, zoom=0.7)
+shade3d(mesh_s_rgl, col="gray")
 ```
 
 # Subdivision
@@ -436,10 +440,10 @@ mesh_afs_rgl <- toRGL(mesh_afs)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_rgl)
+shade3d(mesh_rgl, col="gray")
 next3d()
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_afs_rgl)
+shade3d(mesh_afs_rgl, col="gray")
 ```
 
 ## SSS
@@ -450,17 +454,17 @@ See [`CGAL` SSS](https://doc.cgal.org/latest/Scale_space_reconstruction_3/)
 mesh     <- dataHeart1
 mesh_rgl <- toRGL(mesh)
 mesh_sss <- reconstructSSS(mesh[["vertices"]],
-                           scaleIterations=1L,
+                           scaleIterations=2L,
                            forceManifold  =TRUE,
-                           neighbors      =6L)
+                           neighbors      =12L)
 mesh_sss_rgl <- toRGL(mesh_sss)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_rgl)
+shade3d(mesh_rgl, col="gray")
 next3d()
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_sss_rgl)
+shade3d(mesh_sss_rgl, col="gray")
 ```
 
 ## Poisson
@@ -468,19 +472,19 @@ wire3d(mesh_sss_rgl)
 See [`CGAL` SSS](https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/)
 
 ```{r}
-mesh     <- makeMesh(dataHopfTorus)
+mesh     <- makeMesh(dataSeptuaginta)
 mesh_rgl <- toRGL(mesh)
 mesh_psr <- reconstructPoisson(mesh[["vertices"]],
                                normalsFun=getNormalsFun(6L),
-                               smAngle=10,
-                               smRadius=3,
-                               smDistance=0.3)
+                               smAngle=20,
+                               smRadius=1,
+                               smDistance=20)
 mesh_psr_rgl <- toRGL(mesh_psr)
 
 mfrow3d(1, 2)
-wire3d(mesh_rgl)
+shade3d(mesh_rgl, col="gray")
 next3d()
-wire3d(mesh_psr_rgl)
+shade3d(mesh_psr_rgl, col="gray")
 ```
 
 ## Alpha Wrapping
@@ -491,16 +495,16 @@ See [`CGAL` Alpha Wrapping](https://doc.cgal.org/latest/Alpha_wrap_3/)
 mesh        <- dataHeart1
 mesh_rgl    <- toRGL(dataHeart1)
 mesh_aw     <- alphaWrap(mesh,
-                         alphaRel =5,
+                         alphaRel =10,
                          offsetRel=300)
 mesh_aw_rgl <- toRGL(mesh_aw)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_rgl)
+shade3d(mesh_rgl, col="gray")
 next3d()
 view3d(0, -90, zoom=0.7)
-wire3d(mesh_aw_rgl)
+shade3d(mesh_aw_rgl, col="gray")
 ```
 
 # Bounding Shapes

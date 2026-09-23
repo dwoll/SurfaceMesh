@@ -41,13 +41,12 @@ mesh_rgl   <- toRGL(mesh)
 mesh_s     <- remeshSmoothShape(mesh, nIter=5, time=1)
 mesh_s_rgl <- toRGL(mesh_s)
 
-open3d(windowRect=50 + c(0, 0, 800, 400))
 mfrow3d(1, 2)
-view3d(0, 0, zoom=0.9)
-wire3d(mesh_rgl)
+view3d(0, -90, zoom=0.7)
+shade3d(mesh_rgl, col="gray")
 next3d()
-view3d(0, 0, zoom=0.9)
-wire3d(mesh_s_rgl)
+view3d(0, -90, zoom=0.7)
+shade3d(mesh_s_rgl, col="gray")
 
 }
 \author{

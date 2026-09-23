@@ -33,24 +33,17 @@
 #' library(SurfaceMesh)
 #' library(rgl)
 #'
-#' # no smoothing
-#' mesh          <- dataHeart1
-#' mesh_rgl      <- toRGL(mesh)
-#' mesh_afs1     <- reconstructAFS(mesh[["vertices"]])
-#' mesh_afs1_rgl <- toRGL(mesh_afs1)
+#' mesh         <- dataHeart1
+#' mesh_rgl     <- toRGL(mesh)
+#' mesh_afs     <- reconstructAFS(mesh[["vertices"]], jetSmoothing=30)
+#' mesh_afs_rgl <- toRGL(mesh_afs)
 #'
-#' # jet smoothing
-#' mesh_afs2     <- reconstructAFS(mesh[["vertices"]],
-#'                                 jetSmoothing=30)
-#' mesh_afs2_rgl <- toRGL(mesh_afs2)
-#'
-#' open3d(windowRect=50 + c(0, 0, 1200, 400))
-#' mfrow3d(1, 3)
-#' wire3d(mesh_rgl)
+#' mfrow3d(1, 2)
+#' view3d(0, -90, zoom=0.7)
+#' shade3d(mesh_rgl, col="gray")
 #' next3d()
-#' wire3d(mesh_afs1_rgl)
-#' next3d()
-#' wire3d(mesh_afs2_rgl)
+#' view3d(0, -90, zoom=0.7)
+#' shade3d(mesh_afs_rgl, col="gray")
 #'
 #' @export
 reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
@@ -102,20 +95,19 @@ reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
 #' library(SurfaceMesh)
 #' library(rgl)
 #'
-#' mesh     <- makeMesh(dataHopfTorus)
+#' mesh     <- makeMesh(dataSeptuaginta)
 #' mesh_rgl <- toRGL(mesh)
 #' mesh_psr <- reconstructPoisson(mesh[["vertices"]],
 #'                                normalsFun=getNormalsFun(6L),
-#'                                smAngle=10,
-#'                                smRadius=3,
-#'                                smDistance=0.3)
+#'                                smAngle=20,
+#'                                smRadius=1,
+#'                                smDistance=20)
 #' mesh_psr_rgl <- toRGL(mesh_psr)
 #'
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' mfrow3d(1, 2)
-#' wire3d(mesh_rgl)
+#' shade3d(mesh_rgl, col="gray")
 #' next3d()
-#' wire3d(mesh_psr_rgl)
+#' shade3d(mesh_psr_rgl, col="gray")
 #'
 #' @export
 reconstructPoisson <- function(
@@ -187,17 +179,17 @@ reconstructPoisson <- function(
 #' mesh     <- dataHeart1
 #' mesh_rgl <- toRGL(mesh)
 #' mesh_sss <- reconstructSSS(mesh[["vertices"]],
-#'                            scaleIterations=1L,
+#'                            scaleIterations=2L,
 #'                            forceManifold  =TRUE,
-#'                            neighbors      =6L)
-#'
+#'                            neighbors      =12L)
 #' mesh_sss_rgl <- toRGL(mesh_sss)
 #'
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' mfrow3d(1, 2)
-#' wire3d(mesh_rgl)
+#' view3d(0, -90, zoom=0.7)
+#' shade3d(mesh_rgl, col="gray")
 #' next3d()
-#' wire3d(mesh_sss_rgl)
+#' view3d(0, -90, zoom=0.7)
+#' shade3d(mesh_sss_rgl, col="gray")
 #'
 #' @export
 reconstructSSS <- function(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/remeshSmooth.R
 \name{remeshSmoothAngle}
 \alias{remeshSmoothAngle}
-\title{Smooth angle}
+\title{Smoothing by angle optimization}
 \usage{
 remeshSmoothAngle(
   x,
@@ -40,24 +40,23 @@ Includes triangulation if mesh is not already triangle.
 See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
 Note that CGAL \code{angle_and_area_smoothing()} supports smoothing by area
 optimization as well. However, this feature requires the external
-Ceres library (\url{http://ceres-solver.org/}) and is thus currently
+Ceres library (\url{http://ceres-solver.org/}) and thus is currently
 not enabled here.
 }
 \examples{
 library(SurfaceMesh)
 library(rgl)
 
-mesh       <- dataHeart1
+mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
 mesh_s     <- remeshSmoothAngle(mesh, nIter=5)
 mesh_s_rgl <- toRGL(mesh_s)
 
-open3d(windowRect=50 + c(0, 0, 800, 400))
 mfrow3d(1, 2)
-view3d(0, 0, zoom=0.9)
-wire3d(mesh_rgl)
+view3d(45, -45, zoom=0.7)
+shade3d(mesh_rgl, col="gray")
 next3d()
-view3d(0, 0, zoom=0.9)
-wire3d(mesh_s_rgl)
+view3d(45, -45, zoom=0.7)
+shade3d(mesh_s_rgl, col="gray")
 
 }

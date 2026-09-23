@@ -53,17 +53,17 @@ library(rgl)
 mesh     <- dataHeart1
 mesh_rgl <- toRGL(mesh)
 mesh_sss <- reconstructSSS(mesh[["vertices"]],
-                           scaleIterations=1L,
+                           scaleIterations=2L,
                            forceManifold  =TRUE,
-                           neighbors      =6L)
-
+                           neighbors      =12L)
 mesh_sss_rgl <- toRGL(mesh_sss)
 
-open3d(windowRect=50 + c(0, 0, 800, 400))
 mfrow3d(1, 2)
-wire3d(mesh_rgl)
+view3d(0, -90, zoom=0.7)
+shade3d(mesh_rgl, col="gray")
 next3d()
-wire3d(mesh_sss_rgl)
+view3d(0, -90, zoom=0.7)
+shade3d(mesh_sss_rgl, col="gray")
 
 }
 \seealso{

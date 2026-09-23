@@ -15,6 +15,9 @@
       * Isotropic
       * Triangulated surface mesh simplification 
       * Smoothing
+          * Smooth shape
+          * Angle-based smoothing (area-based smoothing not supported)
+          * Tangential relaxation
   * Subdivision
       * Catmull-Clark
       * Doo-Sabin

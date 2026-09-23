@@ -233,13 +233,8 @@ boolUnion <- function(x, repairSoup = TRUE, normals = FALSE, verbose = FALSE) {
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#' # mesh one: a cube
-#' mesh1_rgl <- cube3d() # (from the rgl package)
-#'
-#' # mesh two: another cube
+#' mesh1_rgl <- cube3d()    # (from the rgl package)
 #' mesh2_rgl <- translate3d(cube3d(), 1, 1, 1)
-#'
-#' # compute JSC, DSC
 #' getJSCDSC(mesh1_rgl, mesh2_rgl)
 #'
 #' @export

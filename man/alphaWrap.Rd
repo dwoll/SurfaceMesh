@@ -36,18 +36,19 @@ See \url{https://doc.cgal.org/latest/Alpha_wrap_3/} for details.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-mesh            <- dataHeart1
-mesh_rgl        <- toRGL(mesh)
-mesh_alwrap     <- alphaWrap(mesh,
-                             alphaRel =5,
-                             offsetRel=300)
-mesh_alwrap_rgl <- toRGL(mesh_alwrap)
+mesh        <- dataHeart1
+mesh_rgl    <- toRGL(dataHeart1)
+mesh_aw     <- alphaWrap(mesh,
+                         alphaRel =10,
+                         offsetRel=300)
+mesh_aw_rgl <- toRGL(mesh_aw)
 
-open3d(windowRect=50 + c(0, 0, 800, 400))
 mfrow3d(1, 2)
-wire3d(mesh_rgl)
+view3d(0, -90, zoom=0.7)
+shade3d(mesh_rgl, col="gray")
 next3d()
-wire3d(mesh_alwrap_rgl)
+view3d(0, -90, zoom=0.7)
+shade3d(mesh_aw_rgl, col="gray")
 
 }
 \seealso{
