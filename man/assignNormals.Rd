@@ -29,7 +29,7 @@ view3d(0, 30, zoom=0.8)
 shade3d(toRGL(mesh), col="gray")
 next3d()
 view3d(0, 30, zoom=0.8)
-shade3d(toRGL(mesh_n), col="gray")
+shade3d(toRGL(mesh_wn), col="gray")
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
