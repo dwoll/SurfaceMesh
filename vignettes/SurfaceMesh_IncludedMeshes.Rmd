@@ -62,7 +62,7 @@ shade3d(toRGL(dataHopfTorus), color="darkred")
 
 ```{r}
 view3d(35, -20, zoom=0.8)
-shade3d(dataICN5Deight, color="violetred")
+shade3d(toRGL(dataICN5Deight), color="violetred")
 ```
 
 ## Oloid
