@@ -18,6 +18,7 @@ Currently, only vertex normals are supported.
 }
 \examples{
 library(SurfaceMesh)
+library(rgl)
 mesh <- makeMesh(dataToroHelix, normals=FALSE)
 mesh
 mesh_wn <- assignNormals(mesh)

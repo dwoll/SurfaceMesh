@@ -69,7 +69,7 @@ mesh     <- makeMesh(f_mesh, verbose=FALSE)
 mesh_rgl <- toRGL(mesh)
 
 view3d(85, -65, zoom=0.8)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="wheat2")
 ```
 
 ## Create Surface Mesh Based on `mesh3d` Object
@@ -114,10 +114,10 @@ mesh_n <- assignNormals(mesh)
 
 mfrow3d(1, 2)
 view3d(0, 30, zoom=0.8)
-shade3d(toRGL(mesh), col="gray")
+shade3d(toRGL(mesh), col="tomato")
 next3d()
 view3d(0, 30, zoom=0.8)
-shade3d(toRGL(mesh_n), col="gray")
+shade3d(toRGL(mesh_n), col="turquoise4")
 ```
 
 # Mesh Repair
@@ -137,10 +137,10 @@ mesh_fill_rgl <- toRGL(mesh_fill)
 
 mfrow3d(1, 2)
 view3d(70, 25, zoom=0.8)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="orangered")
 next3d()
 view3d(70, 25, zoom=0.8)
-shade3d(mesh_fill_rgl, col="gray")
+shade3d(mesh_fill_rgl, col="violetred")
 ```
 
 ## Remove Self-Intersections
@@ -252,10 +252,10 @@ mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="forestgreen")
 next3d()
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_s_rgl, col="gray")
+shade3d(mesh_s_rgl, col="darkolivegreen4")
 ```
 
 ### Angle Smoothing
@@ -268,7 +268,7 @@ mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
 view3d(45, -45, zoom=0.7)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="darkviolet")
 next3d()
 view3d(45, -45, zoom=0.7)
 shade3d(mesh_s_rgl, col="gray")
@@ -292,7 +292,7 @@ view3d(45, -45, zoom=0.7)
 shade3d(mesh_rgl, col="gray")
 next3d()
 view3d(45, -45, zoom=0.7)
-shade3d(mesh_s_rgl, col="gray")
+shade3d(mesh_s_rgl, col="royalblue3")
 ```
 
 # Subdivision
@@ -372,8 +372,8 @@ TODO
 ptsBefore   <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
 (avgSpacing <- getAverageSpacing(ptsBefore, nNeighbors=6L))
 ## contaminate
-idx              <- sample(seq_len(nrow(ptsBefore)), 20L, replace=FALSE)
-ptsBefore[idx, ] <- matrix(rnorm(30L, mean=100, sd=1), ncol=3L)
+idx              <- sample(seq_len(nrow(ptsBefore)), 4L, replace=FALSE)
+ptsBefore[idx, ] <- matrix(rnorm(4L, mean=10, sd=1), ncol=3L)
 ptsAfter         <- removeOutliers(ptsBefore, nNeighbors=6L)
 dim(ptsBefore)
 dim(ptsAfter)
@@ -391,10 +391,10 @@ mesh_afs_rgl <- toRGL(mesh_afs)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="mediumorchid4")
 next3d()
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_afs_rgl, col="gray")
+shade3d(mesh_afs_rgl, col="maroon2")
 ```
 
 ## SSS
@@ -412,10 +412,10 @@ mesh_sss_rgl <- toRGL(mesh_sss)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="yellowgreen")
 next3d()
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_sss_rgl, col="gray")
+shade3d(mesh_sss_rgl, col="rosybrown4")
 ```
 
 ## Poisson
@@ -452,10 +452,10 @@ mesh_aw_rgl <- toRGL(mesh_aw)
 
 mfrow3d(1, 2)
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_rgl, col="gray")
+shade3d(mesh_rgl, col="olivedrab3")
 next3d()
 view3d(0, -90, zoom=0.7)
-shade3d(mesh_aw_rgl, col="gray")
+shade3d(mesh_aw_rgl, col="mediumseagreen")
 ```
 
 # Bounding Shapes

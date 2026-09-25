@@ -73,8 +73,8 @@ getAverageSpacing <- function(x, nNeighbors = 6L) {
 #' ptsBefore   <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
 #' (avgSpacing <- getAverageSpacing(ptsBefore, nNeighbors=6L))
 #' ## contaminate
-#' idx              <- sample(seq_len(nrow(ptsBefore)), 20L, replace=FALSE)
-#' ptsBefore[idx, ] <- matrix(rnorm(5L, mean=10, sd=1), ncol=3L)
+#' idx              <- sample(seq_len(nrow(ptsBefore)), 4L, replace=FALSE)
+#' ptsBefore[idx, ] <- matrix(rnorm(4L, mean=10, sd=1), ncol=3L)
 #' ptsAfter         <- removeOutliers(ptsBefore, nNeighbors=6L)
 #' dim(ptsBefore)
 #' dim(ptsAfter)
