@@ -30,7 +30,7 @@ library(rgl)
 
 mesh       <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
-mesh_l     <- subdivideLoop(mesh, nIter=2)
+mesh_l     <- subdivideLoop(mesh, nIter=2L)
 mesh_l_rgl <- toRGL(mesh_l)
 
 open3d(windowRect=50 + c(0, 0, 800, 400))

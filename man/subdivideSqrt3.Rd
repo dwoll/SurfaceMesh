@@ -30,7 +30,7 @@ library(rgl)
 
 mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_s3     <- subdivideSqrt3(mesh, nIter=2)
+mesh_s3     <- subdivideSqrt3(mesh, nIter=2L)
 mesh_s3_rgl <- toRGL(mesh_s3)
 
 open3d(windowRect=50 + c(0, 0, 800, 400))

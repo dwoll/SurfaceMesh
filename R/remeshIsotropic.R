@@ -28,9 +28,16 @@
 #' @param nIter Positive \code{integer}: Number of iterations.
 #' @param nRelaxSteps Positive \code{integer}: Number of relaxation steps.
 #' @param protectConstraints Boolean. Protect constraints? See details.
+#' @param dihedralAngle Positive number. Constrain edges with a dihedral
+#'   angle over given value to preserve sharp edges.
 #' @param normals Boolean. Return vertex normals?
 #' @return A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
+#' @seealso See \code{\link[SurfaceMesh]{remeshSimplify}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothAngle}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
+#'   for other remeshing operations.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
@@ -39,7 +46,7 @@
 #'
 #' mesh         <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
 #' mesh_rgl     <- toRGL(mesh)
-#' mesh_rem     <- remeshIsotropic(mesh, targetEdgeLen=1)
+#' mesh_rem     <- remeshIsotropic(mesh, targetEdgeLen=0.7)
 #' mesh_rem_rgl <- toRGL(mesh_rem)
 #'
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
@@ -59,6 +66,7 @@ remeshIsotropic <- function(
         nIter = 1L,
         nRelaxSteps = 1L,
         protectConstraints = TRUE,
+        dihedralAngle = 60,
         normals = FALSE) {
     method <- match.arg(method)
     if(!inherits(x, "CGALmesh")) {
@@ -68,6 +76,7 @@ remeshIsotropic <- function(
     stopifnot(isStrictPositiveInteger(nIter))
     stopifnot(isStrictPositiveInteger(nRelaxSteps))
     stopifnot(isBoolean(protectConstraints))
+    stopifnot(isNonNegativeNumber(dihedralAngle))
     stopifnot(isBoolean(normals))
     meshCPP <- fromR(x)
     meshRem <- if(method == "uniform") {
@@ -77,6 +86,7 @@ remeshIsotropic <- function(
                            as.integer(nIter),
                            as.integer(nRelaxSteps),
                            protectConstraints,
+                           dihedralAngle,
                            normals)
     } else if(method == "adaptive") {
       stopifnot(isPositiveNumber(tol))
@@ -89,6 +99,7 @@ remeshIsotropic <- function(
                          as.integer(nIter),
                          as.integer(nRelaxSteps),
                          protectConstraints,
+                         dihedralAngle,
                          normals)
     }
 

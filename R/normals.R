@@ -11,17 +11,17 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title Normals for a point cloud
-#' @description Returns a function which computes normals for a
+#' @description Returns a function which estimates normals for a
 #'   3D point cloud.
-#' @param x \code{integer}. Number of neighbors used to compute the normals.
+#' @param x \code{integer}. Number of neighbors used to estimate the normals.
 #' @param method One of \code{"PCA"} to estimate the normal direction at
 #'   each point by linear least squares fitting of a plane over its nearest
 #'   neighbors, or \code{"Jet"} to estimate the normal direction at each
 #'   point by fitting a jet surface over its nearest neighbors). See details.
-#' @returns A function which takes just one argument: a numeric matrix with
+#' @returns A function which takes one argument: a numeric matrix with
 #'   three columns, each row represents a point, and the function returns a
 #'   matrix of the same size as the input matrix, with each row giving one
-#'   unit normal for the point.
+#'   unit normal per point.
 #' @note The \code{getNormalsFun} function is intended to be used in the
 #'   \code{\link[SurfaceMesh]{reconstructPoisson}} function. If you want to use it for
 #'   another purpose, be careful because the function it returns does not
@@ -53,7 +53,6 @@
 getNormalsFun <- function(x, method = c("PCA", "Jet")) {
   method_choices <- c("pca", "jet")
   method         <- match.arg(tolower(method), choices=method_choices)
-  methodInt      <- match(method, method_choices)
   x <- as.integer(x)
   if(x < 2L) {
     stop("There must be at least two neighbors.", call. = TRUE)
@@ -69,8 +68,8 @@ getNormalsFun <- function(x, method = c("PCA", "Jet")) {
       stop("Insufficient number of points.", call. = TRUE)
     }
     storage.mode(points) <- "double"
-    jet_pca_normals_cpp(t(points), x, methodInt)
+    normals_jet_pca_cpp(t(points), x, method)
   }
-  class(fun) <- "CGALnormalsFunc"
+  class(fun) <- "CGALnormalsFun"
   fun
 }

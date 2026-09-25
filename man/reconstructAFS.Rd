@@ -48,6 +48,7 @@ shade3d(mesh_afs_rgl, col="gray")
 
 }
 \seealso{
+\code{\link[SurfaceMesh]{removeOutliers}},
 \code{\link[SurfaceMesh]{reconstructSSS}},
 \code{\link[SurfaceMesh]{reconstructPoisson}}, \code{\link[SurfaceMesh]{alphaWrap}}
 }

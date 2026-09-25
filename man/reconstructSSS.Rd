@@ -41,6 +41,8 @@ A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \str
 }
 \description{
 Reconstruction of a surface from a cloud of 3D points.
+A good choice if the input point cloud is noisy but the user still wants the
+surface to pass exactly through the points.
 }
 \details{
 See \url{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}
@@ -67,6 +69,7 @@ shade3d(mesh_sss_rgl, col="gray")
 
 }
 \seealso{
+\code{\link[SurfaceMesh]{removeOutliers}},
 \code{\link[SurfaceMesh]{reconstructAFS}},
 \code{\link[SurfaceMesh]{reconstructPoisson}}, \code{\link[SurfaceMesh]{alphaWrap}}
 }

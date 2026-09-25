@@ -82,6 +82,7 @@ MeshT boolIntersection(const Rcpp::List &rmeshes,
       Rcpp::stop("Intersection computation has failed.");
     }
   }
+  meshes[nMeshes - 1].collect_garbage();
   return meshes[nMeshes - 1];
 }
 
@@ -122,6 +123,7 @@ MeshT boolDifference(const Rcpp::List &rmesh1,
   if(!ok) {
     Rcpp::stop("Difference computation has failed.");
   }
+  mesh_d.collect_garbage();
   return mesh_d;
 }
 
@@ -177,6 +179,7 @@ MeshT boolUnion(const Rcpp::List &rmeshes,
       Rcpp::stop("Union computation has failed.");
     }
   }
+  meshes[nMeshes - 1].collect_garbage();
   return meshes[nMeshes - 1];
 }
 
@@ -187,6 +190,17 @@ Rcpp::List boolUnionEK_cpp(const Rcpp::List rmeshes,
                            const bool verbose) {
   EMesh3 mesh = boolUnion<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
   return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
+}
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+Rcpp::List get_na_list_sc(void) {
+    return Rcpp::List::create(Rcpp::Named("Vol1") = Rcpp::NumericVector::get_na(),
+                              Rcpp::Named("Vol2") = Rcpp::NumericVector::get_na(),
+                              Rcpp::Named("VolI") = Rcpp::NumericVector::get_na(),
+                              Rcpp::Named("VolU") = Rcpp::NumericVector::get_na(),
+                              Rcpp::Named("JSC")  = Rcpp::NumericVector::get_na(),
+                              Rcpp::Named("DSC")  = Rcpp::NumericVector::get_na());
 }
 
 // ----------------------------------------------------------------------- //
@@ -211,12 +225,12 @@ Rcpp::List getJSCDSC_cpp(const Rcpp::List rmeshes,
   if(!CGAL::is_closed(mesh_u) ||
      !CGAL::is_closed(mesh_i)) {
     Rcpp::warning("Mesh union or intersection is not closed.");
-    return Rcpp::NumericVector::get_na();
+    return get_na_list_sc();
   }
   if(PMP::does_self_intersect(mesh_u) ||
      PMP::does_self_intersect(mesh_i)) {
     Rcpp::warning("Mesh union or intersection self-intersects.");
-    return Rcpp::NumericVector::get_na();
+    return get_na_list_sc();
   }
   const double vol_1 = CGAL::to_double<EK::FT>(PMP::volume(mesh_1));
   const double vol_2 = CGAL::to_double<EK::FT>(PMP::volume(mesh_2));

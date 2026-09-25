@@ -20,6 +20,8 @@
 #include <CGAL/Scale_space_surface_reconstruction_3.h>
 #include <CGAL/poisson_surface_reconstruction.h>
 #include <CGAL/jet_smooth_point_set.h>
+#include <CGAL/remove_outliers.h>
+#include <CGAL/compute_average_spacing.h>
 #include <CGAL/Polygon_mesh_processing/repair_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 #include <CGAL/Polygon_mesh_processing/orientation.h>
@@ -39,6 +41,53 @@ typedef SSS_reconstruction::Facet_const_iterator                     SSS_facet_i
 typedef SSS_reconstruction::Point_const_iterator                     SSS_point_iterator;
 
 // ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
+double getAverageSpacing_cpp(const Rcpp::NumericMatrix pts,
+                             const unsigned int nNeighbors) {
+  std::vector<Point3> points = matrix_to_points3<Point3>(pts);
+  return CGAL::to_double<K::FT>(CGAL::compute_average_spacing<SEQ_TAG>(points, nNeighbors));
+}
+
+// ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Property_map/Point_set_processing_3_2remove_outliers_example_8cpp-example.html
+// ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
+Rcpp::NumericMatrix removeOutliers_cpp(const Rcpp::NumericMatrix pts,
+                                       const unsigned int nNeighbors,
+                                       const double threshPerc,
+                                       const double threshDst) {
+    std::vector<Point3> points = matrix_to_points3<Point3>(pts);
+    std::vector<Point3>::iterator first_to_remove;
+    // neither threshold percentage of points nor threshold distance are given
+    // estimate scale of the point set with average spacing
+    if((threshPerc < 0) && (threshDst < 0)) {
+        const double avg_space = CGAL::to_double<K::FT>(CGAL::compute_average_spacing<SEQ_TAG>(points, nNeighbors));
+        // no limit on the number of outliers to remove
+        // point with distance above 2*average_spacing are considered outliers
+        first_to_remove = CGAL::remove_outliers<PIA_TAG>(
+            points, nNeighbors,
+            CGAL::parameters::threshold_percent(100.)
+                            .threshold_distance(2.0*avg_space));
+    } else if(threshDst > 0) {
+        first_to_remove = CGAL::remove_outliers<PIA_TAG>(
+            points, nNeighbors,
+            CGAL::parameters::threshold_percent(100.0)
+                            .threshold_distance(threshDst));
+    } else if(threshPerc > 0) {
+        first_to_remove = CGAL::remove_outliers<PIA_TAG>(
+            points, nNeighbors,
+            CGAL::parameters::threshold_percent(threshPerc)
+                            .threshold_distance(0.0));
+    }
+
+    points.erase(first_to_remove, points.end());
+    // use Scott Meyer's "swap trick" to trim excess capacity
+    std::vector<Point3>(points).swap(points);
+    return points3_to_matrix<K, Point3>(points);
+}
+
+// ----------------------------------------------------------------------- //
 // code adapted from
 // https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/Advancing_front_surface_reconstruction_2reconstruction_class_8cpp-example.html
 // ----------------------------------------------------------------------- //
@@ -49,7 +98,7 @@ Rcpp::List reconstructAFS_cpp(const Rcpp::NumericMatrix pts,
                               const bool normals) {
   std::vector<Point3> points = matrix_to_points3<Point3>(pts);
   if(nNeighbors >= 2) {
-    CGAL::jet_smooth_point_set<CGAL::Sequential_tag>(points, nNeighbors);
+    CGAL::jet_smooth_point_set<SEQ_TAG>(points, nNeighbors);
   }
 
   AFS_triangulation3 dt(points.begin(), points.end());
@@ -130,19 +179,19 @@ Rcpp::List reconstructPoisson_cpp(const Rcpp::NumericMatrix pts,
                                   const double smDistance,
                                   const bool normals) {
   const std::size_t nPts = pts.ncol();
-  std::vector<P3V3> points(nPts);   // points with normals
+  std::vector<P3V3> points_wn(nPts);   // points with normals
   for(std::size_t i = 0; i < nPts; i++) {
     const Rcpp::NumericVector pt_i = pts(Rcpp::_, i);
     const Rcpp::NumericVector nrml_i = normalsIn(Rcpp::_, i);
-    points[i] =
+    points_wn[i] =
       std::make_pair(Point3(pt_i(0), pt_i(1), pt_i(2)),
                      Vector3(nrml_i(0), nrml_i(1), nrml_i(2)));
   }
 
   double spacingUse;
   if(spacing == -1.0) {
-    spacingUse = CGAL::compute_average_spacing<CGAL::Sequential_tag>(
-      points, 6, /* knn = 1 ring */
+    spacingUse = CGAL::compute_average_spacing<SEQ_TAG>(
+      points_wn, 6, /* knn = 1 ring */
       CGAL::parameters::point_map(CGAL::First_of_pair_property_map<P3V3>()));
   } else {
       spacingUse = spacing;
@@ -150,7 +199,7 @@ Rcpp::List reconstructPoisson_cpp(const Rcpp::NumericMatrix pts,
 
   Polyhedron poly;
   const bool success = CGAL::poisson_surface_reconstruction_delaunay(
-    points.begin(), points.end(),
+    points_wn.begin(), points_wn.end(),
     CGAL::First_of_pair_property_map<P3V3>(),
     CGAL::Second_of_pair_property_map<P3V3>(),
     poly,

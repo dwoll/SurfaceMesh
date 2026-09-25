@@ -13,12 +13,12 @@ Description: Basic processing of 3D surface meshes based on the
     Reads and writes common file formats for meshes and
     polygon soups.
     Supports mesh repair, remeshing (isotropic, smooth, simplify),
-    subdivision, Boolean operations on bounded volumes, surface
-    reconstruction, (optimal) bounding box, convex hull,
-    surface distance metrics (such as Hausdorff),
+    subdivision, Boolean operations on bounded volumes, outlier
+    removal, surface reconstruction, (optimal) bounding box,
+    convex hull, surface distance metrics (such as Hausdorff),
     and volume-overlap similarity measures (such as 'JSC', 'DSC').
-    Adapts code from packages 'Boov', 'PolygonSoup',
-    and 'cgalMeshes' developed by Stephane Laurent.
+    Adapts code from packages 'Boov', 'cgalMeshes', and
+    'SurfaceReconstruction' developed by Stephane Laurent.
 License: GPL-3
 URL: https://github.com/dwoll/SurfaceMesh/
 BugReports: https://github.com/dwoll/SurfaceMesh/issues/
@@ -27,7 +27,7 @@ Depends:
 Imports:
     Rcpp (>= 1.0.9),
     rgl
-Suggests: knitr, rmarkdown
+Suggests: knitr, rmarkdown, misc3d
 LinkingTo:
     BH,
     Rcpp,

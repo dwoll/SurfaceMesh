@@ -32,7 +32,7 @@ library(rgl)
 
 mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_ds     <- subdivideDooSabin(mesh, nIter=2)
+mesh_ds     <- subdivideDooSabin(mesh, nIter=2L)
 mesh_ds_rgl <- toRGL(mesh_ds)
 
 open3d(windowRect=50 + c(0, 0, 800, 400))

@@ -109,7 +109,7 @@ makeMesh <- function(x,
     stopifnot(isBoolean(repairSoup))
     stopifnot(isBoolean(removeIntersections))
     method_choices  <- c("auto", "auto_snap")
-    removeMethod    <- match.arg(removeMethod, choices=method_choices)
+    removeMethod    <- match.arg(tolower(removeMethod), choices=method_choices)
     removeMethodInt <- match(removeMethod, method_choices)
     stopifnot(isBoolean(fillHoles))
     stopifnot(isBoolean(fairHole))
@@ -265,11 +265,17 @@ makeMeshValid <- function(x,
 #'
 #' @examples
 #' library(SurfaceMesh)
-#' mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE, normals=FALSE)
+#' mesh <- makeMesh(dataToroHelix, normals=FALSE)
 #' mesh
 #' mesh_wn <- assignNormals(mesh)
 #' mesh_wn
 #'
+#' mfrow3d(1, 2)
+#' view3d(0, 30, zoom=0.8)
+#' shade3d(toRGL(mesh), col="gray")
+#' next3d()
+#' view3d(0, 30, zoom=0.8)
+#' shade3d(toRGL(mesh_n), col="gray")
 #' @export
 assignNormals <- function(x) {
   if(!inherits(x, "CGALmesh")) {
@@ -480,7 +486,7 @@ getCentroid <- function(x) {
 #' wire3d(hull_rgl)
 #'
 #' @export
-getConvexHull <- function(x, normals = TRUE) {
+getConvexHull <- function(x, normals = FALSE) {
   if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
     stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
   }
@@ -724,7 +730,7 @@ orientToBoundVolume <- function(x, normals = FALSE) {
 
 #' @title Plot some edges
 #' @description Plot the given edges with functions from package \strong{rgl}.
-#' @param vertices A matrix with 3 columns giving the coordinates of the vertices.
+#' @param x A matrix with 3 columns giving the coordinates of the vertices.
 #' @param edges \code{integer} matrix with two columns giving the edges by pairs of
 #'   vertex indices.
 #' @param color \code{character}. Color for the edges.
@@ -758,7 +764,7 @@ orientToBoundVolume <- function(x, normals = FALSE) {
 #'
 #' @export
 #' @importFrom rgl cylinder3d shade3d lines3d spheres3d
-plotEdges <- function(vertices,
+plotEdges <- function(x,
 		                  edges,
 		                  color = "black",
 		                  lwd = 2,
@@ -768,21 +774,33 @@ plotEdges <- function(vertices,
 		                  only,
 		                  spheresRadius = 0.05,
 		                  spheresColor = color) {
-  for(i in seq_len(nrow(edges))) {
+	if(!is.matrix(x) || !is.numeric(x) || (nrow(x) <= 3L)) {
+    stop("`x` must be a numeric matrix with at least 3 points.", call. = TRUE)
+  }
+	stopifnot(isPositiveNumber(lwd))
+	stopifnot(isBoolean(edgesAsTubes))
+	stopifnot(isPositiveNumber(tubesRadius))
+	stopifnot(isBoolean(verticesAsSpheres))
+	xRowIdx <- seq_len(nrow(x))
+	if(!missing(only)) {
+    stopifnot(all(only %in% xRowIdx))
+	}
+	stopifnot(isPositiveNumber(spheresRadius))
+  for(i in xRowIdx) {
 		edge <- edges[i, ]
 		if(edgesAsTubes) {
 			tube <- cylinder3d(
-					vertices[edge, , drop=FALSE], radius = tubesRadius, sides = 90)
+					x[edge, , drop=FALSE], radius = tubesRadius, sides = 90)
 			shade3d(tube, color = color)
 		} else {
-			lines3d(vertices[edge, , drop=FALSE], color = color, lwd = lwd)
+			lines3d(x[edge, , drop=FALSE], color = color, lwd = lwd)
 		}
 	}
 	if(verticesAsSpheres) {
 		if(!missing(only)) {
-			vertices <- vertices[only, , drop=FALSE]
+			x <- x[only, , drop=FALSE]
 		}
-		spheres3d(vertices, radius=spheresRadius, color=spheresColor)
+		spheres3d(x, radius=spheresRadius, color=spheresColor)
 	}
 	invisible(NULL)
 }
@@ -820,17 +838,23 @@ print.CGALmesh <- function(x, ...) {
 #' @param sampleVerts Boolean. Do sample vertices?
 #' @param sampleEdges Boolean. Do sample edges?
 #' @param sampleFaces Boolean. Do sample faces?
-#' @param gridSpacing \code{numeric}.
+#' @param gridSpacing \code{numeric}. The grid spacing for \code{method="grid"}.
 #' @param ptsOnEdges \code{integer}. For the random sampling method as the
 #'   number of points to pick exclusively on edges.
 #'   If missing, the number of edges is used.
 #' @param ptsOnFaces \code{integer}. For the random sampling method as the
 #'   number of points to pick on the surface.
 #'   If missing, the number of vertices is used.
-#' @param ptsPerDist \code{numeric}.
-#' @param ptsPerEdge \code{integer}.
-#' @param ptsPerArea \code{numeric}.
-#' @param ptsPerFace \code{integer}.
+#' @param ptsPerDist \code{numeric}. Points per distance unit. Used for
+#'   \code{method="random"} and \code{"mc"} to respectively
+#'   determine the total number of points on edges and the number of points per edge.
+#' @param ptsPerEdge \code{integer}. Points per edge. Used for \code{method="mc"}
+#'   as the number of points per edge to pick.
+#' @param ptsPerArea \code{numeric}. Points per area unit. Used for
+#'   \code{method="random"} and \code{"mc"} to respectively determine
+#'   the total number of points inside faces and the number of points per face.
+#' @param ptsPerFace \code{integer}. Points per face. Used for \code{method="mc"}
+#'   as the number of points per face to pick.
 #' @return A \code{n x 3} numeric matrix containing the sampled vertices.
 #' @details For details on sampling options, see
 #'   \url{https://doc.cgal.org/latest/Polygon_mesh_processing/group__PMP__distance__grp.html}.
@@ -892,33 +916,36 @@ samplePoints <- function(x,
 #' @export
 #' @importFrom rgl mesh3d
 toRGL <- function(x, ...) {
-	if(!inherits(x, "CGALmesh")) {
+    if(inherits(x, "mesh3d")) {
+        x
+    } else if(!inherits(x, "CGALmesh")) {
 		stop("The `x` argument must be of class 'CGALmesh'",
 				 " (i.e., the output of the `makeMesh()` function).")
-	}
-	rgl <- attr(x, "toRGL")
-	if(isFALSE(rgl)) {
-		stop("Impossible to convert this mesh to a 'rgl' mesh ",
-				 "(the faces must have at most four sides).")
-	}
-	if(rgl == 3L) {
-		mesh3d(x        =x[["vertices"]],
-				   normals  =x[["normals"]],
-				   triangles=t(x[["faces"]]),
-				   ...)
-	} else if(rgl == 4L) {
-		mesh3d(x      =x[["vertices"]],
-				   normals=x[["normals"]],
-				   quads  =t(x[["faces"]]),
-				   ...)
-	} else {
-		faces <- split(x[["faces"]], lengths(x[["faces"]]))
-		mesh3d(x        =x[["vertices"]],
-				   normals  =x[["normals"]],
-				   triangles=do.call(cbind, faces[["3"]]),
-				   quads    =do.call(cbind, faces[["4"]]),
-				   ...)
-	}
+    } else {
+        rgl <- attr(x, "toRGL")
+        if(isFALSE(rgl)) {
+            stop("Impossible to convert this mesh to a 'rgl' mesh ",
+                 "(the faces must have at most four sides).")
+        }
+        if(rgl == 3L) {
+            mesh3d(x        =x[["vertices"]],
+                   normals  =x[["normals"]],
+                   triangles=t(x[["faces"]]),
+                   ...)
+        } else if(rgl == 4L) {
+            mesh3d(x      =x[["vertices"]],
+                   normals=x[["normals"]],
+                   quads  =t(x[["faces"]]),
+                   ...)
+        } else {
+            faces <- split(x[["faces"]], lengths(x[["faces"]]))
+            mesh3d(x        =x[["vertices"]],
+                   normals  =x[["normals"]],
+                   triangles=do.call(cbind, faces[["3"]]),
+                   quads    =do.call(cbind, faces[["4"]]),
+                   ...)
+        }
+    }
 }
 
 #' @title Triangulate mesh

@@ -2,7 +2,7 @@
 % Please edit documentation in R/remeshSmooth.R
 \name{remeshSmoothTangentRelax}
 \alias{remeshSmoothTangentRelax}
-\title{Smooting by tangential relaxation}
+\title{Smoothing by tangential relaxation}
 \usage{
 remeshSmoothTangentRelax(x, nIter = 1L, relaxConstr = FALSE, normals = FALSE)
 }
@@ -22,7 +22,8 @@ polylines they belong to.}
 A \code{CGALmesh} object.
 }
 \description{
-Iterative area-based smoothing by tangential relaxation.
+Iterative area-based smoothing of a 3D surface mesh by
+tangential relaxation.
 Includes triangulation if mesh is not already triangle.
 }
 \details{
@@ -34,7 +35,7 @@ library(rgl)
 
 mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
-mesh_s     <- remeshSmoothTangentRelax(mesh, nIter=5)
+mesh_s     <- remeshSmoothTangentRelax(mesh, nIter=5L)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
@@ -44,4 +45,11 @@ next3d()
 view3d(45, -45, zoom=0.7)
 shade3d(mesh_s_rgl, col="gray")
 
+}
+\seealso{
+See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+\code{\link[SurfaceMesh]{remeshSimplify}},
+\code{\link[SurfaceMesh]{remeshSmoothShape}},
+\code{\link[SurfaceMesh]{remeshSmoothAngle}}
+for other remeshing operations.
 }

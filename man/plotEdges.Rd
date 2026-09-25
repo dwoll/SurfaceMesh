@@ -5,7 +5,7 @@
 \title{Plot some edges}
 \usage{
 plotEdges(
-  vertices,
+  x,
   edges,
   color = "black",
   lwd = 2,
@@ -18,7 +18,7 @@ plotEdges(
 )
 }
 \arguments{
-\item{vertices}{A matrix with 3 columns giving the coordinates of the vertices.}
+\item{x}{A matrix with 3 columns giving the coordinates of the vertices.}
 
 \item{edges}{\code{integer} matrix with two columns giving the edges by pairs of
 vertex indices.}

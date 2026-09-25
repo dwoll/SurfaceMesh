@@ -89,7 +89,7 @@ Rcpp::DataFrame getEdges(const MeshT &mesh) {
       typename KernelT::FT angle = CGAL::abs(CGAL::approximate_dihedral_angle(
           points[0], points[1], points[2], points[3]));
       Angle(i) = CGAL::to_double<typename KernelT::FT>(angle);
-      Exterior(i) = angle < 179.0 || angle > 181.0;
+      Exterior(i) = (angle < 179.0) || (angle > 181.0);
       Coplanar(i) = CGAL::coplanar(points[0], points[1], points[2], points[3]);
       typename KernelT::FT el = PMP::edge_length(h0, mesh);
       Length(i) = CGAL::to_double<typename KernelT::FT>(el);

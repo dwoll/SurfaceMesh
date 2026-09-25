@@ -4,7 +4,7 @@
 \alias{getConvexHull}
 \title{Convex hull of a set of 3D points}
 \usage{
-getConvexHull(x, normals = TRUE)
+getConvexHull(x, normals = FALSE)
 }
 \arguments{
 \item{x}{\code{numeric} matrix with 3 columns with one point per row.}

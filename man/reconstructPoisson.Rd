@@ -22,8 +22,7 @@ reconstructPoisson(
 
 \item{spacing}{Optional size parameter. Smaller values increase the precision
 of the output mesh at the cost of higher computation time. If missing,
-a reasonable default value: an average spacing that is stored in the
-\code{"spacing"} attribute of the output.}
+an average spacing is chosen as a reasonable default value.}
 
 \item{smAngle}{Bound for the minimum facet angle in degrees.}
 
@@ -38,6 +37,8 @@ A \code{CGALmesh} object.
 }
 \description{
 Poisson reconstruction of a surface, from a cloud of 3D points.
+Performs well if the aim is to approximate a noisy point cloud with a smooth surface.
+Not appropriate if the surface is expected to interpolate the input points.
 }
 \details{
 See \url{https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/}
@@ -63,6 +64,7 @@ shade3d(mesh_psr_rgl, col="gray")
 
 }
 \seealso{
+\code{\link[SurfaceMesh]{removeOutliers}},
 \code{\link[SurfaceMesh]{reconstructAFS}},
 \code{\link[SurfaceMesh]{reconstructSSS}},
 \code{\link[SurfaceMesh]{alphaWrap}}

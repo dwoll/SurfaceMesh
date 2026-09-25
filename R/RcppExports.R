@@ -125,8 +125,8 @@ triangulateMesh_cpp <- function(rmesh, normals) {
     .Call(`_SurfaceMesh_triangulateMesh_cpp`, rmesh, normals)
 }
 
-jet_pca_normals_cpp <- function(pts, nbNeighbors, method) {
-    .Call(`_SurfaceMesh_jet_pca_normals_cpp`, pts, nbNeighbors, method)
+normals_jet_pca_cpp <- function(pts, nNeighbors, method) {
+    .Call(`_SurfaceMesh_normals_jet_pca_cpp`, pts, nNeighbors, method)
 }
 
 readFileSoup_cpp <- function(filename, verbose) {
@@ -141,6 +141,14 @@ writeFile_cpp <- function(filename, binary, precision, vertices, faceList) {
     invisible(.Call(`_SurfaceMesh_writeFile_cpp`, filename, binary, precision, vertices, faceList))
 }
 
+getAverageSpacing_cpp <- function(pts, nNeighbors) {
+    .Call(`_SurfaceMesh_getAverageSpacing_cpp`, pts, nNeighbors)
+}
+
+removeOutliers_cpp <- function(pts, nNeighbors, threshPerc, threshDst) {
+    .Call(`_SurfaceMesh_removeOutliers_cpp`, pts, nNeighbors, threshPerc, threshDst)
+}
+
 reconstructAFS_cpp <- function(pts, nNeighbors, repairSoup, normals) {
     .Call(`_SurfaceMesh_reconstructAFS_cpp`, pts, nNeighbors, repairSoup, normals)
 }
@@ -153,12 +161,12 @@ reconstructSSS_cpp <- function(pts, scaleIterations, nNeighbors, nSamples, separ
     .Call(`_SurfaceMesh_reconstructSSS_cpp`, pts, scaleIterations, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals)
 }
 
-remeshIsoUniform_cpp <- function(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals) {
-    .Call(`_SurfaceMesh_remeshIsoUniform_cpp`, rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, normals)
+remeshIsoUniform_cpp <- function(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, dihedralAngle, normals) {
+    .Call(`_SurfaceMesh_remeshIsoUniform_cpp`, rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, dihedralAngle, normals)
 }
 
-remeshIsoAdapt_cpp <- function(rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, normals) {
-    .Call(`_SurfaceMesh_remeshIsoAdapt_cpp`, rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, normals)
+remeshIsoAdapt_cpp <- function(rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, dihedralAngle, normals) {
+    .Call(`_SurfaceMesh_remeshIsoAdapt_cpp`, rmesh, tol, edgeMin, edgeMax, nIter, nRelaxSteps, protectConstraints, dihedralAngle, normals)
 }
 
 simplifyLT_cpp <- function(rmesh, repairSoup, repairMesh, method, ueRatio, ueCount, normals, verbose) {

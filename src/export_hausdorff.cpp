@@ -119,6 +119,22 @@ double getHausdorffEst_cpp(
 }
 
 // ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+Rcpp::List get_na_list_hd(const bool returnDists) {
+    if(returnDists) {
+        return Rcpp::List::create(Rcpp::Named("HDq")     = Rcpp::NumericVector::get_na(),
+                                  Rcpp::Named("ASSD")    = Rcpp::NumericVector::get_na(),
+                                  Rcpp::Named("RMSE")    = Rcpp::NumericVector::get_na(),
+                                  Rcpp::Named("dists12") = Rcpp::NumericVector::get_na(),
+                                  Rcpp::Named("dists21") = Rcpp::NumericVector::get_na());
+    } else {
+        return Rcpp::List::create(Rcpp::Named("HDq")     = Rcpp::NumericVector::get_na(),
+                                  Rcpp::Named("ASSD")    = Rcpp::NumericVector::get_na(),
+                                  Rcpp::Named("RMSE")    = Rcpp::NumericVector::get_na());
+    }
+}
+
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List getSurfaceDist_cpp(
     const Rcpp::List rmesh1,
@@ -143,19 +159,19 @@ Rcpp::List getSurfaceDist_cpp(
       false);      // verbose
   if(CGAL::is_empty(mesh1)) {
     Rcpp::warning("Mesh 1 is empty.");
-    return Rcpp::NumericVector::get_na();
+    return get_na_list_hd(returnDists);
   }
   if(CGAL::is_empty(mesh2)) {
     Rcpp::warning("Mesh 2 is empty.");
-    return Rcpp::NumericVector::get_na();
+    return get_na_list_hd(returnDists);
   }
   if(!CGAL::is_triangle_mesh(mesh1)) {
     Rcpp::warning("Mesh 1 is not triangle.");
-    return Rcpp::NumericVector::get_na();
+    return get_na_list_hd(returnDists);
   }
   if(!CGAL::is_triangle_mesh(mesh2)) {
     Rcpp::warning("Mesh 2 is not triangle.");
-    return Rcpp::NumericVector::get_na();
+    return get_na_list_hd(returnDists);
   }
   std::vector<double>dsts12;
   std::vector<double>dsts21;

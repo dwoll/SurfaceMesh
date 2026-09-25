@@ -32,7 +32,7 @@ See details.}
 
 \item{sampleFaces}{Boolean. Do sample faces?}
 
-\item{gridSpacing}{\code{numeric}.}
+\item{gridSpacing}{\code{numeric}. The grid spacing for \code{method="grid"}.}
 
 \item{ptsOnEdges}{\code{integer}. For the random sampling method as the
 number of points to pick exclusively on edges.
@@ -42,13 +42,19 @@ If missing, the number of edges is used.}
 number of points to pick on the surface.
 If missing, the number of vertices is used.}
 
-\item{ptsPerDist}{\code{numeric}.}
+\item{ptsPerDist}{\code{numeric}. Points per distance unit. Used for
+\code{method="random"} and \code{"mc"} to respectively
+determine the total number of points on edges and the number of points per edge.}
 
-\item{ptsPerEdge}{\code{integer}.}
+\item{ptsPerEdge}{\code{integer}. Points per edge. Used for \code{method="mc"}
+as the number of points per edge to pick.}
 
-\item{ptsPerArea}{\code{numeric}.}
+\item{ptsPerArea}{\code{numeric}. Points per area unit. Used for
+\code{method="random"} and \code{"mc"} to respectively determine
+the total number of points inside faces and the number of points per face.}
 
-\item{ptsPerFace}{\code{integer}.}
+\item{ptsPerFace}{\code{integer}. Points per face. Used for \code{method="mc"}
+as the number of points per face to pick.}
 }
 \value{
 A \code{n x 3} numeric matrix containing the sampled vertices.

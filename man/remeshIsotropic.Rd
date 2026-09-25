@@ -14,6 +14,7 @@ remeshIsotropic(
   nIter = 1L,
   nRelaxSteps = 1L,
   protectConstraints = TRUE,
+  dihedralAngle = 60,
   normals = FALSE
 )
 }
@@ -43,6 +44,9 @@ The target edge length of the remeshed mesh.}
 
 \item{protectConstraints}{Boolean. Protect constraints? See details.}
 
+\item{dihedralAngle}{Positive number. Constrain edges with a dihedral
+angle over given value to preserve sharp edges.}
+
 \item{normals}{Boolean. Return vertex normals?}
 }
 \value{
@@ -60,7 +64,7 @@ library(rgl)
 
 mesh         <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
 mesh_rgl     <- toRGL(mesh)
-mesh_rem     <- remeshIsotropic(mesh, targetEdgeLen=1)
+mesh_rem     <- remeshIsotropic(mesh, targetEdgeLen=0.7)
 mesh_rem_rgl <- toRGL(mesh_rem)
 
 open3d(windowRect=50 + c(0, 0, 800, 400))
@@ -69,6 +73,13 @@ wire3d(mesh_rgl)
 next3d()
 wire3d(mesh_rem_rgl)
 
+}
+\seealso{
+See \code{\link[SurfaceMesh]{remeshSimplify}},
+\code{\link[SurfaceMesh]{remeshSmoothShape}},
+\code{\link[SurfaceMesh]{remeshSmoothAngle}},
+\code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
+for other remeshing operations.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

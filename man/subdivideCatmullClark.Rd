@@ -30,7 +30,7 @@ library(rgl)
 
 mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_cc     <- subdivideCatmullClark(mesh, nIter=2)
+mesh_cc     <- subdivideCatmullClark(mesh, nIter=2L)
 mesh_cc_rgl <- toRGL(mesh_cc)
 
 open3d(windowRect=50 + c(0, 0, 800, 400))

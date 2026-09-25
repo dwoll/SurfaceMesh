@@ -38,7 +38,7 @@ library(rgl)
 
 mesh       <- dataHeart1
 mesh_rgl   <- toRGL(mesh)
-mesh_s     <- remeshSmoothShape(mesh, nIter=5, time=1)
+mesh_s     <- remeshSmoothShape(mesh, nIter=5L, time=1)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
@@ -48,6 +48,13 @@ next3d()
 view3d(0, -90, zoom=0.7)
 shade3d(mesh_s_rgl, col="gray")
 
+}
+\seealso{
+See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+\code{\link[SurfaceMesh]{remeshSimplify}},
+\code{\link[SurfaceMesh]{remeshSmoothAngle}},
+\code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
+for other remeshing operations.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

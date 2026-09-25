@@ -11,8 +11,8 @@ A list with components \code{vb}, \code{it}, and \code{normals}.
 dataHopfTorus
 }
 \description{
-An object of class \code{mesh3d} from package \strong{rgl} representing
-a Hopf torus.
+An object of class \code{mesh3d} from package \strong{rgl}
+representing a Hopf torus.
 }
 \author{
 Originally developed by Stephane Laurent.

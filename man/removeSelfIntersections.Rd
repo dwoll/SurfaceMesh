@@ -25,12 +25,13 @@ removeSelfIntersections(
 \code{CGALmesh} object.
 }
 \description{
-Remove self intersections.
+Try to remove self intersections of a 3D surface mesh.
 }
 \details{
 See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} and
 \url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 If faces are not triangle, the mesh is triangulated.
+Not guaranteed to work for every input mesh.
 }
 \examples{
 library(SurfaceMesh)

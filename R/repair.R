@@ -11,7 +11,7 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title Remove self intersections
-#' @description Remove self intersections.
+#' @description Try to remove self intersections of a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param method \code{character}. One of \code{"auto"} (for auto-refine) and
 #'   \code{"auto_snap"} (auto-refine with iterative snap). See details.
@@ -22,6 +22,7 @@
 #' @details See \url{https://www.cgal.org/2025/06/13/autorefine-and-snap/} and
 #'   \url{https://doc.cgal.org/latest/PMP_Mesh_repair/} for details.
 #'   If faces are not triangle, the mesh is triangulated.
+#'   Not guaranteed to work for every input mesh.
 #' @seealso See \code{\link[SurfaceMesh]{fillBoundaryHoles}} for filling
 #'   boundary holes.
 #'
@@ -49,11 +50,11 @@ removeSelfIntersections <- function(
 }
 
 #' @title Fill boundary holes
-#' @description Fill boundary holes.
+#' @description Try to fill boundary holes in a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param fairHole Boolean. Use CGAL \code{triangulate_refine_and_fair_hole()} (\code{TRUE})
 #'     or \code{triangulate_and_refine_hole()} (\code{FALSE})?
-#' @param maxNumHoles \code{integer}. Maximum number of holes to be filled. May be 0.
+#' @param maxNumHoles \code{integer}. Maximum number of holes to be filled.
 #' @param normals Boolean. Return vertex normals?
 #' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns \code{CGALmesh} object.
@@ -74,10 +75,10 @@ removeSelfIntersections <- function(
 #' mesh_fill_rgl <- toRGL(mesh_fill)
 #'
 #' mfrow3d(1, 2)
-#' view3d(70, 15, zoom=0.8)
+#' view3d(70, 25, zoom=0.8)
 #' shade3d(mesh_rgl, col="gray")
 #' next3d()
-#' view3d(70, 15, zoom=0.8)
+#' view3d(70, 25, zoom=0.8)
 #' shade3d(mesh_fill_rgl, col="gray")
 #'
 #' @export

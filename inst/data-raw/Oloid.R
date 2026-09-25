@@ -1,8 +1,6 @@
 ## ----------------------------------------------------------------------- //
 ## Code adapted from packages
-## https://github.com/stla/Boov/
-## https://github.com/stla/PolygonSoup/
-## https://github.com/stla/cgalMeshes/
+## https://github.com/stla/SurfaceReconstruction/
 ## developed and copyright by
 ## Stéphane Laurent <laurent_step@outlook.fr>
 ## adapted by
@@ -13,13 +11,17 @@
 library(rgl)
 library(SurfaceMesh)
 
-tt     <- seq(0, 2, length.out=1000L)[-1L]
-crcl1  <- cbind(cospi(tt)+0.5, sinpi(tt), 0)
-crcl2  <- cbind(cospi(tt)-0.5, 0,         sinpi(tt))
-points <- rbind(crcl1, crcl2)
+## ----------------------------------------------------------------------- //
+## Oloid
+## ----------------------------------------------------------------------- //
 
-# dataOloid <- getConvexHull(points, normals=TRUE)
-dataOloid <- alphaWrap(points,alphaRel = 0.1, offsetRel = 1000)
+meshOloid <- function(len) {
+    tt     <- seq(0, 2, length.out=len)[-1L]
+    crcl1  <- cbind(cospi(tt)+0.5, sinpi(tt), 0)
+    crcl2  <- cbind(cospi(tt)-0.5, 0,         sinpi(tt))
+    points <- rbind(crcl1, crcl2)
+    getConvexHull(points)
+}
 
-mesh_rgl  <- toRGL(dataOloid)
-wire3d(mesh_rgl)
+# mOloid <- meshOloid(len=500L)
+# wire3d(toRGL(mOloid))

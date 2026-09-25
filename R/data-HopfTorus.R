@@ -9,8 +9,8 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title A mesh of a Hopf torus
-#' @description An object of class \code{mesh3d} from package \strong{rgl} representing
-#'     a Hopf torus.
+#' @description An object of class \code{mesh3d} from package \strong{rgl}
+#'   representing a Hopf torus.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @author Originally developed by Stephane Laurent.
 "dataHopfTorus"

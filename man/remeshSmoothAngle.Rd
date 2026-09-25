@@ -33,7 +33,7 @@ each iteration?}
 A \code{CGALmesh} object.
 }
 \description{
-Smoothing by angle optimization.
+Smoothes a 3D surface mesh by angle optimization.
 Includes triangulation if mesh is not already triangle.
 }
 \details{
@@ -49,7 +49,7 @@ library(rgl)
 
 mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
-mesh_s     <- remeshSmoothAngle(mesh, nIter=5)
+mesh_s     <- remeshSmoothAngle(mesh, nIter=5L)
 mesh_s_rgl <- toRGL(mesh_s)
 
 mfrow3d(1, 2)
@@ -59,4 +59,11 @@ next3d()
 view3d(45, -45, zoom=0.7)
 shade3d(mesh_s_rgl, col="gray")
 
+}
+\seealso{
+See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+\code{\link[SurfaceMesh]{remeshSimplify}},
+\code{\link[SurfaceMesh]{remeshSmoothShape}},
+\code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
+for other remeshing operations.
 }

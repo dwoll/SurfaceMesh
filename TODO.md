@@ -1,10 +1,5 @@
 # TODO
 
-  * Poisson reconstruction
-      * does not work well
-  * `remeshIsotropic()`
-      * does not work well for pentagrammic prism - why? (`Rvcg::vcgIsotropicRemeshing()` works)
-
 # Wishlist
 
   * remeshing
@@ -24,3 +19,4 @@
       * Topologically correct marching cubes
       * Dual contouring
   * color wash for mesh distances as in `Rvcg::vcgMetro()`
+  * alpha shapes

@@ -25,6 +25,11 @@
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
+#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#'   \code{\link[SurfaceMesh]{remeshSimplify}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothAngle}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
+#'   for other remeshing operations.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
@@ -33,7 +38,7 @@
 #'
 #' mesh       <- dataHeart1
 #' mesh_rgl   <- toRGL(mesh)
-#' mesh_s     <- remeshSmoothShape(mesh, nIter=5, time=1)
+#' mesh_s     <- remeshSmoothShape(mesh, nIter=5L, time=1)
 #' mesh_s_rgl <- toRGL(mesh_s)
 #'
 #' mfrow3d(1, 2)
@@ -74,7 +79,7 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 }
 
 #' @title Smoothing by angle optimization
-#' @description Smoothing by angle optimization.
+#' @description Smoothes a 3D surface mesh by angle optimization.
 #'   Includes triangulation if mesh is not already triangle.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
@@ -91,6 +96,11 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 #'   optimization as well. However, this feature requires the external
 #'   Ceres library (\url{http://ceres-solver.org/}) and thus is currently
 #'   not enabled here.
+#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#'   \code{\link[SurfaceMesh]{remeshSimplify}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
+#'   for other remeshing operations.
 #'
 #' @examples
 #' library(SurfaceMesh)
@@ -98,7 +108,7 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 #'
 #' mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 #' mesh_rgl   <- toRGL(mesh)
-#' mesh_s     <- remeshSmoothAngle(mesh, nIter=5)
+#' mesh_s     <- remeshSmoothAngle(mesh, nIter=5L)
 #' mesh_s_rgl <- toRGL(mesh_s)
 #'
 #' mfrow3d(1, 2)
@@ -134,8 +144,9 @@ remeshSmoothAngle <- function(x,
   fromCPP(meshOut)
 }
 
-#' @title Smooting by tangential relaxation
-#' @description Iterative area-based smoothing by tangential relaxation.
+#' @title Smoothing by tangential relaxation
+#' @description Iterative area-based smoothing of a 3D surface mesh by
+#'   tangential relaxation.
 #'   Includes triangulation if mesh is not already triangle.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
@@ -146,6 +157,11 @@ remeshSmoothAngle <- function(x,
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
+#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#'   \code{\link[SurfaceMesh]{remeshSimplify}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
+#'   \code{\link[SurfaceMesh]{remeshSmoothAngle}}
+#'   for other remeshing operations.
 #'
 #' @examples
 #' library(SurfaceMesh)
@@ -153,7 +169,7 @@ remeshSmoothAngle <- function(x,
 #'
 #' mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 #' mesh_rgl   <- toRGL(mesh)
-#' mesh_s     <- remeshSmoothTangentRelax(mesh, nIter=5)
+#' mesh_s     <- remeshSmoothTangentRelax(mesh, nIter=5L)
 #' mesh_s_rgl <- toRGL(mesh_s)
 #'
 #' mfrow3d(1, 2)
