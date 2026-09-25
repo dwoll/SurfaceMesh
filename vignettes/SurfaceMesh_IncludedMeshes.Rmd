@@ -55,7 +55,7 @@ shade3d(dataCyclide, color="orangered")
 
 ```{r}
 view3d(35, -20, zoom=0.8)
-shade3d(dataHopfTorus, color="darkred")
+shade3d(toRGL(dataHopfTorus), color="darkred")
 ```
 
 ## ICN5D eight
