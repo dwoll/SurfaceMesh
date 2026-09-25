@@ -11,7 +11,8 @@ A list with components \code{vb}, \code{it}, and \code{normals}.
 dataMobiusStrip
 }
 \description{
-A \code{\link[rgl]{mesh3d}} object, representing a solid Mobius Strip.
+An object of class \code{\link[rgl]{mesh3d}} from package
+\strong{rgl}, representing a solid Mobius Strip.
 }
 \author{
 Originally developed by Stephane Laurent.

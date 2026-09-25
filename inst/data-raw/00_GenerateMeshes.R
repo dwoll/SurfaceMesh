@@ -62,11 +62,10 @@ if(!inherits(dataICN5Deight, "try-error")) {
     view3d(30, -30, zoom=0.8)
     shade3d(dataICN5Deight, color="violetred")
 
-    dataICN5Deight <- remeshIsotropic(makeMeshValid(dataICN5Deight),
-                                      method="adaptive",
-                                      edgeMin=0.4,
-                                      edgeMax=2,
-                                      dihedralAngle=10)
+    dataICN5Deight <- Rvcg::vcgUniformRemesh(dataICN5Deight,
+                                             multiSample=TRUE,
+                                             mergeClost=TRUE)
+    
     wire3d(toRGL(dataICN5Deight))
     save(dataICN5Deight, file=paste0(path_out, "dataICN5Deight.rda"))
 }
@@ -97,9 +96,9 @@ if(!inherits(dataOrthoCircle, "try-error")) {
     view3d(-15, -10, zoom=0.8)
     shade3d(dataOrthoCircle, color="darkolivegreen4")
 
-    dataOrthoCircle <- try(meshOrthoCircle(a=0.075, b=3, nx=100L, ny=100L, nz=100L))
-    dataOrthoCircle <- remeshSimplify(makeMeshValid(dataOrthoCircle))
-
+    dataOrthoCircle <- Rvcg::vcgUniformRemesh(dataOrthoCircle,
+                                             multiSample=TRUE,
+                                             mergeClost=TRUE)
     wire3d(toRGL(dataOrthoCircle))
     save(dataOrthoCircle, file=paste0(path_out, "dataOrthoCircle.rda"))
 }
@@ -135,6 +134,12 @@ if(!inherits(dataMobiusStrip, "try-error")) {
     view3d(-10, -20, zoom=0.8)
     shade3d(dataMobiusStrip, color="darkred")
 
+    dataMobiusStrip <- try(meshSolidMobiusStrip(a=0.4, b=0.1, nx=100L, ny=100L, nz=100L))
+    dataMobiusStrip <- Rvcg::vcgUniformRemesh(dataMobiusStrip,
+                                multiSample = FALSE,
+                                mergeClost=TRUE)
+    wire3d(dataMobiusStrip)
+    
     save(dataMobiusStrip, file=paste0(path_out, "dataMobiusStrip.rda"))
 }
 
@@ -148,9 +153,9 @@ if(!inherits(dataSpiderCage, "try-error")) {
     shade3d(dataSpiderCage, color="darkviolet")
 
     dataSpiderCage <- try(meshSpiderCage(a=0.9, nx=250L, ny=250L, nz=250L))
-    y <- remeshSimplify(makeMeshValid(dataSpiderCage),
-                                 method="LT-R",
-                        stopUeRatio = 0.05)
+    dataSpiderCage <- Rvcg::vcgUniformRemesh(dataSpiderCage,
+                                              multiSample=TRUE,
+                                              mergeClost=TRUE)
     wire3d(toRGL(dataSpiderCage))
     save(dataSpiderCage, file=paste0(path_out, "dataSpiderCage.rda"))
 }

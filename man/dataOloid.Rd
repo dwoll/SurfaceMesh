@@ -11,8 +11,8 @@ A \code{CGALmesh} object.
 dataOloid
 }
 \description{
-A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}
-representing an oloid.
+A \code{CGALmesh} object, i.e., the output of
+\code{\link[SurfaceMesh]{makeMesh}} representing an oloid.
 }
 \author{
 Originally developed by Stephane Laurent.

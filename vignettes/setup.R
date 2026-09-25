@@ -8,7 +8,7 @@ open3d()
 if (!requireNamespace("rmarkdown", quietly = TRUE) ||
     !rmarkdown::pandoc_available("1.14")) {
   warning(call. = FALSE, "These vignettes assume rmarkdown and Pandoc
-          version 1.14.  These were not found. Older versions will not work.")
+          version 1.14. These were not found. Older versions will not work.")
   knitr::knit_exit()
 }
 

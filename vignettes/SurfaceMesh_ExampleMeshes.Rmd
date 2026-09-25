@@ -1,0 +1,161 @@
+---
+title: "SurfaceMesh: Example Meshes"
+author: "Daniel Wollschläger (<wollschlaeger@uni-mainz.de>)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  rmarkdown::html_vignette:
+    fig_height: 5
+    fig_width: 5
+    toc: true
+  html_document:
+    df_print: paged
+    toc: true
+  pdf_document:
+    fig_height: 5
+    fig_width: 5
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{SurfaceMesh_ExampleMeshes}
+  %\VignetteDepends{SurfaceMesh}
+  %\VignetteKeywords{SurfaceMesh}
+  %\VignettePackage{SurfaceMesh}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, echo=FALSE, results="asis"}
+source("setup.R")
+setupKnitr(autoprint=TRUE)
+set.seed(123L)
+
+rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
+```
+
+# Geometric Meshes
+
+Please see the following directory for the `.R` scripts to generate the geometric meshes included in the `SurfaceMesh` package.
+
+```{r eval=FALSE}
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+```
+
+The meshes were generated using this file:
+
+```{r eval=FALSE}
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+```
+
+## Cyclide
+
+```{r}
+view3d(0, -35, zoom=0.8)
+shade3d(dataCyclide, color="orangered")
+```
+
+## Hopf Torus
+
+```{r}
+view3d(35, -20, zoom=0.8)
+shade3d(toRGL(dataHopfTorus), color="darkred")
+```
+
+## ICN5D eight
+
+```{r}
+view3d(35, -20, zoom=0.8)
+shade3d(dataICN5Deight, color="violetred")
+```
+
+## Oloid
+
+```{r}
+view3d(20, 15, zoom=0.8)
+shade3d(toRGL(dataOloid), color="darkviolet")
+```
+
+## OrthoCircle
+
+```{r}
+view3d(-15, -10, zoom=0.8)
+shade3d(dataOrthoCircle, color="darkolivegreen4")
+```
+
+## Pentagrammic Prism
+
+```{r}
+mPentaPrism <- makeMesh(dataPentaPrism, triangulate=TRUE)
+view3d(-15, -15, zoom=0.8)
+shade3d(toRGL(mPentaPrism), color="forestgreen")
+```
+
+## Septuaginta
+
+```{r}
+view3d(-10, -20, zoom=0.8)
+shade3d(dataSeptuaginta, color="orangered")
+```
+
+## Solid Möbius strip
+
+TODO
+
+```{r}
+view3d(-10, -20, zoom=0.8)
+shade3d(dataMobiusStrip, color="darkred")
+```
+
+## Spider Cage
+
+TODO
+
+```{r}
+view3d(-25, -45, zoom=0.8)
+shade3d(dataSpiderCage, color="mediumseagreen")
+```
+
+## Toroidal Helix
+
+```{r}
+view3d(15, -20, zoom=0.8)
+shade3d(dataToroHelix, color="violetred")
+```
+
+# Truncated Icosahedron
+
+```{r}
+mTruncIcosahedron <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+view3d(-15, -10, zoom=0.8)
+shade3d(toRGL(mTruncIcosahedron), color="wheat2")
+```
+
+## Tubular Knot
+
+```{r}
+view3d(-15, -15, zoom=0.8)
+shade3d(dataTubularKnot, color="royalblue3")
+```
+
+## Corner
+
+```{r}
+f_mesh   <- system.file("extdata", "dataCorner.off", package="SurfaceMesh")
+mesh     <- makeMesh(f_mesh, verbose=FALSE)
+mesh_rgl <- toRGL(mesh)
+
+view3d(85, -65, zoom=0.8)
+shade3d(mesh_rgl, col="turquoise4")
+```
+
+# Human Heart Contoured from CT Images
+## Heart by Observer 1
+
+```{r}
+view3d(-5, -90, zoom=0.8)
+shade3d(toRGL(dataHeart1), color="tomato")
+```
+
+## Heart by Observer 2
+
+```{r}
+view3d(-5, -90, zoom=0.8)
+shade3d(toRGL(dataHeart2), color="gray")
+```

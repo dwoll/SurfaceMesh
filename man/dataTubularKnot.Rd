@@ -11,7 +11,8 @@ A list with components \code{vb}, \code{it}, and \code{normals}.
 dataTubularKnot
 }
 \description{
-An object of class \code{\link[rgl]{mesh3d}} representing a tubular knot.
+An object of class \code{\link[rgl]{mesh3d}} from package
+\strong{rgl} representing a tubular knot.
 }
 \author{
 Originally developed by Stephane Laurent.

@@ -5,14 +5,14 @@
 \alias{dataICN5Deight}
 \title{A mesh of an ICN5d eight}
 \format{
-A \code{CGALmesh} object.
+A list with components \code{vb}, \code{it}, and \code{normals}.
 }
 \usage{
 dataICN5Deight
 }
 \description{
-A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}
-representing an ICN5D eight.
+An object of class \code{\link[rgl]{mesh3d}} from package
+\strong{rgl} representing an ICN5D eight.
 }
 \author{
 Originally developed by Stephane Laurent.

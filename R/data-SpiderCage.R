@@ -6,9 +6,10 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of an ICN5d eight
+#' @title A mesh of a Spider Cage
+#'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
-#'    \strong{rgl} representing an ICN5D eight.
+#'    \strong{rgl} representing a Spider Cage.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @author Originally developed by Stephane Laurent.
-"dataICN5Deight"
+"dataSpiderCage"

@@ -11,7 +11,7 @@ A list with components \code{vb}, \code{it}.
 dataToroHelix
 }
 \description{
-An object of class \code{mesh3d} from package \strong{rgl}
-representing a toroidal helix.
+An object of class \code{\link[rgl]{mesh3d}} from package
+\strong{rgl} representing a toroidal helix.
 }
 \keyword{datasets}
