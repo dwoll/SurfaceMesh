@@ -32,16 +32,11 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
 
 # Geometric Meshes
 
-Please see the following directory for the `.R` scripts to generate the geometric meshes included in the `SurfaceMesh` package.
+The geometric meshes included in package `SurfaceMesh` were originally part of R package [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Please see the following directory for the `.R` scripts for how to generate them.
 
-```{r eval=FALSE}
-system.file("data-raw", package="SurfaceMesh")
-```
-
-The meshes were generated using this file:
-
-```{r eval=FALSE}
-system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+```{r}
+(d <- system.file("data-raw", package="SurfaceMesh"))
+list.files(d)
 ```
 
 ## Cyclide
