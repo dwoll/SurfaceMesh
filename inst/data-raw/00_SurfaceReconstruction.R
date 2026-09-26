@@ -9,7 +9,7 @@ library(SurfaceMesh)
 ## unfinished
 
 ## ----------------------------------------------------------------------- //
-## Cyclide
+## Dupin Cyclide
 ## ----------------------------------------------------------------------- //
 
 mCyclide   <- meshCyclide(aa=0.94, cc=0.34, dd=0.56)
@@ -22,6 +22,10 @@ cyclide_pois <- reconstructPoisson(ptsCyclide,
 wire3d(mCyclide)
 shade3d(toRGL(cyclide_afs),  color="darkred")
 shade3d(toRGL(cyclide_pois), color="orangered")
+
+## ----------------------------------------------------------------------- //
+## Entzensberger Star
+## ----------------------------------------------------------------------- //
 
 ## ----------------------------------------------------------------------- //
 ## Hopf Torus
@@ -41,11 +45,8 @@ shade3d(toRGL(ht_afs),  color="darkred")
 shade3d(toRGL(ht_pois), color="orangered")
 
 ## ----------------------------------------------------------------------- //
-## ICN5D eight
+## ICN5D Eight
 ## ----------------------------------------------------------------------- //
-
-mICN5deight <- meshICN5Deight(a=2.4, nx=200L, ny=200L, nz=200L)
-wire3d(mICN5deight)
 
 ## ----------------------------------------------------------------------- //
 ## Oloid
@@ -54,10 +55,6 @@ wire3d(mICN5deight)
 ## ----------------------------------------------------------------------- //
 ## OrthoCircle
 ## ----------------------------------------------------------------------- //
-
-mOrthoCircle   <- meshOrthoCircle(a=0.075, b=3, nx=100L, ny=100L, nz=100L)
-ptsOrthoCircle <- t(mOrthoCircle$vb[-4L, ])
-wire3d(mOrthoCircle)
 
 ## ----------------------------------------------------------------------- //
 ## Solid Möbius strip
@@ -89,6 +86,10 @@ dsc_pois <- reconstructPoisson(ptsSpiderCage,
 wire3d(mSpiderCage)
 shade3d(toRGL(dsc_afs),  color="violetred")
 shade3d(toRGL(dsc_pois), color="darkviolet")
+
+## ----------------------------------------------------------------------- //
+## Toroidal Helix
+## ----------------------------------------------------------------------- //
 
 ## ----------------------------------------------------------------------- //
 ## Tubular Knot

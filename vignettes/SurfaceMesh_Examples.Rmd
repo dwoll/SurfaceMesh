@@ -35,7 +35,8 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
 The geometric meshes included in package `SurfaceMesh` were originally part of R packages [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/) and [`cgalMeshes`](https://github.com/stla/cgalMeshes/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Please see the following directory for the `.R` scripts for how to generate the meshes.
 
 ```{r}
-(d <- system.file("data-raw", package="SurfaceMesh"))
+## package installation directory depends on system
+d <- system.file("data-raw", package="SurfaceMesh")
 list.files(d)
 ```
 
@@ -46,6 +47,13 @@ view3d(0, -35, zoom=0.8)
 shade3d(dataCyclide, color="orangered")
 ```
 
+## Entzensberger Star
+
+```{r}
+view3d(-55, -20, zoom=0.8)
+shade3d(dataEntzenStar, col="steelblue2")
+```
+
 ## Hopf Torus
 
 ```{r}
@@ -53,7 +61,7 @@ view3d(35, -20, zoom=0.8)
 shade3d(toRGL(dataHopfTorus), color="darkred")
 ```
 
-## ICN5D eight
+## ICN5D Eight
 
 ```{r}
 view3d(35, -20, zoom=0.8)

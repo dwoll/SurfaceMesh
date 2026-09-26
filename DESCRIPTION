@@ -6,7 +6,8 @@ Authors@R:
     c(person("Daniel", "Wollschlaeger",
              role=c("aut", "cre"),
              email="wollschlaeger@uni-mainz.de"),
-      person("Stephane", "Laurent", role=c("aut")))
+      person("Stephane", "Laurent", role=c"aut"),
+      person("The CGAL Project",    role="cph"))
 Maintainer: Daniel Wollschlaeger <wollschlaeger@uni-mainz.de>
 Description: Basic processing of 3D surface meshes based on the
     'C++' library 'CGAL' (<https://www.cgal.org/>).

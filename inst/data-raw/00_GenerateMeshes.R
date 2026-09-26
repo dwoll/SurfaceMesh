@@ -11,6 +11,7 @@ path_in  <- system.file("data-raw", package="SurfaceMesh")
 path_out <- "c:/Users/dwollsch/Documents/SurfaceMesh/data/"
 
 source(paste0(path_in, "/Cyclide.R"))
+source(paste0(path_in, "/EntzenStar.R"))
 source(paste0(path_in, "/HopfTorus.R"))
 source(paste0(path_in, "/ICN5Deight.R"))
 source(paste0(path_in, "/IsoCuboid.R"))
@@ -35,6 +36,16 @@ view3d(0, -35, zoom=0.8)
 shade3d(dataCyclide, color="orangered")
 
 save(dataCyclide, file=paste0(path_out, "dataCyclide.rda"))
+
+## ----------------------------------------------------------------------- //
+## Entzensberger Star
+## ----------------------------------------------------------------------- //
+
+dataEntzenStar <- meshEntzenStar(n=60, constant=100)
+view3d(-55, -20, zoom=0.8)
+shade3d(dataEntzenStar, col="steelblue2")
+
+save(dataEntzenStar, file=paste0(path_out, "dataEntzenStar.rda"))
 
 ## ----------------------------------------------------------------------- //
 ## Hopf Torus

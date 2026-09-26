@@ -12,6 +12,7 @@ library(rgl)
 
 ## ----------------------------------------------------------------------- //
 ## ICN5D eight
+## from user ICN5D on forum http://hi.gher.space/forum/
 ## ----------------------------------------------------------------------- //
 
 meshICN5Deight <- function(a, nx, ny, nz) {
