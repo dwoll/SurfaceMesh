@@ -103,6 +103,7 @@ shade3d(dataSolidMobiusStrip, color="darkred")
 ```{r}
 view3d(-25, -45, zoom=0.8)
 shade3d(dataSphere, color="darkgoldenrod")
+wire3d(dataSphere)
 ```
 
 ## Spider Cage
@@ -127,7 +128,7 @@ shade3d(dataTorus, color="green")
 wire3d(dataTorus)
 ```
 
-# Truncated Icosahedron
+## Truncated Icosahedron
 
 ```{r}
 meshTruncIcos <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
