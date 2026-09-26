@@ -14,6 +14,16 @@ dataOrthoCircle
 An object of class \code{\link[rgl]{mesh3d}} from package
 \strong{rgl} representing an Ortho Circle.
 }
+\examples{
+## The following files were used to generate this mesh.
+system.file("data-raw", "OrthoCircle.R",       package="SurfaceMesh")
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+
+library(SurfaceMesh)
+library(rgl)
+view3d(-15, -10, zoom=0.8)
+shade3d(dataOrthoCircle, color="darkolivegreen4")
+}
 \author{
 Originally developed by Stephane Laurent.
 }

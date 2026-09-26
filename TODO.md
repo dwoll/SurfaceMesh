@@ -2,6 +2,7 @@
 
 # Wishlist
 
+  * https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/Advancing_front_surface_reconstruction_2reconstruction_structured_8cpp-example.html
   * remeshing
       * https://doc.cgal.org/latest/PMP_Remeshing/
       * `approximated_centroidal_Voronoi_diagram_remeshing()`

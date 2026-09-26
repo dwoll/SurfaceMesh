@@ -14,6 +14,17 @@ dataTruncIcosahedron
 A list giving the vertices and the faces of a truncated
 icosahedron. There are some hexagonal faces and some pentagonal faces.
 }
+\examples{
+## The following files were used to generate this mesh.
+system.file("data-raw", "TruncIcosahedron.R",  package="SurfaceMesh")
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+
+library(SurfaceMesh)
+library(rgl)
+mTruncIcosahedron <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+view3d(-15, -10, zoom=0.8)
+shade3d(toRGL(mTruncIcosahedron), color="wheat2")
+}
 \author{
 Originally developed by Stephane Laurent.
 }

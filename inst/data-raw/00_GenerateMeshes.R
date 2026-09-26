@@ -62,11 +62,12 @@ if(!inherits(dataICN5Deight, "try-error")) {
     view3d(30, -30, zoom=0.8)
     shade3d(dataICN5Deight, color="violetred")
 
-    dataICN5Deight <- Rvcg::vcgUniformRemesh(dataICN5Deight,
-                                             multiSample=TRUE,
-                                             mergeClost=TRUE)
-    
-    wire3d(toRGL(dataICN5Deight))
+    # dataICN5Deight <- try(meshICN5Deight(a=2.4, nx=200L, ny=200L, nz=200L))
+    # dataICN5Deight <- Rvcg::vcgUniformRemesh(dataICN5Deight,
+    #                                          multiSample=TRUE,
+    #                                          mergeClost=TRUE)
+    # wire3d(toRGL(dataICN5Deight))
+    #
     save(dataICN5Deight, file=paste0(path_out, "dataICN5Deight.rda"))
 }
 
@@ -96,10 +97,12 @@ if(!inherits(dataOrthoCircle, "try-error")) {
     view3d(-15, -10, zoom=0.8)
     shade3d(dataOrthoCircle, color="darkolivegreen4")
 
-    dataOrthoCircle <- Rvcg::vcgUniformRemesh(dataOrthoCircle,
-                                             multiSample=TRUE,
-                                             mergeClost=TRUE)
-    wire3d(toRGL(dataOrthoCircle))
+    # dataOrthoCircle <- try(meshOrthoCircle(a=0.075, b=3, nx=100L, ny=100L, nz=100L))
+    # dataOrthoCircle <- Rvcg::vcgUniformRemesh(dataOrthoCircle,
+    #                                          multiSample=TRUE,
+    #                                          mergeClost=TRUE)
+    # wire3d(toRGL(dataOrthoCircle))
+
     save(dataOrthoCircle, file=paste0(path_out, "dataOrthoCircle.rda"))
 }
 
@@ -129,18 +132,18 @@ save(dataSeptuaginta, file=paste0(path_out, "dataSeptuaginta.rda"))
 ## Solid Möbius strip
 ## ----------------------------------------------------------------------- //
 
-dataMobiusStrip <- try(meshSolidMobiusStrip(a=0.4, b=0.1, nx=100L, ny=100L, nz=100L))
-if(!inherits(dataMobiusStrip, "try-error")) {
+dataSolidMobiusStrip <- try(meshSolidMobiusStrip(a=0.4, b=0.1, nx=100L, ny=100L, nz=100L))
+if(!inherits(dataSolidMobiusStrip, "try-error")) {
     view3d(-10, -20, zoom=0.8)
-    shade3d(dataMobiusStrip, color="darkred")
+    shade3d(dataSolidMobiusStrip, color="darkred")
 
-    dataMobiusStrip <- try(meshSolidMobiusStrip(a=0.4, b=0.1, nx=100L, ny=100L, nz=100L))
-    dataMobiusStrip <- Rvcg::vcgUniformRemesh(dataMobiusStrip,
-                                multiSample = FALSE,
-                                mergeClost=TRUE)
-    wire3d(dataMobiusStrip)
-    
-    save(dataMobiusStrip, file=paste0(path_out, "dataMobiusStrip.rda"))
+    # dataMobiusStrip      <- try(meshSolidMobiusStrip(a=0.4, b=0.1, nx=100L, ny=100L, nz=100L))
+    # dataSolidMobiusStrip <- Rvcg::vcgUniformRemesh(dataSolidMobiusStrip,
+    #                          multiSample=FALSE,
+    #                          mergeClost =TRUE)
+    # wire3d(dataSolidMobiusStrip)
+
+    save(dataSolidMobiusStrip, file=paste0(path_out, "dataSolidMobiusStrip.rda"))
 }
 
 ## ----------------------------------------------------------------------- //
@@ -152,11 +155,12 @@ if(!inherits(dataSpiderCage, "try-error")) {
     view3d(-25, -45, zoom=0.8)
     shade3d(dataSpiderCage, color="darkviolet")
 
-    dataSpiderCage <- try(meshSpiderCage(a=0.9, nx=250L, ny=250L, nz=250L))
-    dataSpiderCage <- Rvcg::vcgUniformRemesh(dataSpiderCage,
-                                              multiSample=TRUE,
-                                              mergeClost=TRUE)
-    wire3d(toRGL(dataSpiderCage))
+    # dataSpiderCage <- try(meshSpiderCage(a=0.9, nx=250L, ny=250L, nz=250L))
+    # dataSpiderCage <- Rvcg::vcgUniformRemesh(dataSpiderCage,
+    #                                           multiSample=TRUE,
+    #                                           mergeClost=TRUE)
+    # wire3d(toRGL(dataSpiderCage))
+
     save(dataSpiderCage, file=paste0(path_out, "dataSpiderCage.rda"))
 }
 

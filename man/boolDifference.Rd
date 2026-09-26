@@ -56,7 +56,7 @@ open3d(windowRect=c(50, 50, 562, 562))
 shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
 shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
 shade3d(mesh_d_rgl, color="red")
-plotEdges(vertices         =mesh_d[["vertices"]],
+plotEdges(mesh_d[["vertices"]],
           edges            =mesh_d[["exteriorEdges"]],
           edgesAsTubes     =TRUE,
           verticesAsSpheres=TRUE)

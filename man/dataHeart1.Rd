@@ -14,4 +14,10 @@ dataHeart1
 An object of class \code{CGALmesh} representing a human heart
 based on a CT scan.
 }
+\examples{
+library(SurfaceMesh)
+library(rgl)
+view3d(-5, -90, zoom=0.8)
+shade3d(toRGL(dataHeart1), color="tomato")
+}
 \keyword{datasets}

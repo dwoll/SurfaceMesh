@@ -15,6 +15,17 @@ A list representing a pentagrammic prism, giving the vertices
 and the faces; it has 20 vertices, 10 triangular faces, 10 rectangular
 faces and two pentagonal faces.
 }
+\examples{
+## The following files were used to generate this mesh.
+system.file("data-raw", "PentaPrism.R",        package="SurfaceMesh")
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+
+library(SurfaceMesh)
+library(rgl)
+mPentaPrism <- makeMesh(dataPentaPrism, triangulate=TRUE)
+view3d(-15, -15, zoom=0.8)
+shade3d(toRGL(mPentaPrism), color="forestgreen")
+}
 \author{
 Originally developed by Stephane Laurent.
 }

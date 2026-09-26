@@ -14,6 +14,16 @@ dataICN5Deight
 An object of class \code{\link[rgl]{mesh3d}} from package
 \strong{rgl} representing an ICN5D eight.
 }
+\examples{
+## The following files were used to generate this mesh.
+system.file("data-raw", "ICN5Deight.R",        package="SurfaceMesh")
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+
+library(SurfaceMesh)
+library(rgl)
+view3d(35, -20, zoom=0.8)
+shade3d(dataICN5Deight, color="violetred")
+}
 \author{
 Originally developed by Stephane Laurent.
 }

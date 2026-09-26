@@ -9,4 +9,9 @@
 #'     based on a CT scan.
 #'
 #' @format A \code{CGALmesh} object.
+#' @examples
+#' library(SurfaceMesh)
+#' library(rgl)
+#' view3d(-5, -90, zoom=0.8)
+#' shade3d(toRGL(dataHeart1), color="tomato")
 "dataHeart1"

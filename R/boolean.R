@@ -52,7 +52,7 @@
 #' shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
 #' shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
 #' shade3d(mesh_i_rgl, color="red")
-#' plotEdges(vertices         =mesh_i[["vertices"]],
+#' plotEdges(mesh_i[["vertices"]],
 #'           edges            =mesh_i[["exteriorEdges"]],
 #'           edgesAsTubes     =FALSE,
 #'           lwd              =3,
@@ -115,7 +115,7 @@ boolIntersection <- function(x, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
 #' shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
 #' shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
 #' shade3d(mesh_d_rgl, color="red")
-#' plotEdges(vertices         =mesh_d[["vertices"]],
+#' plotEdges(mesh_d[["vertices"]],
 #'           edges            =mesh_d[["exteriorEdges"]],
 #'           edgesAsTubes     =TRUE,
 #'           verticesAsSpheres=TRUE)
@@ -180,7 +180,7 @@ boolDifference <- function(
 #' mesh_u_rgl <- toRGL(mesh_u)
 #' open3d(windowRect=c(50, 50, 562, 562))
 #' shade3d(mesh_u_rgl, color="red")
-#' plotEdges(vertices         =mesh_u[["vertices"]],
+#' plotEdges(mesh_u[["vertices"]],
 #'           edges            =mesh_u[["exteriorEdges"]],
 #'           edgesAsTubes     =TRUE,
 #'           verticesAsSpheres=TRUE)

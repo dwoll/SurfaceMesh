@@ -12,4 +12,13 @@
 #'    faces like a sphere based on the drawing by Leonardo da Vinci.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @author Originally developed by Stephane Laurent.
+#' @examples
+#' ## The following files were used to generate this mesh.
+#' system.file("data-raw", "Septuaginta.R",       package="SurfaceMesh")
+#' system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+#'
+#' library(SurfaceMesh)
+#' library(rgl)
+#' view3d(-10, -20, zoom=0.8)
+#' shade3d(dataSeptuaginta, color="orangered")
 "dataSeptuaginta"

@@ -12,4 +12,13 @@
 #'    \strong{rgl} representing a Spider Cage.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @author Originally developed by Stephane Laurent.
+#' @examples
+#' ## The following files were used to generate this mesh.
+#' system.file("data-raw", "SpiderCage.R",        package="SurfaceMesh")
+#' system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+#'
+#' library(SurfaceMesh)
+#' library(rgl)
+#' view3d(-25, -45, zoom=0.8)
+#' shade3d(dataSpiderCage, color="mediumseagreen")
 "dataSpiderCage"

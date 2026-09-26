@@ -44,7 +44,7 @@ mesh_u <- boolUnion(list(mesh1_rgl, mesh2_rgl))
 mesh_u_rgl <- toRGL(mesh_u)
 open3d(windowRect=c(50, 50, 562, 562))
 shade3d(mesh_u_rgl, color="red")
-plotEdges(vertices         =mesh_u[["vertices"]],
+plotEdges(mesh_u[["vertices"]],
           edges            =mesh_u[["exteriorEdges"]],
           edgesAsTubes     =TRUE,
           verticesAsSpheres=TRUE)

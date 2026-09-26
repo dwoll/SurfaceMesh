@@ -14,6 +14,16 @@ dataCyclide
 An object of class \code{\link[rgl]{mesh3d}} from package
 \strong{rgl} representing a cyclide.
 }
+\examples{
+## The following files were used to generate this mesh.
+system.file("data-raw", "Cyclide.R",           package="SurfaceMesh")
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+
+library(SurfaceMesh)
+library(rgl)
+view3d(0, -35, zoom=0.8)
+shade3d(dataCyclide, color="orangered")
+}
 \author{
 Originally developed by Stephane Laurent.
 }

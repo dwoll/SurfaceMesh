@@ -35,7 +35,7 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
 Please see the following directory for the `.R` scripts to generate the geometric meshes included in the `SurfaceMesh` package.
 
 ```{r eval=FALSE}
-system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+system.file("data-raw", package="SurfaceMesh")
 ```
 
 The meshes were generated using this file:
@@ -96,16 +96,12 @@ shade3d(dataSeptuaginta, color="orangered")
 
 ## Solid Möbius strip
 
-TODO
-
 ```{r}
 view3d(-10, -20, zoom=0.8)
-shade3d(dataMobiusStrip, color="darkred")
+shade3d(dataSolidMobiusStrip, color="darkred")
 ```
 
 ## Spider Cage
-
-TODO
 
 ```{r}
 view3d(-25, -45, zoom=0.8)

@@ -14,6 +14,16 @@ dataTubularKnot
 An object of class \code{\link[rgl]{mesh3d}} from package
 \strong{rgl} representing a tubular knot.
 }
+\examples{
+## The following files were used to generate this mesh.
+system.file("data-raw", "TubularKnot.R",       package="SurfaceMesh")
+system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
+
+library(SurfaceMesh)
+library(rgl)
+view3d(-15, -15, zoom=0.8)
+shade3d(dataTubularKnot, color="royalblue3")
+}
 \author{
 Originally developed by Stephane Laurent.
 }
