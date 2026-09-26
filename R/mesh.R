@@ -268,15 +268,15 @@ makeMeshValid <- function(x,
 #' library(rgl)
 #' mesh <- makeMesh(dataToroHelix, normals=FALSE)
 #' mesh
-#' mesh_wn <- assignNormals(mesh)
-#' mesh_wn
+#' mesh_vn <- assignNormals(mesh)
+#' mesh_vn
 #'
 #' mfrow3d(1, 2)
 #' view3d(0, 30, zoom=0.8)
 #' shade3d(toRGL(mesh), col="gray")
 #' next3d()
 #' view3d(0, 30, zoom=0.8)
-#' shade3d(toRGL(mesh_wn), col="gray")
+#' shade3d(toRGL(mesh_vn), col="gray")
 #' @export
 assignNormals <- function(x) {
   if(!inherits(x, "CGALmesh")) {

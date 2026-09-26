@@ -7,10 +7,10 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title A mesh of an Ortho Circle
-#'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing an Ortho Circle.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
+#' @details \url{https://paulbourke.net/geometry/orthocircle/}
 #' @author Originally developed by Stephane Laurent.
 #' @examples
 #' ## The following files were used to generate this mesh.

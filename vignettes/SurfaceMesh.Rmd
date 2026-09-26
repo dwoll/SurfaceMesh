@@ -54,7 +54,7 @@ The package also calculates surface distance and volume-overlap based similarity
 
 # Background
 
-This package includes code adapted from packages [`Boov`](https://github.com/stla/Boov/), [`cgalMeshes`](https://github.com/stla/cgalMeshes/), and [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/) developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Currently, only a subset of the functionality of these packages is provided in `SurfaceMesh`.
+This package includes code adapted from packages [`Boov`](https://github.com/stla/Boov/), [`cgalMeshes`](https://github.com/stla/cgalMeshes/), and [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Currently, only a subset of the functionality of these packages is provided in `SurfaceMesh`.
 
 A fork / adaptation of packages [`Boov`](https://github.com/stla/Boov/), [`cgalMeshes`](https://github.com/stla/cgalMeshes/), and [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/) was carried out as upstream changes to CGAL introduced incompatibilities, and the packages were archived from [CRAN](https://cran.r-project.org/).
 
@@ -84,7 +84,7 @@ mesh
 ## Triangulate
 
 ```{r}
-mesh     <- makeMesh(dataSeptuaginta, verbose=FALSE)
+mesh     <- makeMesh(dataSeptuaginta, triangulate=FALSE, verbose=FALSE)
 mesh_rgl <- toRGL(mesh)
 isTriangle(mesh)
 
@@ -109,15 +109,15 @@ mesh
 Or
 
 ```{r}
-mesh   <- makeMesh(dataToroHelix, normals=FALSE)
-mesh_n <- assignNormals(mesh)
+mesh    <- makeMesh(dataToroHelix, normals=FALSE)
+mesh_vn <- assignNormals(mesh)
 
 mfrow3d(1, 2)
 view3d(0, 30, zoom=0.8)
 shade3d(toRGL(mesh), col="tomato")
 next3d()
 view3d(0, 30, zoom=0.8)
-shade3d(toRGL(mesh_n), col="turquoise4")
+shade3d(toRGL(mesh_vn), col="turquoise4")
 ```
 
 # Mesh Repair
@@ -366,14 +366,12 @@ wire3d(mesh_l_rgl)
 # Surface Reconstruction
 ## Removing outliers from point cloud
 
-TODO
-
 ```{r}
 ptsBefore   <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
 (avgSpacing <- getAverageSpacing(ptsBefore, nNeighbors=6L))
 ## contaminate
 idx              <- sample(seq_len(nrow(ptsBefore)), 4L, replace=FALSE)
-ptsBefore[idx, ] <- matrix(rnorm(4L, mean=10, sd=1), ncol=3L)
+ptsBefore[idx, ] <- matrix(rnorm(12L, mean=10, sd=1), ncol=3L)
 ptsAfter         <- removeOutliers(ptsBefore, nNeighbors=6L)
 dim(ptsBefore)
 dim(ptsAfter)

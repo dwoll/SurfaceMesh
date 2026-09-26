@@ -6,18 +6,18 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a Hopf torus
+#' @title A sphere
+#'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
-#'    \strong{rgl} representing a Hopf torus.
-#' @format A list with components \code{vb}, \code{it}, and \code{normals}.
-#' @author Originally developed by Stephane Laurent.
+#'    \strong{rgl} representing a sphere
+#' @format A list with components \code{vb}, \code{it}.
 #' @examples
 #' ## The following files were used to generate this mesh.
-#' system.file("data-raw", "HopfTorus.R",         package="SurfaceMesh")
+#' system.file("data-raw", "Sphere.R",            package="SurfaceMesh")
 #' system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
 #'
 #' library(SurfaceMesh)
 #' library(rgl)
-#' view3d(35, -20, zoom=0.8)
-#' shade3d(toRGL(dataHopfTorus), color="darkred")
-"dataHopfTorus"
+#' view3d(15, -20, zoom=0.8)
+#' shade3d(dataSphere, color="darkgoldenrod")
+"dataSphere"

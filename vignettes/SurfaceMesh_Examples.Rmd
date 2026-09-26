@@ -15,7 +15,7 @@ output:
     fig_width: 5
     toc: true
 vignette: >
-  %\VignetteIndexEntry{SurfaceMesh_ExampleMeshes}
+  %\VignetteIndexEntry{SurfaceMesh Examples}
   %\VignetteDepends{SurfaceMesh}
   %\VignetteKeywords{SurfaceMesh}
   %\VignettePackage{SurfaceMesh}
@@ -32,14 +32,14 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
 
 # Geometric Meshes
 
-The geometric meshes included in package `SurfaceMesh` were originally part of R package [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Please see the following directory for the `.R` scripts for how to generate them.
+The geometric meshes included in package `SurfaceMesh` were originally part of R packages [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/) and [`cgalMeshes`](https://github.com/stla/cgalMeshes/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Please see the following directory for the `.R` scripts for how to generate the meshes.
 
 ```{r}
 (d <- system.file("data-raw", package="SurfaceMesh"))
 list.files(d)
 ```
 
-## Cyclide
+## Dupin Cyclide
 
 ```{r}
 view3d(0, -35, zoom=0.8)
@@ -69,6 +69,8 @@ shade3d(toRGL(dataOloid), color="darkviolet")
 
 ## OrthoCircle
 
+[Paul Bourke OrthoCircle](https://paulbourke.net/geometry/orthocircle/)
+
 ```{r}
 view3d(-15, -10, zoom=0.8)
 shade3d(dataOrthoCircle, color="darkolivegreen4")
@@ -77,9 +79,9 @@ shade3d(dataOrthoCircle, color="darkolivegreen4")
 ## Pentagrammic Prism
 
 ```{r}
-mPentaPrism <- makeMesh(dataPentaPrism, triangulate=TRUE)
+meshPentaPrism <- makeMesh(dataPentaPrism, triangulate=TRUE)
 view3d(-15, -15, zoom=0.8)
-shade3d(toRGL(mPentaPrism), color="forestgreen")
+shade3d(toRGL(meshPentaPrism), color="forestgreen")
 ```
 
 ## Septuaginta
@@ -96,6 +98,13 @@ view3d(-10, -20, zoom=0.8)
 shade3d(dataSolidMobiusStrip, color="darkred")
 ```
 
+## Sphere
+
+```{r}
+view3d(-25, -45, zoom=0.8)
+shade3d(dataSphere, color="darkgoldenrod")
+```
+
 ## Spider Cage
 
 ```{r}
@@ -110,12 +119,20 @@ view3d(15, -20, zoom=0.8)
 shade3d(dataToroHelix, color="violetred")
 ```
 
+## Torus
+
+```{r}
+view3d(-20, -20, zoom=0.75)
+shade3d(dataTorus, color="green")
+wire3d(dataTorus)
+```
+
 # Truncated Icosahedron
 
 ```{r}
-mTruncIcosahedron <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+meshTruncIcos <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
 view3d(-15, -10, zoom=0.8)
-shade3d(toRGL(mTruncIcosahedron), color="wheat2")
+shade3d(toRGL(meshTruncIcos), color="wheat2")
 ```
 
 ## Tubular Knot

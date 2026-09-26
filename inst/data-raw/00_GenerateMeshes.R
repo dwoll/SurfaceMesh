@@ -7,32 +7,30 @@
 library(rgl)
 library(SurfaceMesh)
 
-# path_in <- getwd()
-path_in <- system.file("data-raw", package="SurfaceMesh")
+path_in  <- system.file("data-raw", package="SurfaceMesh")
+path_out <- "c:/Users/dwollsch/Documents/SurfaceMesh/data/"
 
 source(paste0(path_in, "/Cyclide.R"))
 source(paste0(path_in, "/HopfTorus.R"))
 source(paste0(path_in, "/ICN5Deight.R"))
+source(paste0(path_in, "/IsoCuboid.R"))
 source(paste0(path_in, "/Oloid.R"))
 source(paste0(path_in, "/OrthoCircle.R"))
 source(paste0(path_in, "/PentaPrism.R"))
 source(paste0(path_in, "/Septuaginta.R"))
 source(paste0(path_in, "/SolidMobiusStrip.R"))
+source(paste0(path_in, "/Sphere.R"))
 source(paste0(path_in, "/SpiderCage.R"))
 source(paste0(path_in, "/ToroidalHelix.R"))
+source(paste0(path_in, "/Torus.R"))
 source(paste0(path_in, "/TruncIcosahedron.R"))
 source(paste0(path_in, "/TubularKnot.R"))
-
-path_out <- "c:/users/dwollsch/documents/SurfaceMesh/data/"
-
-## ----------------------------------------------------------------------- //
-## ----------------------------------------------------------------------- //
 
 ## ----------------------------------------------------------------------- //
 ## Cyclide
 ## ----------------------------------------------------------------------- //
 
-dataCyclide <- meshCyclide(aa=0.94, cc=0.34, dd=0.56)
+dataCyclide <- meshCyclide(a = 97, c = 32, mu = 57)
 view3d(0, -35, zoom=0.8)
 shade3d(dataCyclide, color="orangered")
 
@@ -46,10 +44,10 @@ dataHopfTorus <- meshHopfTorus(nu=200L, nv=150L, nlobes=3L, A=0.44)
 view3d(35, -20, zoom=0.8)
 shade3d(dataHopfTorus, color="darkred")
 
-dataHopfTorus <- remeshIsotropic(makeMeshValid(dataHopfTorus),
-                                 method="adaptive",
-                                 edgeMin=0.7,
-                                 edgeMax=5)
+# dataHopfTorus <- remeshIsotropic(makeMeshValid(dataHopfTorus),
+#                                  method="adaptive",
+#                                  edgeMin=0.7,
+#                                  edgeMax=5)
 wire3d(toRGL(dataHopfTorus))
 save(dataHopfTorus, file=paste0(path_out, "dataHopfTorus.rda"))
 
@@ -79,12 +77,11 @@ dataOloid <- meshOloid(len=500L)
 view3d(20, 15, zoom=0.8)
 shade3d(toRGL(dataOloid), color="darkviolet")
 
-dataOloid <- remeshIsotropic(dataOloid,
-                             method="adaptive",
-                             edgeMin=0.2,
-                             edgeMax=2,
-                             # targetEdgeLen=0.3,
-                             dihedralAngle=60)
+# dataOloid <- remeshIsotropic(dataOloid,
+#                              method="adaptive",
+#                              edgeMin=0.2,
+#                              edgeMax=2,
+#                              dihedralAngle=60)
 
 save(dataOloid, file=paste0(path_out, "dataOloid.rda"))
 
@@ -147,6 +144,17 @@ if(!inherits(dataSolidMobiusStrip, "try-error")) {
 }
 
 ## ----------------------------------------------------------------------- //
+## Sphere
+## ----------------------------------------------------------------------- //
+
+dataSphere <- meshSphere(r=1, nIter=3)
+view3d(-20, -20, zoom = 0.75)
+shade3d(dataSphere, color="darkgoldenrod")
+wire3d(dataSphere)
+
+save(dataSphere, file=paste0(path_out, "dataSphere.rda"))
+
+## ----------------------------------------------------------------------- //
 ## Spider Cage
 ## ----------------------------------------------------------------------- //
 
@@ -179,6 +187,17 @@ view3d(15, -20, zoom=0.8)
 shade3d(dataToroHelix, color="violetred")
 
 save(dataToroHelix, file=paste0(path_out, "dataToroHelix.rda"))
+
+## ----------------------------------------------------------------------- //
+## Torus
+## ----------------------------------------------------------------------- //
+
+dataTorus <- meshTorus(R=3, r=1)
+view3d(-20, -20, zoom = 0.75)
+shade3d(dataTorus, color = "green")
+wire3d(dataTorus)
+
+save(dataTorus, file=paste0(path_out, "dataTorus.rda"))
 
 ## ----------------------------------------------------------------------- //
 ## Truncated Icosahedron
