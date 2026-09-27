@@ -1,7 +1,5 @@
 // ----------------------------------------------------------------------- //
 // Daniel Wollschlaeger
-// code adapted from
-// https://doc.cgal.org/latest/Surface_mesh_simplification/examples.html
 // License: GPL-3
 // ----------------------------------------------------------------------- //
 
@@ -27,6 +25,10 @@ typedef SMS::GarlandHeckbert_triangle_policies<Mesh3, K>               Classic_t
 typedef SMS::GarlandHeckbert_probabilistic_triangle_policies<Mesh3, K> Prob_tri;
 typedef SMS::GarlandHeckbert_plane_and_line_policies<Mesh3, K>         Plane_and_line;
 
+// ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Surface_mesh_simplification/Surface_mesh_simplification_2edge_collapse_surface_mesh_8cpp-example.html
+// https://doc.cgal.org/latest/Surface_mesh_simplification/Surface_mesh_simplification_2edge_collapse_bounded_normal_change_8cpp-example.html
 // ----------------------------------------------------------------------- //
 // cost strategy: Lindstrom-Turk
 // [[Rcpp::export]]
@@ -102,6 +104,8 @@ Rcpp::List simplifyLT_cpp(const Rcpp::List rmesh,
 }
 
 // ----------------------------------------------------------------------- //
+// code adapted from
+// https://doc.cgal.org/latest/Surface_mesh_simplification/Surface_mesh_simplification_2edge_collapse_garland_heckbert_8cpp-example.html
 // ----------------------------------------------------------------------- //
 // cost strategy: Garland-Heckbert
 template <typename GHPolicies, typename MeshT>
@@ -125,6 +129,9 @@ int collapse_gh(MeshT& mesh, const double ueRatio) {
   return r;
 }
 
+// ----------------------------------------------------------------------- //
+// code adpated from
+// https://doc.cgal.org/latest/Surface_mesh_simplification/Surface_mesh_simplification_2edge_collapse_garland_heckbert_8cpp-example.html
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List simplifyGH_cpp(const Rcpp::List rmesh,

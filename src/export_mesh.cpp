@@ -196,8 +196,7 @@ double getArea_cpp(const Rcpp::List rmesh) {
     Rcpp::warning("The mesh self-intersects.");
     return Rcpp::NumericVector::get_na();
   }
-  const K::FT a = PMP::area(mesh);
-  return CGAL::to_double<K::FT>(a);
+  return CGAL::to_double<K::FT>(PMP::area(mesh));
 }
 
 // ----------------------------------------------------------------------- //
@@ -338,8 +337,11 @@ double getVolume_cpp(const Rcpp::List rmesh) {
     Rcpp::warning("The mesh self-intersects.");
     return Rcpp::NumericVector::get_na();
   }
-  const K::FT vol = PMP::volume(mesh);
-  return CGAL::to_double<K::FT>(vol);
+  if(!PMP::does_bound_a_volume(mesh)) {
+    Rcpp::warning("The mesh does not bound a volume.");
+    return Rcpp::NumericVector::get_na();
+  }
+  return CGAL::to_double<K::FT>(PMP::volume(mesh));
 }
 
 // ----------------------------------------------------------------------- //

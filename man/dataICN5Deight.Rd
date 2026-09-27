@@ -13,7 +13,7 @@ dataICN5Deight
 \description{
 An object of class \code{\link[rgl]{mesh3d}} from package
 \strong{rgl} representing an ICN5D eight, a shape from from user ICN5D
-  on forum \url{http://hi.gher.space/forum/}.
+on forum \url{http://hi.gher.space/forum/}.
 }
 \examples{
 ## The following files were used to generate this mesh.

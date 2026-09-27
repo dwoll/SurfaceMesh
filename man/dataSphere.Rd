@@ -12,7 +12,7 @@ dataSphere
 }
 \description{
 An object of class \code{\link[rgl]{mesh3d}} from package
-\strong{rgl} representing a sphere.
+\strong{rgl} representing a sphere
 }
 \examples{
 ## The following files were used to generate this mesh.
@@ -21,8 +21,7 @@ system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
 
 library(SurfaceMesh)
 library(rgl)
-view3d(-20, -20, zoom=0.75)
+view3d(15, -20, zoom=0.8)
 shade3d(dataSphere, color="darkgoldenrod")
-wire3d(dataSphere)
 }
 \keyword{datasets}

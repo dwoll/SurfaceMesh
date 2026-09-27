@@ -125,9 +125,9 @@ template EMesh3 fill_boundary_holes<EMesh3, EPoint3>(EMesh3&, const bool, const 
 // uses a polygon soup as container as the output will most likely be non-manifold
 template <typename KernelT, typename PointT>
 bool remove_selfint_soup(std::vector<PointT> &points,
-                       std::vector<std::vector<std::size_t>> &polygons,
-                       const int method,
-                       const bool verbose) {
+                         std::vector<std::vector<std::size_t>> &polygons,
+                         const int method,
+                         const bool verbose) {
     bool success;
     std::string msg;
     std::string msg_method;
@@ -140,7 +140,7 @@ bool remove_selfint_soup(std::vector<PointT> &points,
                 .erase_policy(PMP::Duplicate_polygon_erase_policy::KEEP_ONE_IF_ODD));
     } else if(method == 2) {
         msg_method=" with snap rounding";
-        // TODO .snap_grid_size(grid_size).number_of_iterations(15));
+        // optional: .snap_grid_size(23).number_of_iterations(5));
         success = PMP::autorefine_triangle_soup(points, polygons,
             CGAL::parameters::concurrency_tag(CGAL::Parallel_if_available_tag())
                 .apply_iterative_snap_rounding(true)

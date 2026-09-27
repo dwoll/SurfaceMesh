@@ -19,9 +19,33 @@ Orient a given 3D surface mesh to bound a volume.
 }
 \examples{
 library(SurfaceMesh)
-mesh   <- makeMesh(dataPentaPrism)
-mesh_o <- orientToBoundVolume(mesh)
-getVolume(mesh_o)
+vertices <- rbind(
+    c(0, 0, 0),
+    c(2, 2, 0),
+    c(2, 0, 2),
+    c(0, 2, 2),
+    c(3, 3, 3),
+    c(5, 5, 3),
+    c(5, 3, 5),
+    c(3, 5, 5))
+
+faces <- rbind(
+    c(3, 2, 1),
+    c(3, 4, 2),
+    c(1, 2, 4),
+    c(4, 3, 1),
+    c(5, 6, 7),
+    c(6, 8, 7),
+    c(8, 6, 5),
+    c(5, 7, 8))
+
+mesh <- makeMesh(vertices, faces=faces)
+doesBoundVolume(mesh)
+getVolume(mesh)
+
+mesh_bv <- orientToBoundVolume(mesh)
+doesBoundVolume(mesh_bv) # TRUE
+getVolume(mesh_bv)
 
 }
 \seealso{

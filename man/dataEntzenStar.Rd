@@ -22,6 +22,6 @@ system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
 library(SurfaceMesh)
 library(rgl)
 view3d(-55, -20, zoom=0.8)
-shade3d(dataEntzenStar, color="steelblue2"))
+shade3d(dataEntzenStar, color="steelblue2")
 }
 \keyword{datasets}

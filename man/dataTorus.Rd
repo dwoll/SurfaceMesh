@@ -21,8 +21,7 @@ system.file("data-raw", "00_GenerateMeshes.R", package="SurfaceMesh")
 
 library(SurfaceMesh)
 library(rgl)
-view3d(-20, -20, zoom=0.75)
+view3d(15, -20, zoom=0.8)
 shade3d(dataTorus, color="green")
-wire3d(dataTorus)
 }
 \keyword{datasets}

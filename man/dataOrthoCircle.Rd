@@ -14,6 +14,9 @@ dataOrthoCircle
 An object of class \code{\link[rgl]{mesh3d}} from package
 \strong{rgl} representing an Ortho Circle.
 }
+\details{
+\url{https://paulbourke.net/geometry/orthocircle/}
+}
 \examples{
 ## The following files were used to generate this mesh.
 system.file("data-raw", "OrthoCircle.R",       package="SurfaceMesh")

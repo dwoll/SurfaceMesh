@@ -195,12 +195,13 @@ Rcpp::List boolUnionEK_cpp(const Rcpp::List rmeshes,
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
 Rcpp::List get_na_list_sc(void) {
-    return Rcpp::List::create(Rcpp::Named("Vol1") = Rcpp::NumericVector::get_na(),
-                              Rcpp::Named("Vol2") = Rcpp::NumericVector::get_na(),
-                              Rcpp::Named("VolI") = Rcpp::NumericVector::get_na(),
-                              Rcpp::Named("VolU") = Rcpp::NumericVector::get_na(),
-                              Rcpp::Named("JSC")  = Rcpp::NumericVector::get_na(),
-                              Rcpp::Named("DSC")  = Rcpp::NumericVector::get_na());
+    return Rcpp::List::create(
+        Rcpp::Named("Vol1") = Rcpp::NumericVector::get_na(),
+        Rcpp::Named("Vol2") = Rcpp::NumericVector::get_na(),
+        Rcpp::Named("VolI") = Rcpp::NumericVector::get_na(),
+        Rcpp::Named("VolU") = Rcpp::NumericVector::get_na(),
+        Rcpp::Named("JSC")  = Rcpp::NumericVector::get_na(),
+        Rcpp::Named("DSC")  = Rcpp::NumericVector::get_na());
 }
 
 // ----------------------------------------------------------------------- //
