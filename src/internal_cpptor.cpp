@@ -43,17 +43,15 @@ template <typename KernelT, typename MeshT, typename PointT>
 Rcpp::NumericMatrix getVertices(const MeshT &mesh) {
   const std::size_t nVerts = mesh.number_of_vertices();
   Rcpp::NumericMatrix Vertices(3, nVerts);
-  {
-    std::size_t i = 0;
-    for(typename MeshT::Vertex_index vd : mesh.vertices()) {
-      Rcpp::NumericVector col_i(3);
-      const PointT vertex = mesh.point(vd);
-      col_i(0) = CGAL::to_double<typename KernelT::FT>(vertex.x());
-      col_i(1) = CGAL::to_double<typename KernelT::FT>(vertex.y());
-      col_i(2) = CGAL::to_double<typename KernelT::FT>(vertex.z());
-      Vertices(Rcpp::_, i) = col_i;
-      i++;
-    }
+  std::size_t i = 0;
+  for(typename MeshT::Vertex_index vd : mesh.vertices()) {
+    Rcpp::NumericVector col_i(3);
+    const PointT vertex = mesh.point(vd);
+    col_i(0) = CGAL::to_double<typename KernelT::FT>(vertex.x());
+    col_i(1) = CGAL::to_double<typename KernelT::FT>(vertex.y());
+    col_i(2) = CGAL::to_double<typename KernelT::FT>(vertex.z());
+    Vertices(Rcpp::_, i) = col_i;
+    i++;
   }
   return Vertices;
 }
@@ -72,9 +70,8 @@ Rcpp::DataFrame getEdges(const MeshT &mesh) {
   Rcpp::NumericVector Angle(nEdges);
   Rcpp::LogicalVector Exterior(nEdges);
   Rcpp::LogicalVector Coplanar(nEdges);
-  {
-    std::size_t i = 0;
-    for(typename MeshT::Edge_index ed : mesh.edges()) {
+  std::size_t i = 0;
+  for(typename MeshT::Edge_index ed : mesh.edges()) {
       typename MeshT::Vertex_index s = source(ed, mesh);
       typename MeshT::Vertex_index t = target(ed, mesh);
       I1(i) = static_cast<int>(s) + 1;
@@ -94,7 +91,6 @@ Rcpp::DataFrame getEdges(const MeshT &mesh) {
       typename KernelT::FT el = PMP::edge_length(h0, mesh);
       Length(i) = CGAL::to_double<typename KernelT::FT>(el);
       i++;
-    }
   }
   Rcpp::DataFrame Edges = Rcpp::DataFrame::create(
     Rcpp::Named("i1")       = I1,
@@ -117,9 +113,8 @@ template <typename MeshT>
 Rcpp::List getFaces1(const MeshT &mesh) {
   const std::size_t nFaces = mesh.number_of_faces();
   Rcpp::List face_list(nFaces);
-  {
-    std::size_t i = 0;
-    for(typename MeshT::Face_index fd : mesh.faces()) {
+  std::size_t i = 0;
+  for(typename MeshT::Face_index fd : mesh.faces()) {
       Rcpp::IntegerVector col_i;
       for(typename MeshT::Vertex_index vd :
           vertices_around_face(mesh.halfedge(fd), mesh)) {
@@ -127,7 +122,6 @@ Rcpp::List getFaces1(const MeshT &mesh) {
       }
       face_list(i) = col_i;
       i++;
-    }
   }
   return face_list;
 }
@@ -142,16 +136,14 @@ template <typename MeshT>
 Rcpp::IntegerMatrix getFaces2(const MeshT &mesh, const std::size_t nSides) {
   const std::size_t nFaces = mesh.number_of_faces();
   Rcpp::IntegerMatrix face_mat(nSides, nFaces);
-  {
-    std::size_t i = 0;
-    for(typename MeshT::Face_index fd : mesh.faces()) {
+  std::size_t i = 0;
+  for(typename MeshT::Face_index fd : mesh.faces()) {
       Rcpp::IntegerVector col_i;
       for(typename MeshT::Vertex_index vd :
           vertices_around_face(mesh.halfedge(fd), mesh)) {
         col_i.push_back(vd + 1);
       }
       face_mat(Rcpp::_, i++) = col_i;
-    }
   }
   return face_mat;
 }
@@ -161,11 +153,12 @@ template Rcpp::IntegerMatrix getFaces2<EMesh3>(const EMesh3&, const std::size_t)
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
+// compute new vertex normals
 // mesh is changed (normals map added)
 // -> no const, no ref (as const in calling function)
 template <typename KernelT, typename MeshT, typename VectorT>
 Rcpp::NumericMatrix computeVNormals(MeshT mesh) {
-    using vertex_descriptor = typename boost::graph_traits<MeshT>::vertex_descriptor;
+    using vertex_descriptor  = typename boost::graph_traits<MeshT>::vertex_descriptor;
     Rcpp::NumericMatrix normals_mat(3, mesh.number_of_vertices());
     remove_properties<MeshT, VectorT>(mesh, {"v:normal"});
     auto vnormals = mesh.template add_property_map<vertex_descriptor, VectorT>(
@@ -199,9 +192,10 @@ Rcpp::List make_rmesh1(const MeshT &mesh, const bool normals) {
   Rcpp::List out = Rcpp::List::create(Rcpp::Named("vertices") = Vertices,
                                       Rcpp::Named("edges")    = Edges,
                                       Rcpp::Named("faces")    = Faces);
+  // compute new vertex normals?
   if(normals) {
-    Rcpp::NumericMatrix vnormals_mat = computeVNormals<KernelT, MeshT, VectorT>(mesh);
-    out["normals"] = vnormals_mat;
+      Rcpp::NumericMatrix vnormals_mat = computeVNormals<KernelT, MeshT, VectorT>(mesh);
+      out["normals"] = vnormals_mat;
   }
   return out;
 }
@@ -220,9 +214,11 @@ Rcpp::List make_rmesh2(const MeshT &mesh, const bool normals, const std::size_t 
   Rcpp::List out = Rcpp::List::create(Rcpp::Named("vertices") = Vertices,
                                       Rcpp::Named("edges") = Edges,
                                       Rcpp::Named("faces") = Faces);
+
+  // compute new vertex normals?
   if(normals) {
-    Rcpp::NumericMatrix vnormals_mat = computeVNormals<KernelT, MeshT, VectorT>(mesh);
-    out["normals"] = vnormals_mat;
+      Rcpp::NumericMatrix vnormals_mat = computeVNormals<KernelT, MeshT, VectorT>(mesh);
+      out["normals"] = vnormals_mat;
   }
   return out;
 }
@@ -261,23 +257,26 @@ template <typename MeshT, typename VectorT>
 void remove_properties(MeshT &mesh, const std::vector<std::string> &props) {
   using vertex_descriptor  = typename boost::graph_traits<MeshT>::vertex_descriptor;
   using face_descriptor    = typename boost::graph_traits<MeshT>::face_descriptor;
-  using vertex_colors_map  = typename MeshT::template Property_map<vertex_descriptor, std::string>;
-  using face_colors_map    = typename MeshT::template Property_map<face_descriptor,   std::string>;
+  using vertex_colors_map  = typename MeshT::template Property_map<vertex_descriptor, CGAL::IO::Color>;
+  using face_colors_map    = typename MeshT::template Property_map<face_descriptor,   CGAL::IO::Color>;
   using vertex_normals_map = typename MeshT::template Property_map<vertex_descriptor, VectorT>;
   using vertex_scalars_map = typename MeshT::template Property_map<vertex_descriptor, double>;
   using face_scalars_map   = typename MeshT::template Property_map<face_descriptor,   double>;
-
+  if((props.size() == 1) && (props[0] == "all:all")) {
+      mesh.remove_all_property_maps();
+      return;
+  }
   for(std::size_t i = 0; i < props.size(); i++) {
     std::string prop = props[i];
     if(prop == "v:color") {
       std::optional<vertex_colors_map> pmap_ =
-        mesh.template property_map<vertex_descriptor, std::string>("v:color");
+        mesh.template property_map<vertex_descriptor, CGAL::IO::Color>("v:color");
       if(pmap_.has_value()) {
         mesh.remove_property_map(pmap_.value());
       }
     } else if(prop == "f:color") {
       std::optional<face_colors_map> pmap_ =
-        mesh.template property_map<face_descriptor, std::string>("f:color");
+        mesh.template property_map<face_descriptor, CGAL::IO::Color>("f:color");
       if(pmap_.has_value()) {
         mesh.remove_property_map(pmap_.value());
       }

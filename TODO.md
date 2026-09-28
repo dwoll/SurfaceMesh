@@ -1,5 +1,7 @@
 # TODO
 
+  * `removeSelfIntersections()` does not work for example
+
 # Wishlist
 
   * https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/Advancing_front_surface_reconstruction_2reconstruction_structured_8cpp-example.html
@@ -21,3 +23,9 @@
       * Dual contouring
   * color wash for mesh distances as in `Rvcg::vcgMetro()`
   * alpha shapes
+  * `assignFaceColors()`, `assignVertexColors()`, `assignVertexNormals()`
+      * currently, there is no value in bringing these property maps to C++ side as nothing is done with them, except later exporting back to R side
+      * `make_surf_mesh()` etc. need to copy face colors, vertex colors, vertex normals
+      * support alpha for vertex colors, face colors in `set*()`
+      * mesh operations invalidate face colors, vertex colors
+      * add to vignette vertex colors, face colors, assigned normals

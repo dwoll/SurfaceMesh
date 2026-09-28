@@ -53,8 +53,8 @@ makeMeshValidFF_cpp <- function(filename, soup, triangulate, normals, verbose) {
     .Call(`_SurfaceMesh_makeMeshValidFF_cpp`, filename, soup, triangulate, normals, verbose)
 }
 
-addVNormals_cpp <- function(rmesh) {
-    .Call(`_SurfaceMesh_addVNormals_cpp`, rmesh)
+addVertexNormals_cpp <- function(rmesh) {
+    .Call(`_SurfaceMesh_addVertexNormals_cpp`, rmesh)
 }
 
 doesBoundVolume_cpp <- function(rmesh) {

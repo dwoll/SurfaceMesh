@@ -36,6 +36,7 @@ typedef std::pair<Point3, Vector3>                      P3V3;  // Point3 with no
 typedef boost::graph_traits<Mesh3>::face_descriptor     fc_dscrptr;
 typedef boost::graph_traits<Mesh3>::edge_descriptor     dg_dscrptr;
 typedef boost::graph_traits<Mesh3>::halfedge_descriptor hlfdg_dscrptr;
+typedef boost::graph_traits<Mesh3>::vertex_descriptor   vrtx_dscrptr;
 
 // -------------------------------------------------------------------------- //
 // triangle sample options for sample_points()

@@ -30,7 +30,7 @@ Rcpp::List subdivideCatmullClark_cpp(
         true,        // triangulate - must be triangle
         false,       // repair_soup
         false);      // verbose
-    remove_properties<EMesh3, EVector3>(mesh, {"v:normal"});
+    remove_properties<EMesh3, EVector3>(mesh, {"all:all"}); // all:all -> all property maps
     CGAL::Subdivision_method_3::CatmullClark_subdivision(
       mesh, CGAL::parameters::number_of_iterations(nIter));
     mesh.collect_garbage();
@@ -53,7 +53,7 @@ Rcpp::List subdivideDooSabin_cpp(
         true,        // triangulate - must be triangle
         false,       // repair_soup
         false);      // verbose
-    remove_properties<EMesh3, EVector3>(mesh, {"v:normal"});
+    remove_properties<EMesh3, EVector3>(mesh, {"all:all"}); // all:all -> all property maps
     CGAL::Subdivision_method_3::DooSabin_subdivision(
       mesh, CGAL::parameters::number_of_iterations(nIter));
     mesh.collect_garbage();
@@ -75,7 +75,7 @@ Rcpp::List subdivideSqrt3_cpp(
         true,        // triangulate - must be triangle
         false,       // repair_soup
         false);      // verbose
-    remove_properties<EMesh3, EVector3>(mesh, {"v:normal"});
+    remove_properties<EMesh3, EVector3>(mesh, {"all:all"}); // all:all -> all property maps
     CGAL::Subdivision_method_3::Sqrt3_subdivision(
       mesh, CGAL::parameters::number_of_iterations(nIter));
     mesh.collect_garbage();
@@ -97,7 +97,7 @@ Rcpp::List subdivideLoop_cpp(
         true,        // triangulate - must be triangle
         false,       // repair_soup
         false);      // verbose
-    remove_properties<EMesh3, EVector3>(mesh, {"v:normal"});
+    remove_properties<EMesh3, EVector3>(mesh, {"all:all"}); // all:all -> all property maps
     CGAL::Subdivision_method_3::Loop_subdivision(
       mesh, CGAL::parameters::number_of_iterations(nIter));
     mesh.collect_garbage();

@@ -118,14 +118,14 @@ Rcpp::List makeMeshValidFF_cpp(const Rcpp::String filename,
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
-Rcpp::List addVNormals_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-    rmesh,
-    false,       // soup
-    false,       // triangulate
-    false,       // repair_soup
-    false);      // verbose
- return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, true);
+Rcpp::List addVertexNormals_cpp(const Rcpp::List rmesh) {
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+        rmesh,
+        false,       // soup
+        false,       // triangulate
+        false,       // repair_soup
+        false);      // verbose
+    return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, true);  // true for normals
 }
 
 // ----------------------------------------------------------------------- //

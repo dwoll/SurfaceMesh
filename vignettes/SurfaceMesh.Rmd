@@ -113,7 +113,7 @@ Or
 
 ```{r}
 mesh    <- makeMesh(dataToroHelix, normals=FALSE)
-mesh_vn <- assignNormals(mesh)
+mesh_vn <- addVertexNormals(mesh)
 
 mfrow3d(1, 2)
 view3d(0, 30, zoom=0.8)

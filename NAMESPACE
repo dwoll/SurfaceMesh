@@ -2,7 +2,7 @@
 
 S3method(print,CGALmesh)
 export(alphaWrap)
-export(assignNormals)
+export(addVertexNormals)
 export(boolDifference)
 export(boolIntersection)
 export(boolUnion)

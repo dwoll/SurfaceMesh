@@ -56,6 +56,11 @@ isString <- function(x){
 }
 
 #' @noRd
+isStringVector <- function(x) {
+  is.character(x) && !anyNA(x)
+}
+
+#' @noRd
 getVFT <- function(x, beforeCheck = FALSE) {
   transposed <- !beforeCheck
   i0 <- as.integer(transposed)

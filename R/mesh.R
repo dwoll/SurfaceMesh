@@ -10,6 +10,8 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Make a 3D mesh
 #' @description Make a 3D surface mesh from an input file,
 #'   from an existing \strong{rgl} mesh object,
@@ -160,6 +162,8 @@ makeMesh <- function(x,
 		fromCPP(mesh_cpp)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Make a 3D mesh assuming valid input
 #' @description Make a 3D surface mesh from an input file,
 #'   from an existing \strong{rgl} mesh object, or
@@ -256,7 +260,9 @@ makeMeshValid <- function(x,
     fromCPP(mesh_cpp)
 }
 
-#' @title Add normals to a mesh
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
+#' @title Add vertex normals to a mesh
 #' @description Add normal vectors to a given 3D surface mesh.
 #'   Currently, only vertex normals are supported.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -268,7 +274,7 @@ makeMeshValid <- function(x,
 #' library(rgl)
 #' mesh <- makeMesh(dataToroHelix, normals=FALSE)
 #' mesh
-#' mesh_vn <- assignNormals(mesh)
+#' mesh_vn <- addVertexNormals(mesh)
 #' mesh_vn
 #'
 #' mfrow3d(1, 2)
@@ -278,16 +284,18 @@ makeMeshValid <- function(x,
 #' view3d(0, 30, zoom=0.8)
 #' shade3d(toRGL(mesh_vn), col="gray")
 #' @export
-assignNormals <- function(x) {
+addVertexNormals <- function(x) {
   if(!inherits(x, "CGALmesh")) {
       stop("The `x` argument must be of class 'CGALmesh'",
 			       " (i.e., the output of the `makeMesh()` function).")
   }
   meshCPP <- fromR(x)
-  mesh    <- addVNormals_cpp(meshCPP)
+  mesh    <- addVertexNormals_cpp(meshCPP)
   fromCPP(mesh)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Does mesh bound a volume?
 #' @description Does given 3D surface mesh bound a volume?
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -308,7 +316,7 @@ assignNormals <- function(x) {
 #'     c(5, 5, 3),
 #'     c(5, 3, 5),
 #'     c(3, 5, 5))
-#' 
+#'
 #' faces <- rbind(
 #'     c(3, 2, 1),
 #'     c(3, 4, 2),
@@ -318,11 +326,11 @@ assignNormals <- function(x) {
 #'     c(6, 8, 7),
 #'     c(8, 6, 5),
 #'     c(5, 7, 8))
-#' 
+#'
 #' mesh <- makeMesh(vertices, faces=faces)
 #' doesBoundVolume(mesh)
 #' getVolume(mesh)
-#' 
+#'
 #' mesh_bv <- orientToBoundVolume(mesh)
 #' doesBoundVolume(mesh_bv) # TRUE
 #' getVolume(mesh_bv)
@@ -337,6 +345,8 @@ doesBoundVolume <- function(x) {
     doesBoundVolume_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Does mesh self intersect?
 #' @description Does the given 3D surface mesh self intersect?
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -347,7 +357,35 @@ doesBoundVolume <- function(x) {
 #'
 #' @examples
 #' library(SurfaceMesh)
-#' mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
+## pentagrammic prism with self-intersection
+#' verts1 <- vapply(c(0, 2, 4, 1, 3),
+#'                  function(i) { c(cos(2*i*pi/5), sin(2*i*pi/5), 0.3) },
+#'                  numeric(3L))
+#'
+#' verts2 <- vapply(c(0, 2, 4, 1, 3),
+#'                  function(i) { c(cos(2*i*pi/5), sin(2*i*pi/5), -0.3) },
+#'                  numeric(3L))
+#'
+#' vertices    <- t(cbind(verts1, verts2))
+#' pentagramms <- rbind(1L:5L, 6L:10L)
+#'
+#' rectangles <- rbind(
+#'     c(1L, 2L, 7L, 6L),
+#'     c(2L, 3L, 8L, 7L),
+#'     c(3L, 4L, 9L, 8L),
+#'     c(4L, 5L, 10L, 9L),
+#'     c(5L, 1L, 6L, 10L))
+#'
+#' faces <- list(
+#'     pentagramms[1L, ],
+#'     pentagramms[2L, ],
+#'     rectangles[1L, ],
+#'     rectangles[2L, ],
+#'     rectangles[3L, ],
+#'     rectangles[4L, ],
+#'     rectangles[5L, ])
+#'
+#' mesh <- makeMesh(vertices, faces)
 #' doesSelfIntersect(mesh)
 #'
 #' @export
@@ -360,6 +398,8 @@ doesSelfIntersect <- function(x) {
   doesSelfIntersect_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get mesh area
 #' @description Get the surface area of a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -382,6 +422,8 @@ getArea <- function(x) {
   getArea_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get axis-parallel bounding box
 #' @description Get the axis-parallel bounding box of a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -427,6 +469,8 @@ getBoundingBox <- function(x, triangulate = FALSE, normals = FALSE) {
   makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get optimal bounding box
 #' @description Get the optimal (oriented) bounding box of a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -463,6 +507,8 @@ getBoundingBoxOptimal <- function(x, triangulate = FALSE, normals = FALSE) {
   outL
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get mesh centroid (center of mass)
 #' @description Get the centroid (center of mass) of a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -485,6 +531,8 @@ getCentroid <- function(x) {
   getCentroid_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Convex hull of a set of 3D points
 #' @description Get the convex hull of a given set of 3D points
 #'   using the quickhull algorithm.
@@ -525,6 +573,8 @@ getConvexHull <- function(x, normals = FALSE) {
   fromCPP(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Euclidean distance between center of mass of two meshes
 #' @description Calculates the Euclidean distance between the two
 #'   respective centers of mass of two 3D surface meshes.
@@ -555,6 +605,8 @@ getDCOM <- function(mesh1, mesh2) {
   sqrt(sum((ctr1-ctr2)^2))
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get distance from points to a mesh
 #' @description Calculate the Euclidean distance of a set of points to a
 #'   given 3D surface mesh.
@@ -593,6 +645,8 @@ getDistance <- function(x, points) {
   dst
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get mesh volume
 #' @description Get the volume bounded by a closed 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -615,6 +669,8 @@ getVolume <- function(x) {
   getVolume_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Does mesh have garbage?
 #' @description Check if the given 3D surface mesh has garbage.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -637,6 +693,8 @@ hasGarbage <- function(x) {
     hasGarbage_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Is mesh closed?
 #' @description Check if the given 3D surface mesh is closed.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -659,6 +717,8 @@ isClosed <- function(x) {
   isClosed_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Is mesh a quad mesh?
 #' @description Check if the given 3D surface mesh is a quad mesh.
 #' @param x A \code{list} with components \code{vertices} and \code{faces},
@@ -682,6 +742,8 @@ isQuad <- function(x) {
   checkedMesh[["isQuad"]]
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Is mesh a triangle mesh?
 #' @description Check if the given 3D surface mesh is a triangle mesh.
 #' @param x A \code{list} with components \code{vertices} and \code{faces},
@@ -704,6 +766,8 @@ isTriangle <- function(x) {
   checkedMesh[["isTriangle"]]
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Is mesh a valid mesh?
 #' @description Check if the given mesh is a valid 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -726,6 +790,8 @@ isValid <- function(x) {
     isValid_cpp(meshCPP)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Orient mesh to bound a volume
 #' @description Orient a given 3D surface mesh to bound a volume.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -747,7 +813,7 @@ isValid <- function(x) {
 #'     c(5, 5, 3),
 #'     c(5, 3, 5),
 #'     c(3, 5, 5))
-#' 
+#'
 #' faces <- rbind(
 #'     c(3, 2, 1),
 #'     c(3, 4, 2),
@@ -757,11 +823,11 @@ isValid <- function(x) {
 #'     c(6, 8, 7),
 #'     c(8, 6, 5),
 #'     c(5, 7, 8))
-#' 
+#'
 #' mesh <- makeMesh(vertices, faces=faces)
 #' doesBoundVolume(mesh)
 #' getVolume(mesh)
-#' 
+#'
 #' mesh_bv <- orientToBoundVolume(mesh)
 #' doesBoundVolume(mesh_bv) # TRUE
 #' getVolume(mesh_bv)
@@ -778,6 +844,8 @@ orientToBoundVolume <- function(x, normals = FALSE) {
   fromCPP(mesh)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Plot some edges
 #' @description Plot the given edges with functions from package \strong{rgl}.
 #' @param x A matrix with 3 columns giving the coordinates of the vertices.
@@ -855,6 +923,8 @@ plotEdges <- function(x,
 	invisible(NULL)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @exportS3Method print CGALmesh
 print.CGALmesh <- function(x, ...) {
 	rgl <- attr(x, "toRGL")
@@ -879,6 +949,8 @@ print.CGALmesh <- function(x, ...) {
 	invisible(NULL)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Sample vertices on mesh
 #' @description Random sampling of vertices on a given 3D triangle surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -945,6 +1017,8 @@ samplePoints <- function(x,
   samplePoints_cpp(meshCPP, sampleOptL)
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Conversion to 'rgl' mesh
 #' @description Converts a \code{CGALmesh} object (the output of the \code{\link{makeMesh}}
 #'   function) to a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
@@ -998,6 +1072,8 @@ toRGL <- function(x, ...) {
     }
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Triangulate mesh
 #' @description Triangulate a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.

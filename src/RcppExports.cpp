@@ -210,14 +210,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// addVNormals_cpp
-Rcpp::List addVNormals_cpp(const Rcpp::List rmesh);
-RcppExport SEXP _SurfaceMesh_addVNormals_cpp(SEXP rmeshSEXP) {
+// addVertexNormals_cpp
+Rcpp::List addVertexNormals_cpp(const Rcpp::List rmesh);
+RcppExport SEXP _SurfaceMesh_addVertexNormals_cpp(SEXP rmeshSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
-    rcpp_result_gen = Rcpp::wrap(addVNormals_cpp(rmesh));
+    rcpp_result_gen = Rcpp::wrap(addVertexNormals_cpp(rmesh));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -734,7 +734,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_makeMeshFF_cpp", (DL_FUNC) &_SurfaceMesh_makeMeshFF_cpp, 10},
     {"_SurfaceMesh_makeMeshValid_cpp", (DL_FUNC) &_SurfaceMesh_makeMeshValid_cpp, 5},
     {"_SurfaceMesh_makeMeshValidFF_cpp", (DL_FUNC) &_SurfaceMesh_makeMeshValidFF_cpp, 5},
-    {"_SurfaceMesh_addVNormals_cpp", (DL_FUNC) &_SurfaceMesh_addVNormals_cpp, 1},
+    {"_SurfaceMesh_addVertexNormals_cpp", (DL_FUNC) &_SurfaceMesh_addVertexNormals_cpp, 1},
     {"_SurfaceMesh_doesBoundVolume_cpp", (DL_FUNC) &_SurfaceMesh_doesBoundVolume_cpp, 1},
     {"_SurfaceMesh_doesSelfIntersect_cpp", (DL_FUNC) &_SurfaceMesh_doesSelfIntersect_cpp, 1},
     {"_SurfaceMesh_fillBoundaryHoles_cpp", (DL_FUNC) &_SurfaceMesh_fillBoundaryHoles_cpp, 5},
