@@ -75,18 +75,12 @@ template <typename KernelT, typename PointT>
 Rcpp::NumericMatrix points3_to_matrix(const std::vector<PointT>&);
 
 template <typename KernelT, typename MeshT, typename VectorT>
-std::optional<Rcpp::IntegerMatrix> getFColors(const MeshT&);
-
-template <typename KernelT, typename MeshT, typename VectorT>
-std::optional<Rcpp::IntegerMatrix> getVColors(const MeshT&);
-
-template <typename KernelT, typename MeshT, typename VectorT>
-std::optional<Rcpp::NumericMatrix> getVNormals(const MeshT&);
+std::optional<std::vector<VectorT>> get_vnormals(const MeshT&);
 
 template <typename KernelT, typename MeshT, typename PointT>
 MeshT soup_to_mesh(
-    std::vector<PointT>,                    // points
-    std::vector<std::vector<std::size_t>>,  // faces
+    std::vector<PointT>&,                   // points
+    std::vector<std::vector<std::size_t>>&, // faces
     const bool,                             // triangulate
     const bool,                             // repair_soup
     const bool,                             // remove_intersections
@@ -154,7 +148,7 @@ template <typename MeshT>
 MeshT readFileMesh(const std::string);
 
 template <typename MeshT>
-void run_mesh_checks(MeshT&);
+void run_mesh_checks(const MeshT&);
 
 template <typename MeshT, typename PointT>
 void sample_points(const MeshT&, std::vector<PointT>&, const sample_opts&);

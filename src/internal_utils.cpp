@@ -33,7 +33,7 @@ void rmessage(std::string msg) {
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
 bool is_triangle_soup(const std::vector<std::vector<std::size_t>>& polygons) {
-    for (const auto& poly : polygons) {
+    for(const auto& poly : polygons) {
         if (poly.size() != 3) {
             return false;
         }

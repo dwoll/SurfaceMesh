@@ -1,5 +1,7 @@
 # TODO
 
+  * `make_surf_mesh()` etc.: copy vertex normals from input
+  * add get / set vertex normals to vignette
   * `removeSelfIntersections()` does not work for example
 
 # Wishlist
@@ -23,9 +25,3 @@
       * Dual contouring
   * color wash for mesh distances as in `Rvcg::vcgMetro()`
   * alpha shapes
-  * `assignFaceColors()`, `assignVertexColors()`, `assignVertexNormals()`
-      * currently, there is no value in bringing these property maps to C++ side as nothing is done with them, except later exporting back to R side
-      * `make_surf_mesh()` etc. need to copy face colors, vertex colors, vertex normals
-      * support alpha for vertex colors, face colors in `set*()`
-      * mesh operations invalidate face colors, vertex colors
-      * add to vignette vertex colors, face colors, assigned normals
