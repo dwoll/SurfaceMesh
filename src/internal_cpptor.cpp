@@ -14,7 +14,6 @@
 #include "SurfaceMesh.h"
 #endif
 
-#include <CGAL/Polygon_mesh_processing/compute_normal.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 
 // ----------------------------------------------------------------------- //
@@ -152,32 +151,6 @@ Rcpp::IntegerMatrix get_faces2(const MeshT &mesh, const std::size_t nSides) {
 
 template Rcpp::IntegerMatrix get_faces2<Mesh3>(const Mesh3&,   const std::size_t);
 template Rcpp::IntegerMatrix get_faces2<EMesh3>(const EMesh3&, const std::size_t);
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-// compute new vertex normals
-// mesh is changed (normals map added)
-// -> no const, no ref (as const in calling function)
-template <typename KernelT, typename MeshT, typename VectorT>
-std::vector<VectorT> compute_vnormals(MeshT mesh) {
-    using vertex_descriptor  = typename boost::graph_traits<MeshT>::vertex_descriptor;
-    using vertex_normals_map = typename MeshT::template Property_map<vertex_descriptor, VectorT>;
-    remove_properties<MeshT, VectorT>(mesh, {"v:normal"});
-    vertex_normals_map vnormmap =
-        mesh.template add_property_map<vertex_descriptor, VectorT>(
-            "v:normal", CGAL::NULL_VECTOR).first;
-    // PMP::compute_normals(mesh, vnormmap, fnormals_map);
-    PMP::compute_vertex_normals(mesh, vnormmap);
-    std::vector<VectorT> vnv;
-    vnv.reserve(mesh.number_of_vertices());
-    for(vertex_descriptor vd : vertices(mesh)) {
-        vnv.emplace_back(vnormmap[vd]);
-    }
-    return vnv;
-}
-
-template std::vector<Vector3>  compute_vnormals<K,  Mesh3,  Vector3>(Mesh3);
-template std::vector<EVector3> compute_vnormals<EK, EMesh3, EVector3>(EMesh3);
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //

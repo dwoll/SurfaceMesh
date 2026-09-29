@@ -30,7 +30,7 @@ Rcpp::List remeshSmoothShape_cpp(
   const unsigned int nIter,
   const double time,
   const bool normals) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -83,7 +83,7 @@ Rcpp::List remeshSmoothAA_cpp(
     const bool useAngleSmooth = true;
     const bool useAreaSmooth  = false;      // Ceres library required
     // const bool useDelaunay,    // for area smoothing
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -124,7 +124,7 @@ Rcpp::List remeshSmoothTR_cpp(
   const unsigned int nIter,
   const bool relaxConstr,
   const bool normals) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle

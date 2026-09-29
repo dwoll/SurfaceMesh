@@ -89,7 +89,7 @@ Rcpp::List makeMeshValid_cpp(const Rcpp::List rmesh,
                              const bool normals,
                              const bool verbose) {
   if(verbose) { rmessage("Processing mesh..."); }
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       soup,
       triangulate,
@@ -119,7 +119,7 @@ Rcpp::List makeMeshValidFF_cpp(const Rcpp::String filename,
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List addVertexNormals_cpp(const Rcpp::List rmesh) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         false,       // soup
         false,       // triangulate
@@ -131,7 +131,7 @@ Rcpp::List addVertexNormals_cpp(const Rcpp::List rmesh) {
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 bool doesBoundVolume_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -152,7 +152,7 @@ bool doesBoundVolume_cpp(const Rcpp::List rmesh) {
 // [[Rcpp::export]]
 bool doesSelfIntersect_cpp(
   const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -186,7 +186,7 @@ Rcpp::List fillBoundaryHoles_cpp(
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 double getArea_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -202,7 +202,7 @@ double getArea_cpp(const Rcpp::List rmesh) {
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       false,       // triangulate
@@ -220,7 +220,7 @@ Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh) {
 // [[Rcpp::export]]
 Rcpp::List getBoundingBoxOptimal_cpp(
   const Rcpp::List rmeshIn, const bool triangulate, const bool normals) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmeshIn,
       false,       // soup
       false,       // triangulate
@@ -251,7 +251,7 @@ Rcpp::List getBoundingBoxOptimal_cpp(
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::NumericVector getCentroid_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -291,7 +291,7 @@ Rcpp::List getConvexHull_cpp(const Rcpp::NumericMatrix rpoints, const bool norma
 // [[Rcpp::export]]
 Rcpp::NumericVector getDistance_cpp(
     const Rcpp::List rmesh, const Rcpp::NumericMatrix rpoints) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -322,8 +322,26 @@ Rcpp::NumericVector getDistance_cpp(
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
+Rcpp::Nullable<Rcpp::NumericMatrix> getVertexNormals_cpp(const Rcpp::List rmesh) {
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
+        rmesh,
+        false,       // soup
+        false,       // triangulate
+        false,       // repair_soup
+        false);      // verbose
+    const std::optional<std::vector<Vector3>> vnormals = get_vnormals<K, Mesh3, Vector3>(mesh);
+    if(vnormals.has_value()) {
+        const Rcpp::NumericMatrix normals_mat = points3_to_matrix<K, Vector3>(vnormals.value());
+        return Rcpp::transpose(normals_mat);
+    } else {
+        return R_NilValue;
+    }
+}
+
+// ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
 double getVolume_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -347,7 +365,7 @@ double getVolume_cpp(const Rcpp::List rmesh) {
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 bool hasGarbage_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       false,       // triangulate
@@ -359,7 +377,7 @@ bool hasGarbage_cpp(const Rcpp::List rmesh) {
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 bool isClosed_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       false,       // triangulate
@@ -371,7 +389,7 @@ bool isClosed_cpp(const Rcpp::List rmesh) {
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 bool isValid_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       false,       // triangulate
@@ -384,7 +402,7 @@ bool isValid_cpp(const Rcpp::List rmesh) {
 // [[Rcpp::export]]
 Rcpp::List orientToBoundVolume_cpp(
   const Rcpp::List rmesh, const bool normals) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       false,       // soup
       true,        // triangulate - must be triangle
@@ -423,7 +441,7 @@ Rcpp::List removeSelfIntersections_cpp(
 Rcpp::NumericMatrix samplePoints_cpp(const Rcpp::List rmesh, const Rcpp::List ropts) {
   Rcpp::List ropts_l = Rcpp::as<Rcpp::List>(ropts);
   sample_opts opts = ropts_to_sample_opts(ropts_l);
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
     rmesh,
     false,       // soup
     true,        // triangulate - must be triangle
@@ -437,8 +455,24 @@ Rcpp::NumericMatrix samplePoints_cpp(const Rcpp::List rmesh, const Rcpp::List ro
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
+Rcpp::List setVertexNormals_cpp(const Rcpp::List rmesh,
+                                const Rcpp::NumericMatrix rnormals) {
+    using vertex_normals_map = Mesh3::Property_map<vrtx_dscrptr, Vector3>;
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
+        rmesh,
+        false,       // soup
+        false,       // triangulate
+        false,       // repair_soup
+        false);      // verbose
+    std::vector<Vector3> vnormals = matrix_to_points3<Vector3>(rnormals);
+    set_vnormals<Mesh3, Vector3>(mesh, vnormals);
+    return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, false);
+}
+
+// ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
 Rcpp::List triangulateMesh_cpp(const Rcpp::List rmesh, const bool normals) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
     rmesh,
     false,       // soup
     true,        // triangulate - must be triangle

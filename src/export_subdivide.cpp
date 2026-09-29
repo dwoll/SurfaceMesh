@@ -24,7 +24,7 @@ Rcpp::List subdivideCatmullClark_cpp(
   const Rcpp::List rmesh,
   const unsigned int nIter,
   const bool normals) {
-    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3>(
+    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -47,7 +47,7 @@ Rcpp::List subdivideDooSabin_cpp(
   const unsigned int nIter,
   const bool triangulate,
   const bool normals) {
-    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3>(
+    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -69,7 +69,7 @@ Rcpp::List subdivideSqrt3_cpp(
   const Rcpp::List rmesh,
   const unsigned int nIter,
   const bool normals) {
-    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3>(
+    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -91,7 +91,7 @@ Rcpp::List subdivideLoop_cpp(
   const Rcpp::List rmesh,
   const unsigned int nIter,
   const bool normals) {
-    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3>(
+    EMesh3 mesh = make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle

@@ -40,8 +40,8 @@ Rcpp::List simplifyLT_cpp(const Rcpp::List rmesh,
                           const unsigned int ueCount, // undirected edge count, 1000 or num_edges(mesh)/2 - 1
                           const bool normals,
                           const bool verbose) {
-  typedef SMS::LindstromTurk_placement<Mesh3> Placement;
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  using Placement = SMS::LindstromTurk_placement<Mesh3>;
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
     rmesh,
     true,        // soup
     true,        // triangulate - must be triangle
@@ -141,7 +141,7 @@ Rcpp::List simplifyGH_cpp(const Rcpp::List rmesh,
                           const Rcpp::String policy, // "CP", "CT", "PP", "PT", "PL"
                           const bool normals,
                           const bool verbose) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
     rmesh,
     true,        // soup
     true,        // triangulate - must be triangle

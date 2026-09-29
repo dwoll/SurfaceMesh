@@ -126,7 +126,13 @@ fromR <- function(x) {
   }
 
   storage.mode(vertices) <- "double"
-  list("vertices"=vertices, "faces"=faces)
+  if(hasName(x, "normals")) {
+    normals <- t(x[["normals"]])
+    storage.mode(normals) <- "double"
+    list(vertices=vertices, faces=faces, normals=normals)
+  } else {
+    list(vertices=vertices, faces=faces)
+  }
 }
 
 ## convert CPP mesh to format required in R

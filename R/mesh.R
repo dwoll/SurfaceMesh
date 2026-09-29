@@ -647,6 +647,38 @@ getDistance <- function(x, points) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
+#' @title Get the vertex normals of a mesh
+#' @description Get the vertex normals of a 3D surface mesh.
+#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @return The numeric matrix of normals attached to the vertices of the mesh.
+#'   \code{NULL} if there are no vertex normals.
+#' @details Note that this function is not really necessary as the vertex
+#'   normals are simply stored in component \code{"normals"} of the
+#'   \code{CGALmesh} object on the R side.
+#'   However, importing vertex normals to the C++ / CGAL side, and then
+#'   exporting them to the R side is a test case for working with CGAL
+#'   property maps that may be useful in the future.
+#' @seealso \code{\link[SurfaceMesh]{setVertexNormals}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' mesh <- makeMeshValid(dataSphere, normals=TRUE)
+#' vn   <- getVertexNormals(mesh)
+#' head(vn)
+#'
+#' @export
+getVertexNormals <- function(x) {
+    if(!inherits(x, "CGALmesh")) {
+        stop("The `x` argument must be of class 'CGALmesh'",
+          " (i.e., the output of the `makeMesh()` function).")
+    }
+    meshCPP <- fromR(x)
+    getVertexNormals_cpp(meshCPP)
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get mesh volume
 #' @description Get the volume bounded by a closed 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -1015,6 +1047,50 @@ samplePoints <- function(x,
   meshCPP <- fromR(x)
   ## output matrix already transposed in samplePoints_cpp()
   samplePoints_cpp(meshCPP, sampleOptL)
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
+#' @title Assign given normal vectors to mesh vertices
+#' @description Assign given per-vertex normal vectors to a 3D surface mesh.
+#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param normals A numeric matrix with three columns and as many rows as
+#'   the number of vertices.
+#' @returns A \code{CGALmesh} object.
+#' @details Note: This function is currently not doing anything except adding
+#'   a list component \code{normals} to the \code{CGALmesh} object after
+#'   setting the property map on the C++ / CGAL side, and then exporting it
+#'   back to R. This is a test case for working with CGAL property maps that
+#'   may be useful in the future.
+#' @seealso \code{\link[SurfaceMesh]{getVertexNormals}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' mesh <- makeMesh(dataPentaPrism, triangulate=TRUE, normals=FALSE)
+#'
+#' ## random unit normal vectors
+#' nVerts  <- nrow(mesh[["vertices"]])
+#' nrmls0  <- matrix(runif(nVerts*3), ncol=3)
+#' lens    <- sqrt(diag(tcrossprod(nrmls0)))
+#' nrmls   <- diag(1/lens) %*% nrmls0
+#' mesh_vn <- setVertexNormals(mesh, nrmls)
+#' head(mesh_vn[["normals"]])
+#' head(nrmls)
+#' @export
+setVertexNormals <- function(x, normals) {
+  if(!inherits(x, "CGALmesh")) {
+      stop("The `x` argument must be of class 'CGALmesh'",
+			       " (i.e., the output of the `makeMesh()` function).")
+  }
+  stopifnot(is.matrix(normals), is.numeric(normals), ncol(normals) == 3L)
+  storage.mode(normals) <- "double"
+  if(anyNA(normals)) {
+    stop("Vectors in `normals` with missing values are not allowed.", call. = TRUE)
+  }
+  meshCPP <- fromR(x)
+  meshOut <- setVertexNormals_cpp(meshCPP, t(normals))
+  fromCPP(meshOut)
 }
 
 ## ----------------------------------------------------------------------- //

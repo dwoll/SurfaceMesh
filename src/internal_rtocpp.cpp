@@ -423,21 +423,22 @@ template EMesh3 make_surf_mesh_ff<EK, EMesh3, EPoint3>(
 // ----------------------------------------------------------------------- //
 // make_surf_tmesh()
 // like make_surf_mesh() but for triangles -> rfaces is matrix
-// const Rcpp::IntegerMatrix             rfaces = Rcpp::as<Rcpp::IntegerMatrix>(rmesh["faces"]);
-// std::vector<std::vector<std::size_t>> faces  = matrix_to_tfaces(rfaces);
+// const Rcpp::IntegerMatrix rfaces = Rcpp::as<Rcpp::IntegerMatrix>(rmesh["faces"]);
+// std::vector<std::vector<std::size_t>> faces = matrix_to_tfaces(rfaces);
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
-template <typename MeshT, typename PointT>
+template <typename MeshT, typename PointT, typename VectorT>
 MeshT make_surf_mesh_valid(const Rcpp::List &rmesh,
                            const bool soup,
                            const bool triangulate,
                            const bool repair_soup,
                            const bool verbose) {
     const Rcpp::NumericMatrix rvertices = Rcpp::as<Rcpp::NumericMatrix>(rmesh["vertices"]);
-    const Rcpp::List          rfaces    = Rcpp::as<Rcpp::List>(rmesh["faces"]);
-    std::vector<PointT>                   vertices = matrix_to_points3<PointT>(rvertices);
-    std::vector<std::vector<std::size_t>> faces    = list_to_faces1(rfaces);
+    const Rcpp::List rfaces = Rcpp::as<Rcpp::List>(rmesh["faces"]);
+
+    std::vector<PointT> vertices = matrix_to_points3<PointT>(rvertices);
+    std::vector<std::vector<std::size_t>> faces = list_to_faces1(rfaces);
     MeshT mesh;
     if(soup) {
         // take vertices and faces for polygon soup without mesh repair
@@ -449,6 +450,11 @@ MeshT make_surf_mesh_valid(const Rcpp::List &rmesh,
         MeshT mesh_tmp = vf_to_mesh<MeshT, PointT>(
             vertices, faces, triangulate);
         mesh = std::move(mesh_tmp);
+        if(rmesh.containsElementNamed("normals")) {
+            const Rcpp::NumericMatrix rnormals = Rcpp::as<Rcpp::NumericMatrix>(rmesh["normals"]);
+            const std::vector<VectorT> vnormals = matrix_to_points3<VectorT>(rnormals);
+            set_vnormals<MeshT, VectorT>(mesh, vnormals);
+        }
     }
 
     if(verbose) {
@@ -457,10 +463,10 @@ MeshT make_surf_mesh_valid(const Rcpp::List &rmesh,
     return mesh;
 }
 
-template Mesh3 make_surf_mesh_valid<Mesh3,  Point3>(
+template Mesh3 make_surf_mesh_valid<Mesh3,  Point3, Vector3>(
     const Rcpp::List&, const bool, const bool, const bool, const bool);
 
-template EMesh3 make_surf_mesh_valid<EMesh3, EPoint3>(
+template EMesh3 make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
     const Rcpp::List&, const bool, const bool, const bool, const bool);
 
 // ----------------------------------------------------------------------- //

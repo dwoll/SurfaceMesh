@@ -75,7 +75,13 @@ template <typename KernelT, typename PointT>
 Rcpp::NumericMatrix points3_to_matrix(const std::vector<PointT>&);
 
 template <typename KernelT, typename MeshT, typename VectorT>
+std::vector<VectorT> compute_vnormals(MeshT);
+
+template <typename KernelT, typename MeshT, typename VectorT>
 std::optional<std::vector<VectorT>> get_vnormals(const MeshT&);
+
+template <typename MeshT, typename VectorT>
+void set_vnormals(MeshT&, const std::vector<VectorT>&);
 
 template <typename KernelT, typename MeshT, typename PointT>
 MeshT soup_to_mesh(
@@ -114,7 +120,7 @@ MeshT make_surf_mesh_ff(
     const unsigned int,
     const bool);
 
-template <typename MeshT, typename PointT>
+template <typename MeshT, typename PointT, typename VectorT>
 MeshT make_surf_mesh_valid(
     const Rcpp::List&, const bool, const bool, const bool, const bool);
 
@@ -154,6 +160,9 @@ template <typename MeshT, typename PointT>
 void sample_points(const MeshT&, std::vector<PointT>&, const sample_opts&);
 
 template <typename KernelT, typename MeshT, typename PointT>
+void sample_dists_to_mesh(const MeshT&, const MeshT&, std::vector<double>&, const sample_opts&);
+
+template <typename KernelT, typename MeshT, typename PointT>
 std::tuple<double, double, double> get_metro(
     const MeshT&,
     const MeshT&,
@@ -168,6 +177,8 @@ std::tuple<double, double, double> get_metro(
 std::string toLower(std::string);
 
 sample_opts ropts_to_sample_opts(const Rcpp::List&);
+
+std::optional<double> get_quantile(std::vector<double>&, double);
 
 void rmessage(std::string);
 

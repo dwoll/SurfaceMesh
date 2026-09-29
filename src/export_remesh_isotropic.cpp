@@ -45,7 +45,7 @@ Rcpp::List remeshIsoUniform_cpp(
     const bool protectConstraints,
     const double dihedralAngle,   // default 60 degrees
     const bool normals) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -86,7 +86,7 @@ Rcpp::List remeshIsoAdapt_cpp(
     const bool protectConstraints,
     const double dihedralAngle,   // default 60 degrees
     const bool normals) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle

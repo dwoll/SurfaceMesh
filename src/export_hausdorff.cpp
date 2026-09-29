@@ -23,13 +23,13 @@ double getHausdorffApprox_cpp(
     const Rcpp::List rmesh2,
     const bool symmetric,
     const unsigned int n) {
-  Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh1,
       true,        // soup
       true,        // triangulate - must be triangle
       false,       // repair_soup
       false);      // verbose
-  Mesh3 mesh2 = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh2 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh2,
       true,        // soup
       true,        // triangulate - must be triangle
@@ -79,13 +79,13 @@ double getHausdorffEst_cpp(
     const Rcpp::List rmesh2,
     const bool symmetric,
     const double error_bound) {
-    Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh1,
         true,        // soup
         true,        // triangulate - must be triangle
         false,       // repair_soup
         false);      // verbose
-    Mesh3 mesh2 = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh2 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh2,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -145,13 +145,13 @@ Rcpp::List getSurfaceDist_cpp(
     const Rcpp::List ropts) {
   Rcpp::List ropts_l = Rcpp::as<Rcpp::List>(ropts);
   sample_opts opts = ropts_to_sample_opts(ropts_l);
-  Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh1,
       true,        // soup
       true,        // triangulate - must be triangle
       false,       // repair_soup
       false);      // verbose
-  Mesh3 mesh2 = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh2 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh2,
       true,        // soup
       true,        // triangulate - must be triangle
