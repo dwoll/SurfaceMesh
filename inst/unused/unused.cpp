@@ -5,267 +5,6 @@
 // ----------------------------------------------------------------------- //
 
 // ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::IntegerMatrix getFaceColors_cpp(const Rcpp::List rmesh) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-        rmesh,
-        false,       // soup
-        true,        // triangulate - must be triangle
-        false,       // repair_soup
-        false);      // verbose
-    const Rcpp::IntegerMatrix colors_mat = getFColors<K, Mesh3, Vector3>(mesh);
-    Rcpp::transpose(colors_mat);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::IntegerMatrix getVertexColors_cpp(const Rcpp::List rmesh) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-        rmesh,
-        false,       // soup
-        true,        // triangulate - must be triangle
-        false,       // repair_soup
-        false);      // verbose
-    const Rcpp::IntegerMatrix colors_mat = getVColors<K, Mesh3, Vector3>(mesh);
-    Rcpp::transpose(colors_mat);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::NumericMatrix getVertexNormals_cpp(const Rcpp::List rmesh) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-        rmesh,
-        false,       // soup
-        true,        // triangulate - must be triangle
-        false,       // repair_soup
-        false);      // verbose
-    const Rcpp::NumericMatrix normals_mat = getVNormals<K, Mesh3, Vector3>(mesh);
-    Rcpp::transpose(normals_mat);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::List setFaceColors_cpp(const Rcpp::List rmesh,
-                             const Rcpp::IntegerMatrix colors) {
-    using face_colors_map = Mesh3::Property_map<fc_dscrptr, CGAL::IO::Color>;
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-        rmesh,
-        false,       // soup
-        false,       // triangulate
-        false,       // repair_soup
-        false);      // verbose
-    if((colors.ncol() != 1) && (colors.ncol() != mesh.number_of_faces())) {
-        Rcpp::stop("The number of colors does not match the number of faces.");
-    }
-    remove_properties<Mesh3, Vector3>(mesh, {"f:color"});
-    face_colors_map fcolmap =
-        mesh.add_property_map<fc_dscrptr, CGAL::IO::Color>("f:color").first;
-        // ("f:color", CGAL::IO::white()).first for default
-    if(colors.ncol() == 1) {
-        for(Mesh3::Face_index fi : mesh.faces()) {
-            const Rcpp::IntegerVector v = colors(Rcpp::_, 0);
-            fcolmap[fi] = CGAL::IO::Color(v(0), v(1), v(2));
-        }
-    } else {
-        std::size_t i = 0;
-        for(Mesh3::Face_index fi : mesh.faces()) {
-            const Rcpp::IntegerVector v = colors(Rcpp::_, i);
-            fcolmap[fi] = CGAL::IO::Color(v(0), v(1), v(2));
-            i++;
-        }
-    }
-    return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, false);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::List setVertexColors_cpp(const Rcpp::List rmesh,
-                               const Rcpp::IntegerMatrix colors) {
-    using vertex_colors_map = Mesh3::Property_map<vrtx_dscrptr, CGAL::IO::Color>;
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-        rmesh,
-        false,       // soup
-        false,       // triangulate
-        false,       // repair_soup
-        false);      // verbose
-    if(colors.ncol() != mesh.number_of_vertices()) {
-        Rcpp::stop("The number of colors does not match the number of vertices.");
-    }
-    remove_properties<Mesh3, Vector3>(mesh, {"v:color"});
-    vertex_colors_map vcolmap =
-        mesh.add_property_map<vrtx_dscrptr, CGAL::IO::Color>("v:color").first;
-    std::size_t i = 0;
-    for(Mesh3::Vertex_index vi : mesh.vertices()) {
-        const Rcpp::IntegerVector v = colors(Rcpp::_, i);
-        vcolmap[vi] = CGAL::IO::Color(v(0), v(1), v(2));
-        i++;
-    }
-    return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, false);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::List setVertexNormals(const Rcpp::List rmesh,
-                            const Rcpp::NumericMatrix normals) {
-    using vertex_normals_map = Mesh3::Property_map<vrtx_dscrptr, Vector3>;
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
-        rmesh,
-        false,       // soup
-        false,       // triangulate
-        false,       // repair_soup
-        false);      // verbose
-    if(normals.ncol() != mesh.number_of_vertices()) {
-        Rcpp::stop("The number of normals does not match the number of vertices.");
-    }
-    remove_properties<Mesh3, Vector3>(mesh, {"v:normal"});
-    vertex_normals_map vnormmap =
-        mesh.add_property_map<vrtx_dscrptr, Vector3>(
-            "v:normal", CGAL::NULL_VECTOR).first;
-    std::size_t i = 0;
-    for(Mesh3::Vertex_index vi : mesh.vertices()) {
-        const Rcpp::NumericVector v = normals(Rcpp::_, i);
-        vnormmap[vi] = Vector3(v(0), v(1), v(2));
-        i++;
-    }
-    return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, false);
-}
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-template <typename KernelT, typename MeshT, typename VectorT>
-Rcpp::IntegerMatrix getFColors(const MeshT&);
-
-template <typename KernelT, typename MeshT, typename VectorT>
-Rcpp::IntegerMatrix getVColors(const MeshT&);
-
-template <typename KernelT, typename MeshT, typename VectorT>
-Rcpp::NumericMatrix getVNormals(const MeshT&);
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-// return existing f:color property map as R matrix
-template <typename KernelT, typename MeshT, typename VectorT>
-Rcpp::IntegerMatrix getFColors(const MeshT &mesh) {
-    using face_descriptor = typename boost::graph_traits<MeshT>::face_descriptor;
-    using face_colors_map = typename MeshT::template Property_map<face_descriptor, CGAL::IO::Color>;
-    Rcpp::IntegerMatrix colors_mat(4, mesh.number_of_faces());
-    std::optional<face_colors_map> pmap_ =
-      mesh.template property_map<face_descriptor, CGAL::IO::Color>("f:color");
-
-    if(pmap_.has_value()) {
-        std::size_t i = 0;
-        face_colors_map fcolmap = pmap_.value();
-        for(face_descriptor vd : faces(mesh)) {
-            Rcpp::IntegerVector col_i(4);
-            CGAL::IO::Color color = fcolmap[CGAL::SM_Face_index(i)];
-            col_i(0) = color.red();
-            col_i(1) = color.green();
-            col_i(2) = color.blue();
-            col_i(3) = color.alpha();
-            colors_mat(Rcpp::_, i) = col_i;
-            i++;
-        }
-    } else {
-        std::size_t i = 0;
-        for(face_descriptor vd : faces(mesh)) {
-            Rcpp::IntegerVector col_i(4);
-            col_i(0) = Rcpp::IntegerVector::get_na();
-            col_i(1) = Rcpp::IntegerVector::get_na();
-            col_i(2) = Rcpp::IntegerVector::get_na();
-            col_i(3) = Rcpp::IntegerVector::get_na();
-            colors_mat(Rcpp::_, i) = col_i;
-            i++;
-        }
-    }
-    return colors_mat;
-}
-
-template Rcpp::IntegerMatrix getFColors<K,  Mesh3,  Vector3>(const Mesh3&);
-template Rcpp::IntegerMatrix getFColors<EK, EMesh3, EVector3>(const EMesh3&);
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-// return existing v:color property map as R matrix
-template <typename KernelT, typename MeshT, typename VectorT>
-Rcpp::IntegerMatrix getVColors(const MeshT &mesh) {
-    using vertex_descriptor = typename boost::graph_traits<MeshT>::vertex_descriptor;
-    using vertex_colors_map = typename MeshT::template Property_map<vertex_descriptor, CGAL::IO::Color>;
-    Rcpp::IntegerMatrix colors_mat(4, mesh.number_of_vertices());
-    std::optional<vertex_colors_map> pmap_ =
-      mesh.template property_map<vertex_descriptor, CGAL::IO::Color>("v:color");
-
-    if(pmap_.has_value()) {
-        std::size_t i = 0;
-        vertex_colors_map vcolmap = pmap_.value();
-        for(vertex_descriptor vd : vertices(mesh)) {
-            Rcpp::IntegerVector col_i(4);
-            CGAL::IO::Color color = vcolmap[CGAL::SM_Vertex_index(i)];
-            col_i(0) = color.red();
-            col_i(1) = color.green();
-            col_i(2) = color.blue();
-            col_i(3) = color.alpha();
-            colors_mat(Rcpp::_, i) = col_i;
-            i++;
-        }
-    } else {
-        std::size_t i = 0;
-        for(vertex_descriptor vd : vertices(mesh)) {
-            Rcpp::IntegerVector col_i(4);
-            col_i(0) = Rcpp::IntegerVector::get_na();
-            col_i(1) = Rcpp::IntegerVector::get_na();
-            col_i(2) = Rcpp::IntegerVector::get_na();
-            col_i(3) = Rcpp::IntegerVector::get_na();
-            colors_mat(Rcpp::_, i) = col_i;
-            i++;
-        }
-    }
-    return colors_mat;
-}
-
-template Rcpp::IntegerMatrix getVColors<K,  Mesh3,  Vector3>(const Mesh3&);
-template Rcpp::IntegerMatrix getVColors<EK, EMesh3, EVector3>(const EMesh3&);
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-// return existing v:normal property map as R matrix
-template <typename KernelT, typename MeshT, typename VectorT>
-Rcpp::NumericMatrix getVNormals(const MeshT &mesh) {
-    using vertex_descriptor  = typename boost::graph_traits<MeshT>::vertex_descriptor;
-    using vertex_normals_map = typename MeshT::template Property_map<vertex_descriptor, VectorT>;
-    Rcpp::NumericMatrix normals_mat(3, mesh.number_of_vertices());
-    std::optional<vertex_normals_map> pmap_ =
-      mesh.template property_map<vertex_descriptor, VectorT>("v:normal");
-
-    if(pmap_.has_value()) {
-        std::size_t i = 0;
-        vertex_normals_map vnormmap = pmap_.value();
-        for(vertex_descriptor vd : vertices(mesh)) {
-            Rcpp::NumericVector col_i(3);
-            VectorT normal = vnormmap[CGAL::SM_Vertex_index(i)];
-            col_i(0) = CGAL::to_double<typename KernelT::FT>(normal.x());
-            col_i(1) = CGAL::to_double<typename KernelT::FT>(normal.y());
-            col_i(2) = CGAL::to_double<typename KernelT::FT>(normal.z());
-            normals_mat(Rcpp::_, i) = col_i;
-            i++;
-        }
-    } else {
-        std::size_t i = 0;
-        for(vertex_descriptor vd : vertices(mesh)) {
-            Rcpp::NumericVector col_i(3);
-            col_i(0) = Rcpp::NumericVector::get_na();
-            col_i(1) = Rcpp::NumericVector::get_na();
-            col_i(2) = Rcpp::NumericVector::get_na();
-            normals_mat(Rcpp::_, i) = col_i;
-            i++;
-        }
-    }
-    return normals_mat;
-}
-
-template Rcpp::NumericMatrix getVNormals<K,  Mesh3,  Vector3>(const Mesh3&);
-template Rcpp::NumericMatrix getVNormals<EK, EMesh3, EVector3>(const EMesh3&);
-
-// ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
 
 // in make_rmesh*()
@@ -287,20 +26,27 @@ std::optional<vertex_normals_map> vnormmap_ =
 if () {
     ...
 } else if(vnormmap_.has_value()) {
-    Rcpp::NumericMatrix vnormals_mat = getVNormals<KernelT, MeshT, VectorT>(mesh);
-    out["normals"] = vnormals_mat;
+    std::optional<Rcpp::NumericMatrix> normals_mat = getVNormals<KernelT, MeshT, VectorT>(mesh);
+    if(normals_mat.has_value()) {
+        out["normals"] = normals_mat.value();
+    }
 }
 
 // vertex colors or face colors? either - or
 if(fcolmap_.has_value() || vcolmap_.has_value()) {
     if(vcolmap_.has_value()) {
-        Rcpp::IntegerMatrix colors_mat = getVColors<KernelT, MeshT, VectorT>(mesh);
-        out["colors"] = colors_mat;
+        std::optional<Rcpp::IntegerMatrix> colors_mat = getVColors<KernelT, MeshT, VectorT>(mesh);
+        if(colors_mat.has_value()) {
+            out["colors"] = colors_mat.value();
+        }
     } else {
-        Rcpp::IntegerMatrix colors_mat = getFColors<KernelT, MeshT, VectorT>(mesh);
-        out["colors"] = colors_mat;
+        std::optional<Rcpp::IntegerMatrix> colors_mat = getFColors<KernelT, MeshT, VectorT>(mesh);
+        if(colors_mat.has_value()) {
+            out["colors"] = colors_mat.value();
+        }
     }
 }
+
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
 
@@ -316,37 +62,6 @@ typedef boost::graph_traits<EMesh3>::halfedge_descriptor             hlfdg_descr
 // EPoint3 with normal EVector3
 typedef std::pair<EPoint3, EVector3>                                 EP3EV3;
 typedef boost::graph_traits<EMesh3>::face_descriptor                 fc_descriptor;
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-
-template <typename KernelT, typename MeshT, typename VectorT>
-std::optional<Rcpp::NumericMatrix> getVNormals(const MeshT &mesh) {
-    using vertex_descriptor = typename boost::graph_traits<MeshT>::vertex_descriptor;
-    using vnormals_map      = typename MeshT::template Property_map<vertex_descriptor, VectorT>;
-
-    std::optional<Rcpp::NumericMatrix> normals_mat;
-    std::optional<vnormals_map> vnormals =
-        mesh.template property_map<vertex_descriptor, VectorT>("v:normal");
-    if(vnormals.has_value()) {
-        Rcpp::NumericMatrix nm(3, mesh.number_of_vertices());
-        std::size_t i = 0;
-        for(vertex_descriptor vd : vertices(mesh)) {
-          Rcpp::NumericVector col_i(3);
-          const VectorT normal = vnormals.value()[vd];
-          col_i(0) = CGAL::to_double<typename KernelT::FT>(normal.x());
-          col_i(1) = CGAL::to_double<typename KernelT::FT>(normal.y());
-          col_i(2) = CGAL::to_double<typename KernelT::FT>(normal.z());
-          nm(Rcpp::_, i) = col_i;
-          i++;
-        }
-        normals_mat = std::move(nm);
-    }
-    return normals_mat;
-}
-
-template std::optional<Rcpp::NumericMatrix> getVNormals<K,  Mesh3,  Vector3>(const  Mesh3&);
-template std::optional<Rcpp::NumericMatrix> getVNormals<EK, EMesh3, EVector3>(const EMesh3&);
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //

@@ -74,6 +74,15 @@ std::vector<PointT> matrix_to_points3(const Rcpp::NumericMatrix&);
 template <typename KernelT, typename PointT>
 Rcpp::NumericMatrix points3_to_matrix(const std::vector<PointT>&);
 
+template <typename KernelT, typename MeshT, typename VectorT>
+std::optional<Rcpp::IntegerMatrix> getFColors(const MeshT&);
+
+template <typename KernelT, typename MeshT, typename VectorT>
+std::optional<Rcpp::IntegerMatrix> getVColors(const MeshT&);
+
+template <typename KernelT, typename MeshT, typename VectorT>
+std::optional<Rcpp::NumericMatrix> getVNormals(const MeshT&);
+
 template <typename KernelT, typename MeshT, typename PointT>
 MeshT soup_to_mesh(
     std::vector<PointT>,                    // points

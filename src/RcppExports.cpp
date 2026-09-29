@@ -12,6 +12,75 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// getFaceColors_cpp
+Rcpp::Nullable<Rcpp::IntegerMatrix> getFaceColors_cpp(const Rcpp::List rmesh);
+RcppExport SEXP _SurfaceMesh_getFaceColors_cpp(SEXP rmeshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    rcpp_result_gen = Rcpp::wrap(getFaceColors_cpp(rmesh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getVertexColors_cpp
+Rcpp::Nullable<Rcpp::IntegerMatrix> getVertexColors_cpp(const Rcpp::List rmesh);
+RcppExport SEXP _SurfaceMesh_getVertexColors_cpp(SEXP rmeshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    rcpp_result_gen = Rcpp::wrap(getVertexColors_cpp(rmesh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getVertexNormals_cpp
+Rcpp::Nullable<Rcpp::NumericMatrix> getVertexNormals_cpp(const Rcpp::List rmesh);
+RcppExport SEXP _SurfaceMesh_getVertexNormals_cpp(SEXP rmeshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    rcpp_result_gen = Rcpp::wrap(getVertexNormals_cpp(rmesh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// setFaceColors_cpp
+Rcpp::List setFaceColors_cpp(const Rcpp::List rmesh, const Rcpp::IntegerMatrix colors);
+RcppExport SEXP _SurfaceMesh_setFaceColors_cpp(SEXP rmeshSEXP, SEXP colorsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix >::type colors(colorsSEXP);
+    rcpp_result_gen = Rcpp::wrap(setFaceColors_cpp(rmesh, colors));
+    return rcpp_result_gen;
+END_RCPP
+}
+// setVertexColors_cpp
+Rcpp::List setVertexColors_cpp(const Rcpp::List rmesh, const Rcpp::IntegerMatrix colors);
+RcppExport SEXP _SurfaceMesh_setVertexColors_cpp(SEXP rmeshSEXP, SEXP colorsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerMatrix >::type colors(colorsSEXP);
+    rcpp_result_gen = Rcpp::wrap(setVertexColors_cpp(rmesh, colors));
+    return rcpp_result_gen;
+END_RCPP
+}
+// setVertexNormals
+Rcpp::List setVertexNormals(const Rcpp::List rmesh, const Rcpp::NumericMatrix normals);
+RcppExport SEXP _SurfaceMesh_setVertexNormals(SEXP rmeshSEXP, SEXP normalsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type normals(normalsSEXP);
+    rcpp_result_gen = Rcpp::wrap(setVertexNormals(rmesh, normals));
+    return rcpp_result_gen;
+END_RCPP
+}
 // alphaWrapPoints_cpp
 Rcpp::List alphaWrapPoints_cpp(const Rcpp::NumericMatrix pts, const double alpha_rel, const double offset_rel, const bool normals);
 RcppExport SEXP _SurfaceMesh_alphaWrapPoints_cpp(SEXP ptsSEXP, SEXP alpha_relSEXP, SEXP offset_relSEXP, SEXP normalsSEXP) {
@@ -721,6 +790,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_SurfaceMesh_getFaceColors_cpp", (DL_FUNC) &_SurfaceMesh_getFaceColors_cpp, 1},
+    {"_SurfaceMesh_getVertexColors_cpp", (DL_FUNC) &_SurfaceMesh_getVertexColors_cpp, 1},
+    {"_SurfaceMesh_getVertexNormals_cpp", (DL_FUNC) &_SurfaceMesh_getVertexNormals_cpp, 1},
+    {"_SurfaceMesh_setFaceColors_cpp", (DL_FUNC) &_SurfaceMesh_setFaceColors_cpp, 2},
+    {"_SurfaceMesh_setVertexColors_cpp", (DL_FUNC) &_SurfaceMesh_setVertexColors_cpp, 2},
+    {"_SurfaceMesh_setVertexNormals", (DL_FUNC) &_SurfaceMesh_setVertexNormals, 2},
     {"_SurfaceMesh_alphaWrapPoints_cpp", (DL_FUNC) &_SurfaceMesh_alphaWrapPoints_cpp, 4},
     {"_SurfaceMesh_alphaWrapMesh_cpp", (DL_FUNC) &_SurfaceMesh_alphaWrapMesh_cpp, 4},
     {"_SurfaceMesh_boolIntersectionEK_cpp", (DL_FUNC) &_SurfaceMesh_boolIntersectionEK_cpp, 4},
