@@ -25,7 +25,7 @@
 struct halfedge2edge {
     using edge_descriptor     = boost::graph_traits<Mesh3>::edge_descriptor;
     using halfedge_descriptor = boost::graph_traits<Mesh3>::halfedge_descriptor;
-    halfedge2edge(const Mesh3& m, std::vector<dg_dscrptr>& edges)
+    halfedge2edge(const Mesh3& m, std::vector<edge_descriptor>& edges)
         : m_mesh(m), m_edges(edges)
         {}
 
@@ -47,6 +47,7 @@ Rcpp::List remeshIsoUniform_cpp(
     const bool protectConstraints,
     const double dihedralAngle,   // default 60 degrees
     const bool normals) {
+    using edge_descriptor = boost::graph_traits<Mesh3>::edge_descriptor;
     Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
@@ -61,7 +62,7 @@ Rcpp::List remeshIsoUniform_cpp(
       PMP::detect_sharp_edges(mesh, dihedralAngle, eif);
     }
 
-    std::vector<dg_dscrptr> border;
+    std::vector<edge_descriptor> border;
     PMP::Uniform_sizing_field<Mesh3> sizing_field(targetEdgeLen, mesh);
     CGAL::border_halfedges(faces(mesh), mesh, boost::make_function_output_iterator(halfedge2edge(mesh, border)));
     PMP::split_long_edges(border, targetEdgeLen, mesh);

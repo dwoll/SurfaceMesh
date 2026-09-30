@@ -7,6 +7,7 @@
 #include "SurfaceMesh.h"
 #endif
 
+#include <CGAL/Polygon_mesh_processing/self_intersections.h>
 #include <CGAL/Surface_mesh_simplification/edge_collapse.h>
 #include <CGAL/Surface_mesh_simplification/Policies/Edge_collapse/Edge_count_ratio_stop_predicate.h>
 #include <CGAL/Surface_mesh_simplification/Policies/Edge_collapse/Edge_count_stop_predicate.h>

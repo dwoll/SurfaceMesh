@@ -28,17 +28,14 @@ namespace PMP = CGAL::Polygon_mesh_processing;
 #define SEQ_TAG CGAL::Sequential_tag
 
 // -------------------------------------------------------------------------- //
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-typedef CGAL::Exact_predicates_exact_constructions_kernel   EK;
-
-typedef K::Point_3  Point3;
-typedef EK::Point_3 EPoint3;
-
-typedef K::Vector_3  Vector3;
-typedef EK::Vector_3 EVector3;
-
-typedef CGAL::Surface_mesh<Point3>  Mesh3;
-typedef CGAL::Surface_mesh<EPoint3> EMesh3;
+using K        = CGAL::Exact_predicates_inexact_constructions_kernel;
+using EK       = CGAL::Exact_predicates_exact_constructions_kernel;
+using Point3   = K::Point_3;
+using EPoint3  = EK::Point_3;
+using Vector3  = K::Vector_3;
+using EVector3 = EK::Vector_3;
+using Mesh3    = CGAL::Surface_mesh<Point3>;
+using EMesh3   = CGAL::Surface_mesh<EPoint3>;
 
 // -------------------------------------------------------------------------- //
 // triangle sample options for sample_points()
@@ -57,15 +54,15 @@ typedef CGAL::Surface_mesh<EPoint3> EMesh3;
 // PMP::parameters::number_of_points_per_face(n)          // unsigned int, for Monte-Carlo sampling
 struct sample_opts {
     unsigned int method; // 1: random uniform, 2: grid, 3: Monte Carlo
-    bool sampleVerts;
-    bool sampleEdges;
-    bool sampleFaces;
-    double gridSpacing;
+    bool         sampleVerts;
+    bool         sampleEdges;
+    bool         sampleFaces;
+    double       gridSpacing;
     unsigned int ptsOnEdges;
     unsigned int ptsOnFaces;
-    double ptsPerDist;
+    double       ptsPerDist;
     unsigned int ptsPerEdge;
-    double ptsPerArea;
+    double       ptsPerArea;
     unsigned int ptsPerFace;
 };
 
@@ -98,6 +95,7 @@ MeshT soup_to_mesh(
     const unsigned int,                     // max_num_holes
     const bool);                            // verbose
 
+// make surface mesh from R input list
 template <typename KernelT, typename MeshT, typename PointT>
 MeshT make_surf_mesh(
     const Rcpp::List&,
@@ -110,6 +108,7 @@ MeshT make_surf_mesh(
     const unsigned int,
     const bool);
 
+// make surface mesh from file
 template <typename KernelT, typename MeshT, typename PointT>
 MeshT make_surf_mesh_ff(
     const Rcpp::String,

@@ -104,12 +104,14 @@ wire3d(mesh_tri_rgl)
 
 ## Vertex normals
 
+Calculate vertex normals when creating a mesh.
+
 ```{r}
 mesh <- makeMesh(dataToroHelix, normals=TRUE)
 mesh
 ```
 
-Or
+Calculate vertex normals for existing mesh.
 
 ```{r}
 mesh    <- makeMesh(dataToroHelix, normals=FALSE)
@@ -121,6 +123,30 @@ shade3d(toRGL(mesh), col="tomato")
 next3d()
 view3d(0, 30, zoom=0.8)
 shade3d(toRGL(mesh_vn), col="turquoise4")
+```
+
+Extract vertex normals.
+
+```{r}
+mesh <- makeMeshValid(dataSphere, normals=TRUE)
+vn   <- getVertexNormals(mesh)
+head(vn)
+```
+
+Set vertex normals to given matrix.
+
+```{r}
+## random unit normal vectors
+mesh    <- makeMesh(dataPentaPrism, triangulate=TRUE, normals=FALSE)
+nVerts  <- nrow(mesh[["vertices"]])
+nrmls0  <- matrix(runif(nVerts*3), ncol=3)
+lens    <- sqrt(diag(tcrossprod(nrmls0)))
+nrmls   <- diag(1/lens) %*% nrmls0
+
+## set vertex normals
+mesh_vn <- setVertexNormals(mesh, nrmls)
+head(mesh_vn[["normals"]])
+head(nrmls)
 ```
 
 # Mesh Repair
