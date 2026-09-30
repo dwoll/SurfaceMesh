@@ -14,6 +14,7 @@ if (!requireNamespace("rmarkdown", quietly = TRUE) ||
 
 # If Pandoc is not installed, the output format won't be set.
 # knitr uses it to determine whether to do
-# screenshots; we don't want those. see https://github.com/rstudio/markdown/issues/115
+# screenshots; we don't want those. 
+# see https://github.com/rstudio/markdown/issues/115
 knitr::opts_chunk$set(screenshot.force = FALSE, snapshot = TRUE)
 # snapshot = TRUE for snapshots instead of dynamic
