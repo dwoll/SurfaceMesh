@@ -65,7 +65,7 @@ Rcpp::List remeshSmoothShape_cpp(
                                  .vertex_is_constrained_map(vcmap));
     }
     mesh.collect_garbage();
-    // subdivision requires triangle mesh -> output is triangle
+    // remeshing requires triangle mesh -> output is triangle
     return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, normals);
 }
 
@@ -82,7 +82,7 @@ Rcpp::List remeshSmoothAA_cpp(
   const bool doProject,
   const bool normals) {
     const bool useAngleSmooth = true;
-    const bool useAreaSmooth  = false;      // Ceres library required
+    const bool useAreaSmooth  = false;      // external Ceres library required
     // const bool useDelaunay,    // for area smoothing
     Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
@@ -91,7 +91,7 @@ Rcpp::List remeshSmoothAA_cpp(
         false,       // repair_soup
         false);      // verbose
     // constrain edges with a dihedral angle over given value
-    typedef boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type EIFMap;
+    using EIFMap = boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type;
     EIFMap eif = get(CGAL::edge_is_feature, mesh);
     PMP::detect_sharp_edges(mesh, dihedralAngle, eif);  // dihedralAngle = 60
     // unsigned int sharp_counter = 0;
@@ -106,12 +106,12 @@ Rcpp::List remeshSmoothAA_cpp(
                                                    .use_angle_smoothing(useAngleSmooth)
                                                    .use_area_smoothing(useAreaSmooth)     // Ceres library required
                                                    .use_safety_constraints(useSafeConstr) // false: authorize all moves
-                                                   // .use_Delaunay_flips(useDelaunay) for area smoothing
+                                                   // .use_Delaunay_flips(useDelaunay)       // for area smoothing
                                                    .do_project(doProject)
                                                    .edge_is_constrained_map(eif));
 
     mesh.collect_garbage();
-    // subdivision requires triangle mesh -> output is triangle
+    // remeshing requires triangle mesh -> output is triangle
     return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, normals);
 }
 

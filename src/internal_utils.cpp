@@ -182,15 +182,16 @@ template void sample_points<EMesh3, EPoint3>(
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
 // distances from a random sample of points on `mesh_source` to `mesh_target`
+// distances stored in dsts -> non-const reference
 template <typename KernelT, typename MeshT, typename PointT>
 void sample_dists_to_mesh(
   const MeshT& mesh_source,
   const MeshT& mesh_target,
   std::vector<double> &dsts,
   const sample_opts &opts) {
-  typedef CGAL::AABB_face_graph_triangle_primitive<MeshT> Primitive;
-  typedef CGAL::AABB_traits_3<KernelT, Primitive> Tree_Traits;
-  typedef CGAL::AABB_tree<Tree_Traits> Tree;
+  using Primitive   = CGAL::AABB_face_graph_triangle_primitive<MeshT>;
+  using Tree_Traits = CGAL::AABB_traits_3<KernelT, Primitive>;
+  using Tree        = CGAL::AABB_tree<Tree_Traits>;
   std::vector<PointT> points;
   sample_points<MeshT, PointT>(mesh_source, points, opts);
   Tree tree(faces(mesh_target).first, faces(mesh_target).second, mesh_target);

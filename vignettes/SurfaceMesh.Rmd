@@ -333,7 +333,7 @@ See [`CGAL subdivision`](https://doc.cgal.org/latest/Subdivision_method_3/)
 ```{r}
 mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_cc     <- subdivideCatmullClark(mesh, nIter=2L)
+mesh_cc     <- subdivide(mesh, method="CC", nIter=2L)
 mesh_cc_rgl <- toRGL(mesh_cc)
 
 mfrow3d(1, 2)
@@ -349,7 +349,7 @@ wire3d(mesh_cc_rgl)
 ```{r}
 mesh        <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_ds     <- subdivideDooSabin(mesh, nIter=1L)
+mesh_ds     <- subdivide(mesh, method="DS", nIter=1L)
 mesh_ds_rgl <- toRGL(mesh_ds)
 
 mfrow3d(1, 2)
@@ -360,28 +360,12 @@ view3d(0, 30, zoom=0.8)
 wire3d(mesh_ds_rgl)
 ```
 
-## Sqrt3
-
-```{r}
-mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
-mesh_rgl    <- toRGL(mesh)
-mesh_s3     <- subdivideSqrt3(mesh, nIter=2L)
-mesh_s3_rgl <- toRGL(mesh_s3)
-
-mfrow3d(1, 2)
-view3d(0, 30, zoom=0.8)
-wire3d(mesh_rgl)
-next3d()
-view3d(0, 30, zoom=0.8)
-wire3d(mesh_s3_rgl)
-```
-
 ## Loop
 
 ```{r}
 mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
-mesh_l     <- subdivideLoop(mesh, nIter=1L)
+mesh_l     <- subdivide(mesh, method="L", nIter=1L)
 mesh_l_rgl <- toRGL(mesh_l)
 
 mfrow3d(1, 2)
@@ -390,6 +374,22 @@ wire3d(mesh_rgl)
 next3d()
 view3d(0, 30, zoom=0.8)
 wire3d(mesh_l_rgl)
+```
+
+## Sqrt3
+
+```{r}
+mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl    <- toRGL(mesh)
+mesh_s3     <- subdivide(mesh, method="S3", nIter=2L)
+mesh_s3_rgl <- toRGL(mesh_s3)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_s3_rgl)
 ```
 
 # Surface Reconstruction
@@ -490,27 +490,26 @@ shade3d(mesh_aw_rgl, col="mediumseagreen")
 ## Axis-parallel Bounding Box
 
 ```{r}
-mesh     <- dataOloid
-mesh_rgl <- toRGL(mesh)
-bb       <- getBoundingBox(mesh)
-bb_rgl   <- toRGL(bb)
+mesh1     <- dataOloid
+mesh1_rgl <- toRGL(mesh1)
+bb1       <- getBoundingBox(mesh1)
+bb1_rgl   <- toRGL(bb1)
 
 view3d(0, 30, zoom=0.9)
-wire3d(mesh_rgl)
-wire3d(bb_rgl)
+wire3d(mesh1_rgl)
+wire3d(bb1_rgl)
 ```
 
 ## Optimal (Oriented) Bounding Box
 
 ```{r}
-mesh     <- dataHeart1
-mesh_rgl <- toRGL(mesh)
-obb      <- getBoundingBoxOptimal(mesh)
-obb_rgl  <- toRGL(obb[["mesh"]])
-
-view3d(0, -90, zoom=0.8)
-wire3d(mesh_rgl)
-wire3d(obb_rgl)
+mesh2     <- dataHeart1
+mesh2_rgl <- toRGL(mesh2)
+bb2       <- getBounding(mesh2, oriented=TRUE)
+bb2_rgl   <- toRGL(bb2[["mesh"]])
+open3d(windowRect=50 + c(0, 0, 800, 400))
+wire3d(mesh2_rgl)
+wire3d(bb2_rgl)
 ```
 
 ## Convex Hull

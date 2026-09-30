@@ -1,7 +1,6 @@
 # TODO
 
-  * `make_surf_mesh()` etc.: copy vertex normals from input
-  * add get / set vertex normals to vignette
+  * `setVertexNormals()` check normals are unit vectors
   * `removeSelfIntersections()` does not work for example
 
 # Wishlist

@@ -15,7 +15,6 @@
 #endif
 
 #include <CGAL/make_conforming_constrained_Delaunay_triangulation_3.h>
-
 #include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
 #include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/autorefinement.h>
@@ -160,7 +159,7 @@ bool remove_selfint_soup(std::vector<PointT> &points,
         Rcpp::warning(msg);
     }
 
-    // autorefine_triangle_soup() can remove edges, put isolated vertices may remain
+    // autorefine_triangle_soup() can remove edges, but isolated vertices may remain
     // result may be non-manifold
     // PMP::repair_polygon_soup(points, polygons);
     PMP::merge_duplicate_points_in_polygon_soup(points, polygons,

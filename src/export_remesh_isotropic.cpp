@@ -56,7 +56,7 @@ Rcpp::List remeshIsoUniform_cpp(
         false);      // verbose
 
     // constrain edges with a dihedral angle over given value
-    typedef boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type EIFMap;
+    using EIFMap = boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type;
     EIFMap eif = get(CGAL::edge_is_feature, mesh);
     if(protectConstraints) {
       PMP::detect_sharp_edges(mesh, dihedralAngle, eif);
@@ -97,7 +97,7 @@ Rcpp::List remeshIsoAdapt_cpp(
         false);      // verbose
 
     // constrain edges with a dihedral angle over given value
-    typedef boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type EIFMap;
+    using EIFMap = boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type;
     EIFMap eif = get(CGAL::edge_is_feature, mesh);
     if(protectConstraints) {
       PMP::detect_sharp_edges(mesh, dihedralAngle, eif);

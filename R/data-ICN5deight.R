@@ -6,10 +6,10 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of an ICN5d eight
+#' @title A mesh of an ICN5D eight
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
-#'   \strong{rgl} representing an ICN5D eight, a shape from from user ICN5D
-#'   on forum \url{https://hi.gher.space/forum/}.
+#'   \strong{rgl} representing an ICN5D eight, a shape presented by user
+#'   ICN5D on forum \url{https://hi.gher.space/forum/}.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @author Originally developed by Stephane Laurent.
 #' @examples

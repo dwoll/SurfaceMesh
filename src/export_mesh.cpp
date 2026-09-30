@@ -298,9 +298,9 @@ Rcpp::NumericVector getDistance_cpp(
       true,        // triangulate - must be triangle
       false,       // repair_soup
       false);      // verbose
-  typedef CGAL::AABB_face_graph_triangle_primitive<Mesh3> Primitive;
-  typedef CGAL::AABB_traits_3<K, Primitive> Tree_Traits;
-  typedef CGAL::AABB_tree<Tree_Traits> Tree;
+  using Primitive   = CGAL::AABB_face_graph_triangle_primitive<Mesh3>;
+  using Tree_Traits = CGAL::AABB_traits_3<K, Primitive>;
+  using Tree        = CGAL::AABB_tree<Tree_Traits>;
 
   const std::size_t nPts = rpoints.ncol();
   Rcpp::NumericVector distances(nPts);

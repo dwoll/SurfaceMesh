@@ -6,10 +6,10 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a cyclide
+#' @title A mesh of a Dupin cyclide
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
-#'    \strong{rgl} representing a cyclide.
-#' @format A list with components \code{vb}, \code{it}, and \code{normals}.
+#'    \strong{rgl} representing a Dupin cyclide.
+#' @format A list with components \code{vb}, \code{it}.
 #' @author Originally developed by Stephane Laurent.
 #' @examples
 #' ## The following files were used to generate this mesh.
