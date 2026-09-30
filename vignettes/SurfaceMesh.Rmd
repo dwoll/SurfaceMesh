@@ -396,8 +396,9 @@ wire3d(mesh_l_rgl)
 ## Removing outliers from point cloud
 
 ```{r}
-ptsBefore   <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
-(avgSpacing <- getAverageSpacing(ptsBefore, nNeighbors=6L))
+ptsBefore <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
+getAverageSpacing(ptsBefore, nNeighbors=6L)
+
 ## contaminate
 idx              <- sample(seq_len(nrow(ptsBefore)), 4L, replace=FALSE)
 ptsBefore[idx, ] <- matrix(rnorm(12L, mean=10, sd=1), ncol=3L)
@@ -566,16 +567,16 @@ points <- matrix(2*runif(3*4), ncol=3)
 getDistance(mesh, points)
 ```
 
-## Surface Distance between two Meshes
-### Distance between the two respective centers of mass (DCOM)
+## Surface Distance Between two Meshes
+### Distance Between the two Respective Centers of Mass (DCOM)
 
 ```{r}
 getDCOM(dataHeart1, dataHeart2)
 ```
 
-### Hausdorff distance
+### Hausdorff Distance
 
-See [`CGAL` Hausdorff distance](https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance)
+See [`CGAL` Hausdorff distance](https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance), [dkfz metrics reloaded: HD](https://metrics-reloaded.dkfz.de/metric-library/hd)
 
 Approximate
 
@@ -597,7 +598,7 @@ getHausdorffQuantile(dataHeart1, dataHeart2, p=0.95)
 
 ### Average symmetric surface distance (ASSD) and Root Mean Squared Error (RMSE)
 
-See [dkfz metric reloaded: ASSD](https://metrics-reloaded.dkfz.de/metric-library/assd)
+See [dkfz metrics reloaded: ASSD](https://metrics-reloaded.dkfz.de/metric-library/assd)
 
 ```{r}
 sd_heart <- getSurfaceDist(dataHeart1, dataHeart2, p=0.95, ptsOnFaces=100L)
@@ -607,8 +608,8 @@ sd_heart[["RMSE"]]
 
 ## Volume-Overlap Based Similarity Measures
 
-  * [dkfz metric reloaded: Jaccard Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/intersection_over_union) (JSC, aka 'Intersection over Union', IoU)
-  * [dkfz metric reloaded: Dice Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/dsc) (DSC)
+  * [dkfz metrics reloaded: Jaccard Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/intersection_over_union) (JSC, aka 'Intersection over Union', IoU)
+  * [dkfz metrics reloaded: Dice Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/dsc) (DSC)
 
 ```{r}
 mesh1_rgl <- cube3d()      # (from the rgl package)
