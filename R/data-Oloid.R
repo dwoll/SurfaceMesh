@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of an oloid
+#' @title Mesh of an oloid
 #' @description A \code{CGALmesh} object, i.e., the output of
 #'   \code{\link[SurfaceMesh]{makeMesh}} representing an oloid.
 #' @format A \code{CGALmesh} object.

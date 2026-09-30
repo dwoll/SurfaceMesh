@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataOrthoCircle}
 \alias{dataOrthoCircle}
-\title{A mesh of an Ortho Circle}
+\title{Mesh of an ortho circle}
 \format{
 A list with components \code{vb}, \code{it}, and \code{normals}.
 }

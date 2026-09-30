@@ -2,7 +2,7 @@
 % Please edit documentation in R/mesh.R
 \name{getVertexNormals}
 \alias{getVertexNormals}
-\title{Get the vertex normals of a mesh}
+\title{Get vertex normals of a mesh}
 \usage{
 getVertexNormals(x)
 }
@@ -27,7 +27,8 @@ property maps that may be useful in the future.
 \examples{
 library(SurfaceMesh)
 mesh <- makeMeshValid(dataSphere, normals=TRUE)
-getVertexNormals(mesh)
+vn   <- getVertexNormals(mesh)
+head(vn)
 
 }
 \seealso{

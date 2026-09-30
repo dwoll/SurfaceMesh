@@ -61,7 +61,7 @@ vertex normals.
 }
 \description{
 Make a 3D surface mesh from an input file,
-from an existing \strong{rgl} mesh object,
+from an existing \strong{rgl} \code{\link[rgl]{mesh3d}} object,
 or from given vertices and faces. The mesh is optionally cleaned:
 duplicated vertices or faces are merged, and isolated vertices are removed.
 The returned faces are coherently oriented, normals are computed if requested, and

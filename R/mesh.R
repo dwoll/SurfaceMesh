@@ -448,8 +448,8 @@ getArea <- function(x) {
 #'
 #' mesh2     <- dataHeart1
 #' mesh2_rgl <- toRGL(mesh2)
-#' bb2       <- getBounding(mesh2, oriented=TRUE)
-#' bb2_rgl   <- toRGL(bb2[["mesh"]])
+#' bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+#' bb2_rgl   <- toRGL(bb2)
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' wire3d(mesh2_rgl)
 #' wire3d(bb2_rgl)
@@ -626,7 +626,7 @@ getDistance <- function(x, points) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
-#' @title Get the vertex normals of a mesh
+#' @title Get vertex normals of a mesh
 #' @description Get the vertex normals of a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @return The numeric matrix of normals attached to the vertices of the mesh.
@@ -1030,7 +1030,7 @@ samplePoints <- function(x,
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
-#' @title Assign given normal vectors to mesh vertices
+#' @title Assign normal vectors to mesh vertices
 #' @description Assign given per-vertex normal vectors to a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param normals A numeric matrix with three columns and as many rows as

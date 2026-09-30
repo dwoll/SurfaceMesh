@@ -3,16 +3,16 @@
 \docType{data}
 \name{dataCyclide}
 \alias{dataCyclide}
-\title{A mesh of a cyclide}
+\title{Mesh of a Dupin cyclide}
 \format{
-A list with components \code{vb}, \code{it}, and \code{normals}.
+A list with components \code{vb}, \code{it}.
 }
 \usage{
 dataCyclide
 }
 \description{
 An object of class \code{\link[rgl]{mesh3d}} from package
-\strong{rgl} representing a cyclide.
+\strong{rgl} representing a Dupin cyclide.
 }
 \examples{
 ## The following files were used to generate this mesh.

@@ -18,7 +18,7 @@ remeshSmoothAngle(
 The mesh must be triangle or be able to be made triangle.}
 
 \item{dihedralAngle}{Positive number. Constrain edges with a dihedral
-angle over given value.}
+angle over given value to preserve sharp edges.}
 
 \item{nIter}{Positive \code{integer}: Number of iterations.}
 

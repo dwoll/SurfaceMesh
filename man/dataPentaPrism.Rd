@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataPentaPrism}
 \alias{dataPentaPrism}
-\title{A mesh of a pentagrammic prism}
+\title{Mesh of a pentagrammic prism}
 \format{
 A list with components \code{vertices}, \code{faces}.
 }

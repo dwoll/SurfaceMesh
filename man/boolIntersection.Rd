@@ -24,7 +24,7 @@ gain some speed.}
 A \code{CGALmesh} object.
 }
 \description{
-Compute the intersection of the given meshes.
+Compute the intersection of the given 3D surface meshes.
 }
 \details{
 See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.

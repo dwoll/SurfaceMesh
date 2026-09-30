@@ -38,8 +38,7 @@ wire3d(hull_rgl)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getBoundingBox}},
-\code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for bounding box functions.
+See \code{\link[SurfaceMesh]{getBoundingBox}} for the bounding box.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataTruncIcosahedron}
 \alias{dataTruncIcosahedron}
-\title{A mesh of the truncated icosahedron}
+\title{Mesh of the truncated icosahedron}
 \format{
 A list with two components: \code{vertices} and \code{faces}.
 }

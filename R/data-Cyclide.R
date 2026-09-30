@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a Dupin cyclide
+#' @title Mesh of a Dupin cyclide
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing a Dupin cyclide.
 #' @format A list with components \code{vb}, \code{it}.

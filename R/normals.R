@@ -10,7 +10,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title Normals for a point cloud
+#' @title Function to generate normals for a point cloud
 #' @description Returns a function which estimates normals for a
 #'   3D point cloud.
 #' @param x \code{integer}. Number of neighbors used to estimate the normals.

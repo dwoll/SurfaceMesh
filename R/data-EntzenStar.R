@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of an Entzensberger star
+#' @title Mesh of an Entzensberger star
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing an Entzensberger star.
 #' @format A list with components \code{vb}, \code{it}.

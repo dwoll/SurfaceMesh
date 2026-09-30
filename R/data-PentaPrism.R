@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a pentagrammic prism
+#' @title Mesh of a pentagrammic prism
 #'
 #' @description A list representing a pentagrammic prism, giving the vertices
 #'   and the faces; it has 20 vertices, 10 triangular faces, 10 rectangular

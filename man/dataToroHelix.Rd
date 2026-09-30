@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataToroHelix}
 \alias{dataToroHelix}
-\title{A toroidal helix}
+\title{Mesh of a toroidal helix}
 \format{
 A list with components \code{vb}, \code{it}.
 }

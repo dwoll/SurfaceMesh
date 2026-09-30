@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataTorus}
 \alias{dataTorus}
-\title{A torus}
+\title{Mesh of a torus}
 \format{
 A list with components \code{vb}, \code{it}.
 }

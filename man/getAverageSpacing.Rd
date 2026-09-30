@@ -2,7 +2,7 @@
 % Please edit documentation in R/reconstruct.R
 \name{getAverageSpacing}
 \alias{getAverageSpacing}
-\title{Compute average spacing input points}
+\title{Compute average spacing of input points}
 \usage{
 getAverageSpacing(x, nNeighbors = 6L)
 }

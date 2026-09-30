@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a solid Mobius Strip
+#' @title Mesh of a solid Mobius strip
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl}, representing a solid Mobius Strip.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.

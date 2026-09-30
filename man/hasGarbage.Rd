@@ -13,7 +13,8 @@ hasGarbage(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Check if the given 3D surface mesh has garbage.
+Check if the given 3D surface mesh has garbage, i.e.,
+there is a mismatch between faces and vertices.
 }
 \examples{
 library(SurfaceMesh)

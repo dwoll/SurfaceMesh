@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataOloid}
 \alias{dataOloid}
-\title{A mesh of an oloid}
+\title{Mesh of an oloid}
 \format{
 A \code{CGALmesh} object.
 }

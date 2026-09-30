@@ -3,9 +3,9 @@
 \docType{data}
 \name{dataSphere}
 \alias{dataSphere}
-\title{A sphere}
+\title{Mesh of a sphere}
 \format{
-A list with components \code{vb}, \code{it}.
+A list with components \code{vb}, \code{it}, and \code{normals}.
 }
 \usage{
 dataSphere

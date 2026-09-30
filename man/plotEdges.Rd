@@ -56,7 +56,6 @@ mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl <- toRGL(mesh)
 open3d(windowRect=c(50, 50, 562, 562), zoom=0.9)
 shade3d(mesh_rgl, color="navy")
-# plot the exterior edges only, given in `mesh[["exteriorEdges"]]`
 plotEdges(mesh[["vertices"]],
           mesh[["exteriorEdges"]],
           color        ="gold",

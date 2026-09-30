@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a Hopf torus
+#' @title Mesh of a Hopf torus
 #' @description A \code{CGALmesh} object, i.e., the output of
 #'   \code{\link[SurfaceMesh]{makeMesh}} representing a Hopf torus.
 #' @format A \code{CGALmesh} object.

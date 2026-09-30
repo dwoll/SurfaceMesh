@@ -2,7 +2,7 @@
 % Please edit documentation in R/mesh.R
 \name{setVertexNormals}
 \alias{setVertexNormals}
-\title{Assign given normal vectors to mesh vertices}
+\title{Assign normal vectors to mesh vertices}
 \usage{
 setVertexNormals(x, normals)
 }
@@ -10,7 +10,7 @@ setVertexNormals(x, normals)
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
 \item{normals}{A numeric matrix with three columns and as many rows as
-the number of vertices.}
+the number of vertices. Should be unit vectors, not currently checked.}
 }
 \value{
 A \code{CGALmesh} object.

@@ -40,13 +40,12 @@ duplicated vertices, duplicated faces, removing isolated vertices)?}
 A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
 }
 \description{
-Reconstruction of a surface from a cloud of 3D points.
-A good choice if the input point cloud is noisy but the user still wants the
-surface to pass exactly through the points.
+Scale-space surface reconstruction of a 3D surface mesh from a cloud of 3D points.
 }
 \details{
 See \url{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}
-for details.
+for details. A good choice if the input point cloud is noisy but the user still wants the
+surface to pass exactly through the points.
 }
 \examples{
 library(SurfaceMesh)

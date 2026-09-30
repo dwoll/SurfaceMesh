@@ -2,12 +2,14 @@
 % Please edit documentation in R/mesh.R
 \name{getBoundingBox}
 \alias{getBoundingBox}
-\title{Get axis-parallel bounding box}
+\title{Get bounding box (axis-parallel or oriented)}
 \usage{
-getBoundingBox(x, triangulate = FALSE, normals = FALSE)
+getBoundingBox(x, oriented = FALSE, triangulate = FALSE, normals = FALSE)
 }
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
+
+\item{oriented}{Boolean. Get the optimal (oriented) bounding box?}
 
 \item{triangulate}{Boolean. Triangulate the faces of the bounding box?}
 
@@ -17,24 +19,30 @@ getBoundingBox(x, triangulate = FALSE, normals = FALSE)
 A \code{CGALmesh} object.
 }
 \description{
-Get the axis-parallel bounding box of a 3D surface mesh.
+Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)
 library(rgl)
 
-mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
-mesh_rgl <- toRGL(mesh)
-bb       <- getBoundingBox(mesh)
-bb_rgl   <- toRGL(bb)
-open3d(windowRect=50 + c(0, 0, 800, 400))
-wire3d(mesh_rgl)
-wire3d(bb_rgl)
+mesh1     <- dataOloid
+mesh1_rgl <- toRGL(mesh1)
+bb1       <- getBoundingBox(mesh1)
+bb1_rgl   <- toRGL(bb1)
+view3d(0, 30, zoom=0.9)
+wire3d(mesh1_rgl)
+wire3d(bb1_rgl)
 
+mesh2     <- dataHeart1
+mesh2_rgl <- toRGL(mesh2)
+bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+bb2_rgl   <- toRGL(bb2)
+open3d(windowRect=50 + c(0, 0, 800, 400))
+wire3d(mesh2_rgl)
+wire3d(bb2_rgl)
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for the optimal
-(oriented) bounding box and \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
+See \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

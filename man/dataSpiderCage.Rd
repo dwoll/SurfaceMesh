@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataSpiderCage}
 \alias{dataSpiderCage}
-\title{A mesh of a Spider Cage}
+\title{Mesh of a spider cage}
 \format{
 A list with components \code{vb}, \code{it}, and \code{normals}.
 }
