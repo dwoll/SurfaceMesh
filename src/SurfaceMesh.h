@@ -9,20 +9,15 @@
 // Daniel Wollschlaeger
 // License: GPL-3
 // ----------------------------------------------------------------------- //
-
 #ifndef _CGALMESHHEADER_
 #define _CGALMESHHEADER_
 
+// -------------------------------------------------------------------------- //
 #include <Rcpp.h>
-
-// ----------------------------------------------------------------------- //
-#include "SurfaceMesh_types.h"
-
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/Surface_mesh/Surface_mesh.h>
 #include <CGAL/Vector_3.h>
-#include <CGAL/property_map.h>
-#include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
-#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
-#include <CGAL/Polygon_mesh_processing/self_intersections.h>
 
 // -------------------------------------------------------------------------- //
 namespace PMP = CGAL::Polygon_mesh_processing;
@@ -32,11 +27,18 @@ namespace PMP = CGAL::Polygon_mesh_processing;
 #define PIA_TAG CGAL::Parallel_if_available_tag
 #define SEQ_TAG CGAL::Sequential_tag
 
-typedef std::pair<Point3, Vector3>                      P3V3;  // Point3 with normal Vector3
-typedef boost::graph_traits<Mesh3>::face_descriptor     fc_dscrptr;
-typedef boost::graph_traits<Mesh3>::edge_descriptor     dg_dscrptr;
-typedef boost::graph_traits<Mesh3>::halfedge_descriptor hlfdg_dscrptr;
-typedef boost::graph_traits<Mesh3>::vertex_descriptor   vrtx_dscrptr;
+// -------------------------------------------------------------------------- //
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+typedef CGAL::Exact_predicates_exact_constructions_kernel   EK;
+
+typedef K::Point_3  Point3;
+typedef EK::Point_3 EPoint3;
+
+typedef K::Vector_3  Vector3;
+typedef EK::Vector_3 EVector3;
+
+typedef CGAL::Surface_mesh<Point3>  Mesh3;
+typedef CGAL::Surface_mesh<EPoint3> EMesh3;
 
 // -------------------------------------------------------------------------- //
 // triangle sample options for sample_points()
@@ -148,19 +150,10 @@ template <typename MeshT, typename VectorT>
 void remove_properties(MeshT&, const std::vector<std::string>&);
 
 template <typename MeshT>
-MeshT readFileSoup(const std::string);
-
-template <typename MeshT>
-MeshT readFileMesh(const std::string);
-
-template <typename MeshT>
 void run_mesh_checks(const MeshT&);
 
 template <typename MeshT, typename PointT>
 void sample_points(const MeshT&, std::vector<PointT>&, const sample_opts&);
-
-template <typename KernelT, typename MeshT, typename PointT>
-void sample_dists_to_mesh(const MeshT&, const MeshT&, std::vector<double>&, const sample_opts&);
 
 template <typename KernelT, typename MeshT, typename PointT>
 std::tuple<double, double, double> get_metro(
@@ -174,15 +167,9 @@ std::tuple<double, double, double> get_metro(
 
 // -------------------------------------------------------------------------- //
 // no template
-std::string toLower(std::string);
-
 sample_opts ropts_to_sample_opts(const Rcpp::List&);
 
-std::optional<double> get_quantile(std::vector<double>&, double);
-
 void rmessage(std::string);
-
-bool is_triangle_soup(const std::vector<std::vector<std::size_t>>&);
 
           std::vector<std::vector<std::size_t>>        list_to_faces1(const Rcpp::List&);
 std::pair<std::vector<std::vector<std::size_t>>, bool> list_to_faces2(const Rcpp::List&);

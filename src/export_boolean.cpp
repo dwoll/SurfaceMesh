@@ -16,6 +16,7 @@
 
 #include <CGAL/Polygon_mesh_processing/corefinement.h>
 #include <CGAL/Polygon_mesh_processing/measure.h>
+#include <CGAL/Polygon_mesh_processing/self_intersections.h>
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //

@@ -23,16 +23,18 @@
 // https://doc.cgal.org/latest/PMP_Remeshing/PMP_Remeshing_2isotropic_remeshing_example_8cpp-example.html
 // ----------------------------------------------------------------------- //
 struct halfedge2edge {
-  halfedge2edge(const Mesh3& m, std::vector<dg_dscrptr>& edges)
-    : m_mesh(m), m_edges(edges)
-  {}
+    using edge_descriptor     = boost::graph_traits<Mesh3>::edge_descriptor;
+    using halfedge_descriptor = boost::graph_traits<Mesh3>::halfedge_descriptor;
+    halfedge2edge(const Mesh3& m, std::vector<dg_dscrptr>& edges)
+        : m_mesh(m), m_edges(edges)
+        {}
 
-  void operator()(const hlfdg_dscrptr& h) const {
-    m_edges.push_back(edge(h, m_mesh));
-  }
+    void operator()(const halfedge_descriptor& h) const {
+        m_edges.push_back(edge(h, m_mesh));
+    }
 
-  const Mesh3& m_mesh;
-  std::vector<dg_dscrptr>& m_edges;
+    const Mesh3& m_mesh;
+    std::vector<edge_descriptor>& m_edges;
 };
 
 // ----------------------------------------------------------------------- //

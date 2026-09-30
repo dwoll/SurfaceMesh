@@ -22,9 +22,12 @@
 #include <CGAL/jet_smooth_point_set.h>
 #include <CGAL/remove_outliers.h>
 #include <CGAL/compute_average_spacing.h>
+
 #include <CGAL/Polygon_mesh_processing/repair_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 #include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
@@ -179,6 +182,7 @@ Rcpp::List reconstructPoisson_cpp(const Rcpp::NumericMatrix pts,
                                   const double smDistance,
                                   const bool normals) {
   const std::size_t nPts = pts.ncol();
+  using P3V3 = std::pair<Point3, Vector3>;  // Point3 with normal Vector3
   std::vector<P3V3> points_wn(nPts);   // points with normals
   for(std::size_t i = 0; i < nPts; i++) {
     const Rcpp::NumericVector pt_i = pts(Rcpp::_, i);

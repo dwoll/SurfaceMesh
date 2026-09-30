@@ -1,0 +1,4 @@
+export(getFaceColors)
+export(getVertexColors)
+export(setFaceColors)
+export(setVertexColors)

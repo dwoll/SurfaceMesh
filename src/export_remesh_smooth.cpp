@@ -30,6 +30,7 @@ Rcpp::List remeshSmoothShape_cpp(
   const unsigned int nIter,
   const double time,
   const bool normals) {
+    using face_descriptor = boost::graph_traits<Mesh3>::face_descriptor;
     Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
@@ -43,16 +44,16 @@ Rcpp::List remeshSmoothShape_cpp(
       }
     }
     CGAL::Boolean_property_map<std::set<Mesh3::Vertex_index>> vcmap(constrained_vertices);
-    const size_t nIdx = indices.size();
+    const std::size_t nIdx = indices.size();
     if(nIdx == 0) {
         PMP::smooth_shape(mesh, time,
                           CGAL::parameters::number_of_iterations(nIter)
                           .vertex_is_constrained_map(vcmap));
     } else {
-        std::list<fc_dscrptr> selectedFaces;
-        const size_t nFaces = mesh.number_of_faces();
+        std::list<face_descriptor> selectedFaces;
+        const std::size_t nFaces = mesh.number_of_faces();
         for(std::size_t i = 0; i < nIdx; i++) {
-          const size_t idx = indices(i);
+          const std::size_t idx = indices(i);
           if(idx >= nFaces) {
             Rcpp::stop("Face index too large.");
           }

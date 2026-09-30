@@ -14,6 +14,7 @@
 #include "SurfaceMesh.h"
 #endif
 
+#include <CGAL/property_map.h>
 #include <CGAL/AABB_tree.h>
 #include <CGAL/AABB_face_graph_triangle_primitive.h>
 #include <CGAL/AABB_traits_3.h>
@@ -29,17 +30,6 @@
 void rmessage(std::string msg) {
   SEXP rmsg = Rcpp::wrap(msg);
   Rcpp::message(rmsg);
-}
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-bool is_triangle_soup(const std::vector<std::vector<std::size_t>> &polygons) {
-    for(const auto& poly : polygons) {
-        if (poly.size() != 3) {
-            return false;
-        }
-    }
-    return true;
 }
 
 // ----------------------------------------------------------------------- //

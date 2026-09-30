@@ -30,6 +30,19 @@ std::string toLower(std::string s) {
 }
 
 // ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+Rcpp::List faces_to_list(std::vector<std::vector<std::size_t>> &faces) {
+    const std::size_t nFaces = faces.size();
+    Rcpp::List face_list(nFaces);
+    for(std::size_t i = 0; i < nFaces; i++) {
+      const std::vector<std::size_t> face_i = faces[i];
+      Rcpp::IntegerVector col_i(face_i.begin(), face_i.end());
+      face_list(i) = col_i + 1;  // vectorized + 1?
+    }
+    return face_list;
+}
+
+// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List readFileSoup_cpp(const std::string filename, const bool verbose) {
     std::vector<Point3> points;
@@ -39,25 +52,11 @@ Rcpp::List readFileSoup_cpp(const std::string filename, const bool verbose) {
     if(!ok) {
       Rcpp::stop("Reading failure.");
     }
-    const std::size_t nPts = points.size();
-    Rcpp::NumericMatrix vertex_mat(3, nPts);
-    for(std::size_t i = 0; i < nPts; i++) {
-      const Point3 point_i = points[i];
-      Rcpp::NumericVector col_i =
-          Rcpp::NumericVector::create(point_i.x(), point_i.y(), point_i.z());
-      vertex_mat(Rcpp::_, i) = col_i;
-    }
-    const std::size_t nFaces = faces.size();
-    Rcpp::List face_list(nFaces);
-    for(std::size_t i = 0; i < nFaces; i++) {
-      const std::vector<std::size_t> face_i = faces[i];
-      Rcpp::IntegerVector col_i(face_i.begin(), face_i.end());
-      face_list(i) = col_i + 1;
-    }
-    Rcpp::List out;
-    out["vertices"] = Rcpp::transpose(vertex_mat);
-    out["faces"]    = face_list;
-    return out;
+    Rcpp::NumericMatrix vertex_mat = points3_to_matrix<K, Point3>(points);
+    Rcpp::List          face_list  = faces_to_list(faces);
+    return Rcpp::List::create(
+        Rcpp::Named("vertices") = Rcpp::transpose(vertex_mat),
+        Rcpp::Named("faces")    = face_list);
 }
 
 // ----------------------------------------------------------------------- //

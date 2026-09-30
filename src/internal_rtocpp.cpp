@@ -14,10 +14,12 @@
 #include "SurfaceMesh.h"
 #endif
 
-#include <CGAL/Polygon_mesh_processing/repair_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/Polygon_mesh_processing/repair_polygon_soup.h>
+#include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 #include <CGAL/Polygon_mesh_processing/IO/polygon_mesh_io.h>
+#include <CGAL/Polygon_mesh_processing/self_intersections.h>
 #include <CGAL/IO/io.h>
 
 // ----------------------------------------------------------------------- //
@@ -107,6 +109,17 @@ std::pair<std::vector<std::vector<std::size_t>>, bool> list_to_faces2(
     triangle = triangle && (face.size() == 3);
   }
   return std::make_pair(faces, triangle);
+}
+
+// ----------------------------------------------------------------------- //
+// ----------------------------------------------------------------------- //
+bool is_triangle_soup(const std::vector<std::vector<std::size_t>> &polygons) {
+    for(const auto& poly : polygons) {
+        if (poly.size() != 3) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // ----------------------------------------------------------------------- //

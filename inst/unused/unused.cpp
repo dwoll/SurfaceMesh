@@ -78,37 +78,6 @@ template std::optional<Rcpp::IntegerMatrix> getVColors<K,  Mesh3,  Vector3>(cons
 template std::optional<Rcpp::IntegerMatrix> getVColors<EK, EMesh3, EVector3>(const EMesh3&);
 
 // ----------------------------------------------------------------------- //
-// return existing v:normal property map as R matrix
-template <typename KernelT, typename MeshT, typename VectorT>
-std::optional<Rcpp::NumericMatrix> getVNormals(const MeshT &mesh) {
-    using vertex_descriptor  = typename boost::graph_traits<MeshT>::vertex_descriptor;
-    using vertex_normals_map = typename MeshT::template Property_map<vertex_descriptor, VectorT>;
-    std::optional<Rcpp::NumericMatrix> normals_mat;
-    std::optional<vertex_normals_map> pmap_ =
-        mesh.template property_map<vertex_descriptor, VectorT>("v:normal");
-
-    if(pmap_.has_value()) {
-        std::size_t i = 0;
-        Rcpp::NumericMatrix nm(3, mesh.number_of_vertices());
-        vertex_normals_map vnormmap = pmap_.value();
-        for(vertex_descriptor vd : vertices(mesh)) {
-            Rcpp::NumericVector col_i(3);
-            VectorT normal = vnormmap[vd];    // CGAL::SM_Vertex_index(i)
-            col_i(0) = CGAL::to_double<typename KernelT::FT>(normal.x());
-            col_i(1) = CGAL::to_double<typename KernelT::FT>(normal.y());
-            col_i(2) = CGAL::to_double<typename KernelT::FT>(normal.z());
-            nm(Rcpp::_, i) = col_i;
-            i++;
-        }
-        normals_mat = std::move(nm);
-    }
-    return normals_mat;
-}
-
-template std::optional<Rcpp::NumericMatrix> getVNormals<K,  Mesh3,  Vector3>(const Mesh3&);
-template std::optional<Rcpp::NumericMatrix> getVNormals<EK, EMesh3, EVector3>(const EMesh3&);
-
-// ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::Nullable<Rcpp::IntegerMatrix> getFaceColors_cpp(const Rcpp::List rmesh) {
     Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
@@ -223,15 +192,6 @@ std::optional<vertex_colors_map> vcolmap_ =
 std::optional<vertex_normals_map> vnormmap_ =
   mesh.template property_map<vertex_descriptor, VectorT>("v:normal");
 
-if () {
-    ...
-} else if(vnormmap_.has_value()) {
-    std::optional<Rcpp::NumericMatrix> normals_mat = getVNormals<KernelT, MeshT, VectorT>(mesh);
-    if(normals_mat.has_value()) {
-        out["normals"] = normals_mat.value();
-    }
-}
-
 // vertex colors or face colors? either - or
 if(fcolmap_.has_value() || vcolmap_.has_value()) {
     if(vcolmap_.has_value()) {
@@ -246,22 +206,6 @@ if(fcolmap_.has_value() || vcolmap_.has_value()) {
         }
     }
 }
-
-// ----------------------------------------------------------------------- //
-// ----------------------------------------------------------------------- //
-
-typedef boost::graph_traits<Mesh3>::vertex_descriptor                vrtx_dscrptr;
-typedef Mesh3::Property_map<vrtx_dscrptr, Rcpp::NumericVector>       nrmls_map_r;
-
-typedef boost::graph_traits<EMesh3>::vertex_descriptor               vrtx_descriptor;
-typedef EMesh3::Property_map<vrtx_descriptor, Rcpp::NumericVector>   normals_map_r;
-
-typedef boost::graph_traits<EMesh3>::edge_descriptor                 dg_descriptor;
-typedef boost::graph_traits<EMesh3>::halfedge_descriptor             hlfdg_descriptor;
-
-// EPoint3 with normal EVector3
-typedef std::pair<EPoint3, EVector3>                                 EP3EV3;
-typedef boost::graph_traits<EMesh3>::face_descriptor                 fc_descriptor;
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
@@ -297,12 +241,10 @@ template bool is_small_hole<EMesh3, EPoint3>(typename boost::graph_traits<EMesh3
 // ----------------------------------------------------------------------- //
 
 Rcpp::NumericVector defaultNormal() {
-  Rcpp::NumericVector def =
-    {
+  Rcpp::NumericVector def = {
       Rcpp::NumericVector::get_na(),
       Rcpp::NumericVector::get_na(),
-      Rcpp::NumericVector::get_na()
-    };
+      Rcpp::NumericVector::get_na() };
   return def;
 }
 
@@ -333,7 +275,7 @@ property_map_pair(MeshT &mesh, const std::string name) {
 // ----------------------------------------------------------------------- //
 
 (const Rcpp::Nullable<Rcpp::NumericMatrix> &normals_)
-using norm_map_r   = typename MeshT::template Property_map<v_descriptor, Rcpp::NumericVector>;
+using norm_map_r = typename MeshT::template Property_map<v_descriptor, Rcpp::NumericVector>;
 using vertex_descriptor = typename boost::graph_traits<MeshT>::vertex_descriptor;
 if(normals_.isNotNull()) {
   Rcpp::NumericMatrix normals_mat(normals_);

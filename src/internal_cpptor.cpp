@@ -14,6 +14,7 @@
 #include "SurfaceMesh.h"
 #endif
 
+#include <CGAL/property_map.h>
 #include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 
 // ----------------------------------------------------------------------- //
