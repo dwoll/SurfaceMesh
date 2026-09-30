@@ -17,9 +17,10 @@
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
 #' @param method \code{character}. One of \code{"CC"} (Catmull-Clark),
-#'   \code{"DS"} (Doo-Sabin), \code{"L"} (Loop), \code{"S3"} (Sqrt3).
+#'   \code{"DS"} (Doo-Sabin), \code{"Loop"} (Loop), \code{"Sqrt3"} (Sqrt3).
 #' @param nIter Positive \code{integer}: Number of iterations.
 #' @param triangulate Boolean. For \code{method="DS"}. Triangulate resulting mesh?
+#'   For other methods, result is automatically triangulated.
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Subdivision_method_3/} for details.
@@ -31,14 +32,18 @@
 #'
 #' mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 #' mesh_rgl    <- toRGL(mesh)
-#' mesh_cc     <- subdivideCatmullClark(mesh, nIter=2L)
+#' mesh_cc     <- subdivide(mesh, method="CC", nIter=2L)
+#' mesh_ds     <- subdivide(mesh, method="DS", nIter=2L)
 #' mesh_cc_rgl <- toRGL(mesh_cc)
+#' mesh_ds_rgl <- toRGL(mesh_ds)
 #'
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
-#' mfrow3d(1, 2)
+#' open3d(windowRect=50 + c(0, 0, 1200, 400))
+#' mfrow3d(1, 3)
 #' wire3d(mesh_rgl)
 #' next3d()
 #' wire3d(mesh_cc_rgl)
+#' next3d()
+#' wire3d(mesh_ds_rgl)
 #'
 #' @export
 subdivide <- function(x,
