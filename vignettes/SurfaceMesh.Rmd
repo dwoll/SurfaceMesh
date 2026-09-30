@@ -365,7 +365,7 @@ wire3d(mesh_ds_rgl)
 ```{r}
 mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
-mesh_l     <- subdivide(mesh, method="L", nIter=1L)
+mesh_l     <- subdivide(mesh, method="Loop", nIter=1L)
 mesh_l_rgl <- toRGL(mesh_l)
 
 mfrow3d(1, 2)
@@ -381,7 +381,7 @@ wire3d(mesh_l_rgl)
 ```{r}
 mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_s3     <- subdivide(mesh, method="S3", nIter=2L)
+mesh_s3     <- subdivide(mesh, method="Sqrt3", nIter=2L)
 mesh_s3_rgl <- toRGL(mesh_s3)
 
 mfrow3d(1, 2)

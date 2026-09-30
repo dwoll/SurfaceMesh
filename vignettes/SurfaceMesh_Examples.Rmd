@@ -1,5 +1,5 @@
 ---
-title: "SurfaceMesh: Example Meshes"
+title: "SurfaceMesh Examples"
 author: "Daniel Wollschläger (<wollschlaeger@uni-mainz.de>)"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
