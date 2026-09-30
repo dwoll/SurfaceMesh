@@ -505,7 +505,7 @@ wire3d(bb1_rgl)
 ```{r}
 mesh2     <- dataHeart1
 mesh2_rgl <- toRGL(mesh2)
-bb2       <- getBounding(mesh2, oriented=TRUE)
+bb2       <- getBoundingBox(mesh2, oriented=TRUE)
 bb2_rgl   <- toRGL(bb2[["mesh"]])
 open3d(windowRect=50 + c(0, 0, 800, 400))
 wire3d(mesh2_rgl)
