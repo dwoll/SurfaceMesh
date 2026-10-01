@@ -93,6 +93,10 @@ getDistance_cpp <- function(rmesh, rpoints) {
     .Call(`_SurfaceMesh_getDistance_cpp`, rmesh, rpoints)
 }
 
+getVertexNormals_cpp <- function(rmesh) {
+    .Call(`_SurfaceMesh_getVertexNormals_cpp`, rmesh)
+}
+
 getVolume_cpp <- function(rmesh) {
     .Call(`_SurfaceMesh_getVolume_cpp`, rmesh)
 }
@@ -119,6 +123,10 @@ removeSelfIntersections_cpp <- function(rmesh, method, normals, verbose) {
 
 samplePoints_cpp <- function(rmesh, ropts) {
     .Call(`_SurfaceMesh_samplePoints_cpp`, rmesh, ropts)
+}
+
+setVertexNormals_cpp <- function(rmesh, rnormals) {
+    .Call(`_SurfaceMesh_setVertexNormals_cpp`, rmesh, rnormals)
 }
 
 triangulateMesh_cpp <- function(rmesh, normals) {

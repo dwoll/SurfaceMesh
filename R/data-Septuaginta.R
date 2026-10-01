@@ -6,11 +6,11 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a septuaginta
+#' @title Mesh of a septuaginta
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing a septuaginta, i.e. a polyhedron with 72
 #'    faces like a sphere based on the drawing by Leonardo da Vinci.
-#' @format A list with components \code{vb}, \code{it}, and \code{normals}.
+#' @format A list with components \code{vb}, \code{it}, and \code{ib}.
 #' @author Originally developed by Stephane Laurent.
 #' @examples
 #' ## The following files were used to generate this mesh.

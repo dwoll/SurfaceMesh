@@ -24,7 +24,7 @@ A number. For the apprixmate distance, the algorithm uses
 simulation, and thus the result can vary.
 }
 \description{
-Hausdorff distance between two meshes. Either the
+Hausdorff distance between two 3D surface meshes. Either the
 approximate distance, or the distance estimate with a given error bound.
 }
 \details{

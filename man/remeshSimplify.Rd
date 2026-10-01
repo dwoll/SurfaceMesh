@@ -2,7 +2,7 @@
 % Please edit documentation in R/remeshSimplify.R
 \name{remeshSimplify}
 \alias{remeshSimplify}
-\title{Triangulated Surface Mesh Simplification}
+\title{Triangulated surface mesh simplification}
 \usage{
 remeshSimplify(
   x,
@@ -19,7 +19,7 @@ remeshSimplify(
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{repairSoup}{Boolean. Clean the mesh (merging duplicated
+\item{repairSoup}{Boolean. Clean the input mesh (merging duplicated
 vertices and duplicated faces, removing isolated vertices)?}
 
 \item{repairMesh}{Boolean. Try to remove self-intersections from output mesh?}

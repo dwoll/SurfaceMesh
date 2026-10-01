@@ -3,9 +3,9 @@
 \docType{data}
 \name{dataSeptuaginta}
 \alias{dataSeptuaginta}
-\title{A mesh of a septuaginta}
+\title{Mesh of a septuaginta}
 \format{
-A list with components \code{vb}, \code{it}, and \code{normals}.
+A list with components \code{vb}, \code{it}, and \code{ib}.
 }
 \usage{
 dataSeptuaginta

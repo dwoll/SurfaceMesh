@@ -24,6 +24,7 @@
 Rcpp::NumericMatrix normals_jet_pca_cpp(const Rcpp::NumericMatrix pts,
                                         const unsigned int nNeighbors,
                                         const Rcpp::String method) {
+  using P3V3 = std::pair<Point3, Vector3>;  // Point3 with normal Vector3
   const std::size_t nPts = pts.ncol();
   std::vector<P3V3> points_wn(nPts);
   for(std::size_t i = 0; i < nPts; i++) {

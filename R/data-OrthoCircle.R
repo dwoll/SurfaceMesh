@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of an Ortho Circle
+#' @title Mesh of an ortho circle
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing an Ortho Circle.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.

@@ -24,7 +24,7 @@ duplicated vertices, duplicated faces, removing isolated vertices)?}
 A \code{CGALmesh} object.
 }
 \description{
-Reconstruction of a surface mesh from a cloud of 3D points.
+Advancing front surface reconstruction of a 3D surface mesh from a cloud of 3D points.
 }
 \details{
 See \url{https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/}

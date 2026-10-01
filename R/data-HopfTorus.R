@@ -6,10 +6,10 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a Hopf torus
-#' @description An object of class \code{\link[rgl]{mesh3d}} from package
-#'    \strong{rgl} representing a Hopf torus.
-#' @format A list with components \code{vb}, \code{it}, and \code{normals}.
+#' @title Mesh of a Hopf torus
+#' @description A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}} representing a Hopf torus.
+#' @format A \code{CGALmesh} object.
 #' @author Originally developed by Stephane Laurent.
 #' @examples
 #' ## The following files were used to generate this mesh.

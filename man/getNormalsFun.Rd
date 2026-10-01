@@ -2,7 +2,7 @@
 % Please edit documentation in R/normals.R
 \name{getNormalsFun}
 \alias{getNormalsFun}
-\title{Normals for a point cloud}
+\title{Function to generate normals for a point cloud}
 \usage{
 getNormalsFun(x, method = c("PCA", "Jet"))
 }
@@ -12,7 +12,7 @@ getNormalsFun(x, method = c("PCA", "Jet"))
 \item{method}{One of \code{"PCA"} to estimate the normal direction at
 each point by linear least squares fitting of a plane over its nearest
 neighbors, or \code{"Jet"} to estimate the normal direction at each
-point by fitting a jet surface over its nearest neighbors). See details.}
+point by fitting a jet surface over its nearest neighbors. See details.}
 }
 \value{
 A function which takes one argument: a numeric matrix with
@@ -26,8 +26,6 @@ Returns a function which estimates normals for a
 }
 \details{
 See \url{https://doc.cgal.org/latest/Point_set_processing_3/} for details.
-}
-\note{
 The \code{getNormalsFun} function is intended to be used in the
 \code{\link[SurfaceMesh]{reconstructPoisson}} function. If you want to use it for
 another purpose, be careful because the function it returns does not

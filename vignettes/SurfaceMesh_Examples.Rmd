@@ -1,5 +1,5 @@
 ---
-title: "SurfaceMesh: Example Meshes"
+title: "SurfaceMesh Examples"
 author: "Daniel Wollschläger (<wollschlaeger@uni-mainz.de>)"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -32,7 +32,7 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
 
 # Geometric Meshes
 
-The geometric meshes included in package `SurfaceMesh` were originally part of R packages [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/) and [`cgalMeshes`](https://github.com/stla/cgalMeshes/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Please see the following directory for the `.R` scripts for how to generate the meshes.
+The geometric meshes included in package `SurfaceMesh` were originally part of R packages [`SurfaceReconstruction`](https://github.com/stla/SurfaceReconstruction/) and [`cgalMeshes`](https://github.com/stla/cgalMeshes/), developed and copyright by [Stéphane Laurent](https://laustep.github.io/stlahblog/). Please see the following directory for the `.R` scripts that generate the meshes.
 
 ```{r}
 ## package installation directory depends on system

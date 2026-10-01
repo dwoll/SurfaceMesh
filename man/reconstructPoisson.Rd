@@ -17,7 +17,8 @@ reconstructPoisson(
 \arguments{
 \item{x}{Numeric matrix with 3 columns which stores the points, one point per row.}
 
-\item{normalsFun}{A function to generate normals, e.g., as returned by
+\item{normalsFun}{A function that accepts a matrix with 3D points and uses it to
+return a matrix with normals. Such a function is returned by
 \code{\link[SurfaceMesh]{getNormalsFun}}.}
 
 \item{spacing}{Optional size parameter. Smaller values increase the precision
@@ -36,13 +37,12 @@ an average spacing is chosen as a reasonable default value.}
 A \code{CGALmesh} object.
 }
 \description{
-Poisson reconstruction of a surface, from a cloud of 3D points.
-Performs well if the aim is to approximate a noisy point cloud with a smooth surface.
-Not appropriate if the surface is expected to interpolate the input points.
+Poisson reconstruction of a 3D surface mesh from a cloud of 3D points.
 }
 \details{
 See \url{https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/}
-for details.
+for details. Performs well if the aim is to approximate a noisy point cloud with a smooth surface.
+Not appropriate if the surface is expected to interpolate the input points.
 }
 \examples{
 library(SurfaceMesh)

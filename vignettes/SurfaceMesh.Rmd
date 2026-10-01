@@ -104,12 +104,14 @@ wire3d(mesh_tri_rgl)
 
 ## Vertex normals
 
+Calculate vertex normals when creating a mesh.
+
 ```{r}
 mesh <- makeMesh(dataToroHelix, normals=TRUE)
 mesh
 ```
 
-Or
+Calculate vertex normals for existing mesh.
 
 ```{r}
 mesh    <- makeMesh(dataToroHelix, normals=FALSE)
@@ -121,6 +123,30 @@ shade3d(toRGL(mesh), col="tomato")
 next3d()
 view3d(0, 30, zoom=0.8)
 shade3d(toRGL(mesh_vn), col="turquoise4")
+```
+
+Extract vertex normals.
+
+```{r}
+mesh <- makeMeshValid(dataSphere, normals=TRUE)
+vn   <- getVertexNormals(mesh)
+head(vn)
+```
+
+Set vertex normals to given matrix.
+
+```{r}
+## random unit normal vectors
+mesh    <- makeMesh(dataPentaPrism, triangulate=TRUE, normals=FALSE)
+nVerts  <- nrow(mesh[["vertices"]])
+nrmls0  <- matrix(runif(nVerts*3), ncol=3)
+lens    <- sqrt(diag(tcrossprod(nrmls0)))
+nrmls   <- diag(1/lens) %*% nrmls0
+
+## set vertex normals
+mesh_vn <- setVertexNormals(mesh, nrmls)
+head(mesh_vn[["normals"]])
+head(nrmls)
 ```
 
 # Mesh Repair
@@ -307,7 +333,7 @@ See [`CGAL subdivision`](https://doc.cgal.org/latest/Subdivision_method_3/)
 ```{r}
 mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_cc     <- subdivideCatmullClark(mesh, nIter=2L)
+mesh_cc     <- subdivide(mesh, method="CC", nIter=2L)
 mesh_cc_rgl <- toRGL(mesh_cc)
 
 mfrow3d(1, 2)
@@ -323,7 +349,7 @@ wire3d(mesh_cc_rgl)
 ```{r}
 mesh        <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl    <- toRGL(mesh)
-mesh_ds     <- subdivideDooSabin(mesh, nIter=1L)
+mesh_ds     <- subdivide(mesh, method="DS", nIter=1L)
 mesh_ds_rgl <- toRGL(mesh_ds)
 
 mfrow3d(1, 2)
@@ -334,28 +360,12 @@ view3d(0, 30, zoom=0.8)
 wire3d(mesh_ds_rgl)
 ```
 
-## Sqrt3
-
-```{r}
-mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
-mesh_rgl    <- toRGL(mesh)
-mesh_s3     <- subdivideSqrt3(mesh, nIter=2L)
-mesh_s3_rgl <- toRGL(mesh_s3)
-
-mfrow3d(1, 2)
-view3d(0, 30, zoom=0.8)
-wire3d(mesh_rgl)
-next3d()
-view3d(0, 30, zoom=0.8)
-wire3d(mesh_s3_rgl)
-```
-
 ## Loop
 
 ```{r}
 mesh       <- makeMesh(dataSeptuaginta, triangulate=TRUE)
 mesh_rgl   <- toRGL(mesh)
-mesh_l     <- subdivideLoop(mesh, nIter=1L)
+mesh_l     <- subdivide(mesh, method="Loop", nIter=1L)
 mesh_l_rgl <- toRGL(mesh_l)
 
 mfrow3d(1, 2)
@@ -366,12 +376,29 @@ view3d(0, 30, zoom=0.8)
 wire3d(mesh_l_rgl)
 ```
 
+## Sqrt3
+
+```{r}
+mesh        <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl    <- toRGL(mesh)
+mesh_s3     <- subdivide(mesh, method="Sqrt3", nIter=2L)
+mesh_s3_rgl <- toRGL(mesh_s3)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_s3_rgl)
+```
+
 # Surface Reconstruction
 ## Removing outliers from point cloud
 
 ```{r}
-ptsBefore   <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
-(avgSpacing <- getAverageSpacing(ptsBefore, nNeighbors=6L))
+ptsBefore <- matrix(rnorm(120L, mean=0, sd=1), ncol=3L)
+getAverageSpacing(ptsBefore, nNeighbors=6L)
+
 ## contaminate
 idx              <- sample(seq_len(nrow(ptsBefore)), 4L, replace=FALSE)
 ptsBefore[idx, ] <- matrix(rnorm(12L, mean=10, sd=1), ncol=3L)
@@ -463,27 +490,26 @@ shade3d(mesh_aw_rgl, col="mediumseagreen")
 ## Axis-parallel Bounding Box
 
 ```{r}
-mesh     <- dataOloid
-mesh_rgl <- toRGL(mesh)
-bb       <- getBoundingBox(mesh)
-bb_rgl   <- toRGL(bb)
+mesh1     <- dataOloid
+mesh1_rgl <- toRGL(mesh1)
+bb1       <- getBoundingBox(mesh1)
+bb1_rgl   <- toRGL(bb1)
 
 view3d(0, 30, zoom=0.9)
-wire3d(mesh_rgl)
-wire3d(bb_rgl)
+wire3d(mesh1_rgl)
+wire3d(bb1_rgl)
 ```
 
 ## Optimal (Oriented) Bounding Box
 
 ```{r}
-mesh     <- dataHeart1
-mesh_rgl <- toRGL(mesh)
-obb      <- getBoundingBoxOptimal(mesh)
-obb_rgl  <- toRGL(obb[["mesh"]])
-
-view3d(0, -90, zoom=0.8)
-wire3d(mesh_rgl)
-wire3d(obb_rgl)
+mesh2     <- dataHeart1
+mesh2_rgl <- toRGL(mesh2)
+bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+bb2_rgl   <- toRGL(bb2)
+open3d(windowRect=50 + c(0, 0, 800, 400))
+wire3d(mesh2_rgl)
+wire3d(bb2_rgl)
 ```
 
 ## Convex Hull
@@ -540,16 +566,16 @@ points <- matrix(2*runif(3*4), ncol=3)
 getDistance(mesh, points)
 ```
 
-## Surface Distance between two Meshes
-### Distance between the two respective centers of mass (DCOM)
+## Surface Distance Between two Meshes
+### Distance Between the two Respective Centers of Mass (DCOM)
 
 ```{r}
 getDCOM(dataHeart1, dataHeart2)
 ```
 
-### Hausdorff distance
+### Hausdorff Distance
 
-See [`CGAL` Hausdorff distance](https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance)
+See [`CGAL` Hausdorff distance](https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance), [dkfz metrics reloaded: HD](https://metrics-reloaded.dkfz.de/metric-library/hd)
 
 Approximate
 
@@ -571,7 +597,7 @@ getHausdorffQuantile(dataHeart1, dataHeart2, p=0.95)
 
 ### Average symmetric surface distance (ASSD) and Root Mean Squared Error (RMSE)
 
-See [dkfz metric reloaded: ASSD](https://metrics-reloaded.dkfz.de/metric-library/assd)
+See [dkfz metrics reloaded: ASSD](https://metrics-reloaded.dkfz.de/metric-library/assd)
 
 ```{r}
 sd_heart <- getSurfaceDist(dataHeart1, dataHeart2, p=0.95, ptsOnFaces=100L)
@@ -581,8 +607,8 @@ sd_heart[["RMSE"]]
 
 ## Volume-Overlap Based Similarity Measures
 
-  * [dkfz metric reloaded: Jaccard Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/intersection_over_union) (JSC, aka 'Intersection over Union', IoU)
-  * [dkfz metric reloaded: Dice Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/dsc) (DSC)
+  * [dkfz metrics reloaded: Jaccard Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/intersection_over_union) (JSC, aka 'Intersection over Union', IoU)
+  * [dkfz metrics reloaded: Dice Similarity Coefficient](https://metrics-reloaded.dkfz.de/metric-library/dsc) (DSC)
 
 ```{r}
 mesh1_rgl <- cube3d()      # (from the rgl package)

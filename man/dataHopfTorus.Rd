@@ -3,16 +3,16 @@
 \docType{data}
 \name{dataHopfTorus}
 \alias{dataHopfTorus}
-\title{A mesh of a Hopf torus}
+\title{Mesh of a Hopf torus}
 \format{
-A list with components \code{vb}, \code{it}, and \code{normals}.
+A \code{CGALmesh} object.
 }
 \usage{
 dataHopfTorus
 }
 \description{
-An object of class \code{\link[rgl]{mesh3d}} from package
-\strong{rgl} representing a Hopf torus.
+A \code{CGALmesh} object, i.e., the output of
+\code{\link[SurfaceMesh]{makeMesh}} representing a Hopf torus.
 }
 \examples{
 ## The following files were used to generate this mesh.

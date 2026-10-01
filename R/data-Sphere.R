@@ -6,11 +6,11 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A sphere
+#' @title Mesh of a sphere
 #'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing a sphere
-#' @format A list with components \code{vb}, \code{it}.
+#' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @examples
 #' ## The following files were used to generate this mesh.
 #' system.file("data-raw", "Sphere.R",            package="SurfaceMesh")

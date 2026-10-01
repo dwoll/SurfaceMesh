@@ -3,10 +3,10 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title Triangulated Surface Mesh Simplification
+#' @title Triangulated surface mesh simplification
 #' @description Simplification of a triangular 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Clean the mesh (merging duplicated
+#' @param repairSoup Boolean. Clean the input mesh (merging duplicated
 #'   vertices and duplicated faces, removing isolated vertices)?
 #' @param repairMesh Boolean. Try to remove self-intersections from output mesh?
 #' @param method \code{character}. Cost and placement strategy. One of

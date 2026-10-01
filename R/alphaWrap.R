@@ -11,8 +11,8 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title 3D alpha wrapping
-#' @description Reconstruction of a surface mesh from a cloud of 3D points
-#'   by alpha wrapping.
+#' @description Reconstruction of a 3D surface mesh from a cloud of 3D
+#'   points by alpha wrapping.
 #'
 #' @param x A \code{CGALmesh} object, i.e.,
 #'   the output of \code{\link[SurfaceMesh]{makeMesh}}, or a numeric matrix

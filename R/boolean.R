@@ -11,7 +11,7 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title Intersection of meshes
-#' @description Compute the intersection of the given meshes.
+#' @description Compute the intersection of the given 3D surface meshes.
 #'
 #' @param x A list of meshes, each being either a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
@@ -78,15 +78,16 @@ boolIntersection <- function(x, repairSoup=TRUE, normals=FALSE, verbose=FALSE) {
 }
 
 #' @title Difference between two meshes
-#' @description Compute the difference \code{mesh1} - \code{mesh2}.
+#' @description Compute the difference between two 3D surface meshes
+#'   (\code{mesh1} - \code{mesh2}).
 #'
-#' @param mesh1 A mesh, either being given a \code{\link[rgl]{mesh3d}} object
-#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#' @param mesh1 A mesh, either given as a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or as a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param mesh2 A mesh, either being given a \code{\link[rgl]{mesh3d}} object
-#'   from package \strong{rgl}, or a \code{CGALmesh} object,
+#' @param mesh2 A mesh, either given as a \code{\link[rgl]{mesh3d}} object
+#'   from package \strong{rgl}, or as a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Clean the meshes (merging duplicated
+#' @param repairSoup Boolean. Clean the input meshes (merging duplicated
 #'   vertices, duplicated faces, removing isolated vertices)? Set to
 #'   \code{FALSE} if you know the meshes are clean to gain some speed.
 #' @param normals Boolean. Return vertex normals of the output mesh?
@@ -153,7 +154,7 @@ boolDifference <- function(
 #' @param x A list of meshes, each being either a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Clean the meshes (merging duplicated
+#' @param repairSoup Boolean. Clean the input meshes (merging duplicated
 #'   vertices, duplicated faces, removing isolated vertices)? Set to
 #'   \code{FALSE} if you know the meshes are clean to gain some speed.
 #' @param normals Boolean. Return vertex normals of the output mesh?
@@ -216,7 +217,7 @@ boolUnion <- function(x, repairSoup = TRUE, normals = FALSE, verbose = FALSE) {
 #' @param mesh2 Either a \code{\link[rgl]{mesh3d}} object
 #'   from package \strong{rgl}, or a \code{CGALmesh} object,
 #'   i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param repairSoup Boolean. Clean the meshes (merging duplicated
+#' @param repairSoup Boolean. Clean the input meshes (merging duplicated
 #'   vertices, duplicated faces, removing isolated vertices)? Set to
 #'   \code{FALSE} if you know the meshes are clean to gain some speed.
 #' @param verbose Boolean. Print out messages about mesh processing?

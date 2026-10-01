@@ -3,9 +3,9 @@
 \docType{data}
 \name{dataTubularKnot}
 \alias{dataTubularKnot}
-\title{A mesh of a tubular knot}
+\title{Mesh of a tubular knot}
 \format{
-A list with components \code{vb}, \code{it}, and \code{normals}.
+A list with components \code{vb}, \code{it}.
 }
 \usage{
 dataTubularKnot

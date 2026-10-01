@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataHeart2}
 \alias{dataHeart2}
-\title{A mesh of a human heart from a CT scan}
+\title{Mesh of a human heart from a CT scan}
 \format{
 A \code{CGALmesh} object.
 }

@@ -13,15 +13,15 @@ boolDifference(
 )
 }
 \arguments{
-\item{mesh1}{A mesh, either being given a \code{\link[rgl]{mesh3d}} object
-from package \strong{rgl}, or a \code{CGALmesh} object,
+\item{mesh1}{A mesh, either given as a \code{\link[rgl]{mesh3d}} object
+from package \strong{rgl}, or as a \code{CGALmesh} object,
 i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{mesh2}{A mesh, either being given a \code{\link[rgl]{mesh3d}} object
-from package \strong{rgl}, or a \code{CGALmesh} object,
+\item{mesh2}{A mesh, either given as a \code{\link[rgl]{mesh3d}} object
+from package \strong{rgl}, or as a \code{CGALmesh} object,
 i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{repairSoup}{Boolean. Clean the meshes (merging duplicated
+\item{repairSoup}{Boolean. Clean the input meshes (merging duplicated
 vertices, duplicated faces, removing isolated vertices)? Set to
 \code{FALSE} if you know the meshes are clean to gain some speed.}
 
@@ -33,7 +33,8 @@ vertices, duplicated faces, removing isolated vertices)? Set to
 A \code{CGALmesh} object.
 }
 \description{
-Compute the difference \code{mesh1} - \code{mesh2}.
+Compute the difference between two 3D surface meshes
+(\code{mesh1} - \code{mesh2}).
 }
 \details{
 See \url{https://doc.cgal.org/latest/PMP_Boolean_operations/} for details.

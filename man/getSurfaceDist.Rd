@@ -78,7 +78,7 @@ The algorithm uses random sampling, so the result can vary.
 }
 \description{
 Quantile Hausdorff distance (HD), average symmetric surface distance (ASSD),
-and root mean squared error (RMSE) for the surface distance between two meshes.
+and root mean squared error (RMSE) for the surface distance between two 3D surface meshes.
 }
 \details{
 See \code{\link[SurfaceMesh]{getHausdorffQuantile}} for details on the quantile
@@ -96,7 +96,4 @@ getSurfaceDist(dataHeart1, dataHeart2, p=0.95, ptsOnFaces=1000L)
 See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance,
 \code{\link[SurfaceMesh]{getHausdorffQuantile}} for the quantile Hausdorff distance, and
 \code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
-}
-\author{
-Daniel Wollschlaeger.
 }

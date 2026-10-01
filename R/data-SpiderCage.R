@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of a Spider Cage
+#' @title Mesh of a spider cage
 #'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing a Spider Cage.

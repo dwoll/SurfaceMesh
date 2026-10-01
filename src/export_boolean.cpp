@@ -16,6 +16,7 @@
 
 #include <CGAL/Polygon_mesh_processing/corefinement.h>
 #include <CGAL/Polygon_mesh_processing/measure.h>
+#include <CGAL/Polygon_mesh_processing/self_intersections.h>
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
@@ -41,7 +42,7 @@ void checkMesh2(const MeshT &mesh, const std::string& what) {
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
-template <typename KernelT, typename MeshT, typename PointT>
+template <typename KernelT, typename MeshT, typename PointT, typename VectorT>
 MeshT boolIntersection(const Rcpp::List &rmeshes,
                        const bool repairSoup,
                        const bool verbose) {
@@ -52,7 +53,7 @@ MeshT boolIntersection(const Rcpp::List &rmeshes,
   std::vector<MeshT> meshes(nMeshes);
   Rcpp::List rmesh_0 = Rcpp::as<Rcpp::List>(rmeshes(0));
   if(verbose) { rmessage("Processing mesh1"); }
-  MeshT mesh_0 = make_surf_mesh_valid<MeshT, PointT>(
+  MeshT mesh_0 = make_surf_mesh_valid<MeshT, PointT, VectorT>(
       rmesh_0,
       true,        // soup
       true,        // triangulate - must be triangle
@@ -69,7 +70,7 @@ MeshT boolIntersection(const Rcpp::List &rmeshes,
     const std::string meshnum = std::to_string(i + 1);
     Rcpp::List rmesh_i = Rcpp::as<Rcpp::List>(rmeshes(i));
     if(verbose) { rmessage("Processing mesh" + meshnum); }
-    MeshT mesh_i = make_surf_mesh_valid<MeshT, PointT>(
+    MeshT mesh_i = make_surf_mesh_valid<MeshT, PointT, VectorT>(
         rmesh_i,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -91,19 +92,19 @@ Rcpp::List boolIntersectionEK_cpp(const Rcpp::List rmeshes,
                                   const bool repairSoup,
                                   const bool normals,
                                   const bool verbose) {
-  EMesh3 mesh = boolIntersection<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  EMesh3 mesh = boolIntersection<EK, EMesh3, EPoint3, EVector3>(rmeshes, repairSoup, verbose);
   return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
 }
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
-template <typename KernelT, typename MeshT, typename PointT>
+template <typename KernelT, typename MeshT, typename PointT, typename VectorT>
 MeshT boolDifference(const Rcpp::List &rmesh1,
                      const Rcpp::List &rmesh2,
                      const bool repairSoup,
                      const bool verbose) {
   if(verbose) { rmessage("Processing mesh1"); }
-  MeshT smesh1 = make_surf_mesh_valid<MeshT, PointT>(
+  MeshT smesh1 = make_surf_mesh_valid<MeshT, PointT, VectorT>(
       rmesh1,
       true,        // soup
       true,        // triangulate - must be triangle
@@ -111,7 +112,7 @@ MeshT boolDifference(const Rcpp::List &rmesh1,
       verbose);    // verbose
   checkMesh1<MeshT>(smesh1, 1);
   if(verbose) { rmessage("Processing mesh2"); }
-  MeshT smesh2 = make_surf_mesh_valid<MeshT, PointT>(
+  MeshT smesh2 = make_surf_mesh_valid<MeshT, PointT, VectorT>(
       rmesh2,
       true,        // soup
       true,        // triangulate - must be triangle
@@ -133,13 +134,13 @@ Rcpp::List boolDifferenceEK_cpp(const Rcpp::List rmesh1,
                                 const bool repairSoup,
                                 const bool normals,
                                 const bool verbose) {
-  EMesh3 mesh = boolDifference<EK, EMesh3, EPoint3>(rmesh1, rmesh2, repairSoup, verbose);
+  EMesh3 mesh = boolDifference<EK, EMesh3, EPoint3, EVector3>(rmesh1, rmesh2, repairSoup, verbose);
   return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
 }
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
-template <typename KernelT, typename MeshT, typename PointT>
+template <typename KernelT, typename MeshT, typename PointT, typename VectorT>
 MeshT boolUnion(const Rcpp::List &rmeshes,
                 const bool repairSoup,
                 const bool verbose) {
@@ -150,7 +151,7 @@ MeshT boolUnion(const Rcpp::List &rmeshes,
   std::vector<MeshT> meshes(nMeshes);
   Rcpp::List rmesh = Rcpp::as<Rcpp::List>(rmeshes(0));
   if(verbose) { rmessage("Processing mesh1"); }
-  MeshT mesh_0 = make_surf_mesh_valid<MeshT, PointT>(
+  MeshT mesh_0 = make_surf_mesh_valid<MeshT, PointT, VectorT>(
       rmesh,
       true,        // soup
       true,        // triangulate - must be triangle
@@ -166,7 +167,7 @@ MeshT boolUnion(const Rcpp::List &rmeshes,
     const std::string meshnum = std::to_string(i + 1);
     Rcpp::List rmesh_i = Rcpp::as<Rcpp::List>(rmeshes(i));
     if(verbose) { rmessage("Processing mesh" + meshnum); }
-    MeshT mesh_i = make_surf_mesh_valid<MeshT, PointT>(
+    MeshT mesh_i = make_surf_mesh_valid<MeshT, PointT, VectorT>(
         rmesh_i,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -188,7 +189,7 @@ Rcpp::List boolUnionEK_cpp(const Rcpp::List rmeshes,
                            const bool repairSoup,
                            const bool normals,
                            const bool verbose) {
-  EMesh3 mesh = boolUnion<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  EMesh3 mesh = boolUnion<EK, EMesh3, EPoint3, EVector3>(rmeshes, repairSoup, verbose);
   return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
 }
 
@@ -209,20 +210,20 @@ Rcpp::List get_na_list_sc(void) {
 Rcpp::List getJSCDSC_cpp(const Rcpp::List rmeshes,
                          const bool repairSoup,
                          const bool verbose) {
-  const EMesh3 mesh_1 = make_surf_mesh_valid<EMesh3, EPoint3>(
+  const EMesh3 mesh_1 = make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
       Rcpp::as<Rcpp::List>(rmeshes(0)),
       true,        // soup
       true,        // triangulate - must be triangle
       repairSoup,  // repair_soup
       verbose);
-  const EMesh3 mesh_2 = make_surf_mesh_valid<EMesh3, EPoint3>(
+  const EMesh3 mesh_2 = make_surf_mesh_valid<EMesh3, EPoint3, EVector3>(
       Rcpp::as<Rcpp::List>(rmeshes(1)),
       true,        // soup
       true,        // triangulate - must be triangle
       repairSoup,  // repair_soup
       verbose);
-  const EMesh3 mesh_i = boolIntersection<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
-  const EMesh3 mesh_u = boolUnion<EK, EMesh3, EPoint3>(rmeshes, repairSoup, verbose);
+  const EMesh3 mesh_i = boolIntersection<EK, EMesh3, EPoint3, EVector3>(rmeshes, repairSoup, verbose);
+  const EMesh3 mesh_u = boolUnion<EK, EMesh3, EPoint3, EVector3>(rmeshes, repairSoup, verbose);
   if(!CGAL::is_closed(mesh_u) ||
      !CGAL::is_closed(mesh_i)) {
     Rcpp::warning("Mesh union or intersection is not closed.");

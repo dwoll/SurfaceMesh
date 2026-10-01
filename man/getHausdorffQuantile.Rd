@@ -45,7 +45,6 @@ getHausdorffQuantile(dataHeart1, dataHeart2, p=0.95)
 See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance,
 \code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics, and
 \code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
-(JSC, DSC).
 }
 \author{
 Daniel Wollschlaeger.

@@ -1,6 +1,4 @@
 export(getFaceColors)
 export(getVertexColors)
-export(getVertexNormals)
 export(setFaceColors)
 export(setVertexColors)
-export(setVertexNormals)

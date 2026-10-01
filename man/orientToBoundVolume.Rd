@@ -40,8 +40,8 @@ faces <- rbind(
     c(5, 7, 8))
 
 mesh <- makeMesh(vertices, faces=faces)
-doesBoundVolume(mesh)
-getVolume(mesh)
+doesBoundVolume(mesh)    # FALSE
+getVolume(mesh)          # NA
 
 mesh_bv <- orientToBoundVolume(mesh)
 doesBoundVolume(mesh_bv) # TRUE

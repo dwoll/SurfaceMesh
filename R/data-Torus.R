@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A torus
+#' @title Mesh of a torus
 #'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing a torus.

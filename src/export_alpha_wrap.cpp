@@ -48,7 +48,7 @@ Rcpp::List alphaWrapMesh_cpp(
     const double alpha_rel,
     const double offset_rel,
     const bool normals) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
       true,        // soup
       true,        // triangulate - must be triangle

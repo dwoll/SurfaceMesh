@@ -41,7 +41,7 @@ of the mesh, the exterior edges, the exterior vertices, and optionally the norma
 }
 \description{
 Make a 3D surface mesh from an input file,
-from an existing \strong{rgl} mesh object, or
+from an existing \strong{rgl} \code{\link[rgl]{mesh3d}} object, or
 from given vertices and faces - assuming that the input defines a valid mesh.
 Omitted validity checks save some processing time.
 The returned faces are coherently oriented (if possible),

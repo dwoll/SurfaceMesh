@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A mesh of the truncated icosahedron
+#' @title Mesh of the truncated icosahedron
 #'
 #' @description A list giving the vertices and the faces of a truncated
 #'   icosahedron. There are some hexagonal faces and some pentagonal faces.

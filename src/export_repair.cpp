@@ -14,10 +14,13 @@
 #include "SurfaceMesh.h"
 #endif
 
+#include <CGAL/make_conforming_constrained_Delaunay_triangulation_3.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
+#include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/autorefinement.h>
 #include <CGAL/Polygon_mesh_processing/polygon_mesh_to_polygon_soup.h>
-#include <CGAL/make_conforming_constrained_Delaunay_triangulation_3.h>
 #include <CGAL/Polygon_mesh_processing/repair_polygon_soup.h>
+#include <CGAL/Polygon_mesh_processing/self_intersections.h>
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
@@ -45,7 +48,7 @@ MeshT fill_boundary_holes(
   unsigned int nb_holes_fail = 0;
   // requires CGAL 6.2 (was PMP::extract_...)
   CGAL::extract_boundary_cycles(mesh, std::back_inserter(border_cycles));
-  size_t n_border = border_cycles.size();
+  std::size_t n_border = border_cycles.size();
   if(n_border == 0) {
     if(verbose) { rmessage("There's no border in this mesh. Nothing done."); }
     return mesh;
@@ -156,7 +159,7 @@ bool remove_selfint_soup(std::vector<PointT> &points,
         Rcpp::warning(msg);
     }
 
-    // autorefine_triangle_soup() can remove edges, put isolated vertices may remain
+    // autorefine_triangle_soup() can remove edges, but isolated vertices may remain
     // result may be non-manifold
     // PMP::repair_polygon_soup(points, polygons);
     PMP::merge_duplicate_points_in_polygon_soup(points, polygons,

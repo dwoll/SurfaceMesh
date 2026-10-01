@@ -6,7 +6,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title A toroidal helix
+#' @title Mesh of a toroidal helix
 #'
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'    \strong{rgl} representing a toroidal helix.

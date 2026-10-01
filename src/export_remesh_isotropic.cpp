@@ -23,16 +23,18 @@
 // https://doc.cgal.org/latest/PMP_Remeshing/PMP_Remeshing_2isotropic_remeshing_example_8cpp-example.html
 // ----------------------------------------------------------------------- //
 struct halfedge2edge {
-  halfedge2edge(const Mesh3& m, std::vector<dg_dscrptr>& edges)
-    : m_mesh(m), m_edges(edges)
-  {}
+    using edge_descriptor     = boost::graph_traits<Mesh3>::edge_descriptor;
+    using halfedge_descriptor = boost::graph_traits<Mesh3>::halfedge_descriptor;
+    halfedge2edge(const Mesh3& m, std::vector<edge_descriptor>& edges)
+        : m_mesh(m), m_edges(edges)
+        {}
 
-  void operator()(const hlfdg_dscrptr& h) const {
-    m_edges.push_back(edge(h, m_mesh));
-  }
+    void operator()(const halfedge_descriptor& h) const {
+        m_edges.push_back(edge(h, m_mesh));
+    }
 
-  const Mesh3& m_mesh;
-  std::vector<dg_dscrptr>& m_edges;
+    const Mesh3& m_mesh;
+    std::vector<edge_descriptor>& m_edges;
 };
 
 // ----------------------------------------------------------------------- //
@@ -45,7 +47,8 @@ Rcpp::List remeshIsoUniform_cpp(
     const bool protectConstraints,
     const double dihedralAngle,   // default 60 degrees
     const bool normals) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    using edge_descriptor = boost::graph_traits<Mesh3>::edge_descriptor;
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -53,13 +56,13 @@ Rcpp::List remeshIsoUniform_cpp(
         false);      // verbose
 
     // constrain edges with a dihedral angle over given value
-    typedef boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type EIFMap;
+    using EIFMap = boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type;
     EIFMap eif = get(CGAL::edge_is_feature, mesh);
     if(protectConstraints) {
       PMP::detect_sharp_edges(mesh, dihedralAngle, eif);
     }
 
-    std::vector<dg_dscrptr> border;
+    std::vector<edge_descriptor> border;
     PMP::Uniform_sizing_field<Mesh3> sizing_field(targetEdgeLen, mesh);
     CGAL::border_halfedges(faces(mesh), mesh, boost::make_function_output_iterator(halfedge2edge(mesh, border)));
     PMP::split_long_edges(border, targetEdgeLen, mesh);
@@ -86,7 +89,7 @@ Rcpp::List remeshIsoAdapt_cpp(
     const bool protectConstraints,
     const double dihedralAngle,   // default 60 degrees
     const bool normals) {
-    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3>(
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
         true,        // soup
         true,        // triangulate - must be triangle
@@ -94,7 +97,7 @@ Rcpp::List remeshIsoAdapt_cpp(
         false);      // verbose
 
     // constrain edges with a dihedral angle over given value
-    typedef boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type EIFMap;
+    using EIFMap = boost::property_map<Mesh3, CGAL::edge_is_feature_t>::type;
     EIFMap eif = get(CGAL::edge_is_feature, mesh);
     if(protectConstraints) {
       PMP::detect_sharp_edges(mesh, dihedralAngle, eif);

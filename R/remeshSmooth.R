@@ -84,7 +84,7 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
 #' @param dihedralAngle Positive number. Constrain edges with a dihedral
-#'   angle over given value.
+#'   angle over given value to preserve sharp edges.
 #' @param nIter Positive \code{integer}: Number of iterations.
 #' @param useSafeConstr Boolean. Use safety constraints for moving vertices?
 #' @param doProject Boolean. Project points onto initial surface after

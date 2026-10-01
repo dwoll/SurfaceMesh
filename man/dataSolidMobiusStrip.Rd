@@ -3,7 +3,7 @@
 \docType{data}
 \name{dataSolidMobiusStrip}
 \alias{dataSolidMobiusStrip}
-\title{A mesh of a solid Mobius Strip}
+\title{Mesh of a solid Mobius strip}
 \format{
 A list with components \code{vb}, \code{it}, and \code{normals}.
 }

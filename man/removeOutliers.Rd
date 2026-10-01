@@ -2,7 +2,7 @@
 % Please edit documentation in R/reconstruct.R
 \name{removeOutliers}
 \alias{removeOutliers}
-\title{Remove outliers from point cloud}
+\title{Remove outliers from 3D point cloud}
 \usage{
 removeOutliers(x, nNeighbors = 6L, threshPerc, threshDst)
 }
@@ -24,7 +24,7 @@ twice the average spacing is chosen as a reasonable default value.}
 A numeric matrix of points with outliers removed.
 }
 \description{
-Remove outliers from point cloud based on their distance to
+Remove outliers from 3D point cloud based on their distance to
 neighboring points.
 }
 \details{

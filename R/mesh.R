@@ -14,7 +14,7 @@
 ## ----------------------------------------------------------------------- //
 #' @title Make a 3D mesh
 #' @description Make a 3D surface mesh from an input file,
-#'   from an existing \strong{rgl} mesh object,
+#'   from an existing \strong{rgl} \code{\link[rgl]{mesh3d}} object,
 #'   or from given vertices and faces. The mesh is optionally cleaned:
 #'   duplicated vertices or faces are merged, and isolated vertices are removed.
 #'   The returned faces are coherently oriented, normals are computed if requested, and
@@ -166,7 +166,7 @@ makeMesh <- function(x,
 ## ----------------------------------------------------------------------- //
 #' @title Make a 3D mesh assuming valid input
 #' @description Make a 3D surface mesh from an input file,
-#'   from an existing \strong{rgl} mesh object, or
+#'   from an existing \strong{rgl} \code{\link[rgl]{mesh3d}} object, or
 #'   from given vertices and faces - assuming that the input defines a valid mesh.
 #'   Omitted validity checks save some processing time.
 #'   The returned faces are coherently oriented (if possible),
@@ -328,8 +328,8 @@ addVertexNormals <- function(x) {
 #'     c(5, 7, 8))
 #'
 #' mesh <- makeMesh(vertices, faces=faces)
-#' doesBoundVolume(mesh)
-#' getVolume(mesh)
+#' doesBoundVolume(mesh)    # FALSE
+#' getVolume(mesh)          # NA
 #'
 #' mesh_bv <- orientToBoundVolume(mesh)
 #' doesBoundVolume(mesh_bv) # TRUE
@@ -424,87 +424,67 @@ getArea <- function(x) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
-#' @title Get axis-parallel bounding box
-#' @description Get the axis-parallel bounding box of a 3D surface mesh.
+#' @title Get bounding box (axis-parallel or oriented)
+#' @description Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param oriented Boolean. Get the optimal (oriented) bounding box?
 #' @param triangulate Boolean. Triangulate the faces of the bounding box?
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
-#' @seealso See \code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for the optimal
-#'   (oriented) bounding box and \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
+#' @seealso See \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
 #'
-#' mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
-#' mesh_rgl <- toRGL(mesh)
-#' bb       <- getBoundingBox(mesh)
-#' bb_rgl   <- toRGL(bb)
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
-#' wire3d(mesh_rgl)
-#' wire3d(bb_rgl)
+#' mesh1     <- dataOloid
+#' mesh1_rgl <- toRGL(mesh1)
+#' bb1       <- getBoundingBox(mesh1)
+#' bb1_rgl   <- toRGL(bb1)
+#' view3d(0, 30, zoom=0.9)
+#' wire3d(mesh1_rgl)
+#' wire3d(bb1_rgl)
 #'
+#' mesh2     <- dataHeart1
+#' mesh2_rgl <- toRGL(mesh2)
+#' bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+#' bb2_rgl   <- toRGL(bb2)
+#' open3d(windowRect=50 + c(0, 0, 800, 400))
+#' wire3d(mesh2_rgl)
+#' wire3d(bb2_rgl)
+
 #' @export
 #' @importFrom rgl translate3d scale3d cube3d
-getBoundingBox <- function(x, triangulate = FALSE, normals = FALSE) {
+getBoundingBox <- function(x,
+                           oriented    = FALSE,
+                           triangulate = FALSE,
+                           normals     = FALSE) {
   if(!inherits(x, "CGALmesh")) {
       stop("The `x` argument must be of class 'CGALmesh'",
 			       " (i.e., the output of the `makeMesh()` function).")
   }
+  stopifnot(isBoolean(oriented))
   stopifnot(isBoolean(triangulate))
   stopifnot(isBoolean(normals))
   meshCPP <- fromR(x)
-  outL    <- getBoundingBox_cpp(meshCPP)
-  lcorner <- outL[["lcorner"]]
-  ucorner <- outL[["ucorner"]]
-  center  <- (lcorner + ucorner) / 2
-  ax <- ucorner[1L] - lcorner[1L]
-  ay <- ucorner[2L] - lcorner[2L]
-  az <- ucorner[3L] - lcorner[3L]
-  m_rgl <- translate3d(scale3d(cube3d(), ax/2, ay/2, az/2),
-                       center[1L], center[2L], center[3L])
+  meshOut <- if(oriented) {
+    outL <- getBoundingBoxOptimal_cpp(meshCPP, triangulate, normals)
+    fromCPP(outL[["mesh"]])
+  } else {
+    outL    <- getBoundingBox_cpp(meshCPP)
+    lcorner <- outL[["lcorner"]]
+    ucorner <- outL[["ucorner"]]
+    center  <- (lcorner + ucorner) / 2
+    ax      <- ucorner[1L] - lcorner[1L]
+    ay      <- ucorner[2L] - lcorner[2L]
+    az      <- ucorner[3L] - lcorner[3L]
+    m_rgl   <- translate3d(scale3d(cube3d(), ax/2, ay/2, az/2),
+                           center[1L], center[2L], center[3L])
 
-  makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
-}
-
-## ----------------------------------------------------------------------- //
-## ----------------------------------------------------------------------- //
-#' @title Get optimal bounding box
-#' @description Get the optimal (oriented) bounding box of a given 3D surface mesh.
-#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param triangulate Boolean. Triangulate the faces of the bounding box?
-#' @param normals Boolean. Return vertex normals?
-#' @returns A \code{CGALmesh} object.
-#' @details See \url{https://doc.cgal.org/latest/Optimal_bounding_box/} for details.
-#' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}} for the axis-aligned bounding
-#'   box and \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
-#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
-#'
-#' @examples
-#' library(SurfaceMesh)
-#' library(rgl)
-#' mesh     <- dataHeart1
-#' mesh_rgl <- toRGL(mesh)
-#' obb      <- getBoundingBoxOptimal(mesh)
-#' obb_rgl  <- toRGL(obb[["mesh"]])
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
-#' wire3d(mesh_rgl)
-#' wire3d(obb_rgl)
-#'
-#' @export
-getBoundingBoxOptimal <- function(x, triangulate = FALSE, normals = FALSE) {
-  if(!inherits(x, "CGALmesh")) {
-      stop("The `x` argument must be of class 'CGALmesh'",
-			       " (i.e., the output of the `makeMesh()` function).")
+    makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
   }
-  stopifnot(isBoolean(triangulate))
-  stopifnot(isBoolean(normals))
-  meshCPP <- fromR(x)
-  outL    <- getBoundingBoxOptimal_cpp(meshCPP, triangulate, normals)
-  outL[["mesh"]] <- fromCPP(outL[["mesh"]])
-  outL
+  meshOut
 }
 
 ## ----------------------------------------------------------------------- //
@@ -539,8 +519,7 @@ getCentroid <- function(x) {
 #' @param x \code{numeric} matrix with 3 columns with one point per row.
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
-#' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}},
-#' \code{\link[SurfaceMesh]{getBoundingBoxOptimal}} for bounding box functions.
+#' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}} for the bounding box.
 #' @details See \url{https://doc.cgal.org/latest/Convex_hull_3/} for details.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
@@ -647,6 +626,38 @@ getDistance <- function(x, points) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
+#' @title Get vertex normals of a mesh
+#' @description Get the vertex normals of a 3D surface mesh.
+#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @return The numeric matrix of normals attached to the vertices of the mesh.
+#'   \code{NULL} if there are no vertex normals.
+#' @details Note that this function is not really necessary as the vertex
+#'   normals are simply stored in component \code{"normals"} of the
+#'   \code{CGALmesh} object on the R side.
+#'   However, importing vertex normals to the C++ / CGAL side, and then
+#'   exporting them to the R side is a test case for working with CGAL
+#'   property maps that may be useful in the future.
+#' @seealso \code{\link[SurfaceMesh]{setVertexNormals}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' mesh <- makeMeshValid(dataSphere, normals=TRUE)
+#' vn   <- getVertexNormals(mesh)
+#' head(vn)
+#'
+#' @export
+getVertexNormals <- function(x) {
+    if(!inherits(x, "CGALmesh")) {
+        stop("The `x` argument must be of class 'CGALmesh'",
+          " (i.e., the output of the `makeMesh()` function).")
+    }
+    meshCPP <- fromR(x)
+    getVertexNormals_cpp(meshCPP)
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Get mesh volume
 #' @description Get the volume bounded by a closed 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -672,7 +683,8 @@ getVolume <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Does mesh have garbage?
-#' @description Check if the given 3D surface mesh has garbage.
+#' @description Check if the given 3D surface mesh has garbage, i.e.,
+#'   there is a mismatch between faces and vertices.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
 #' @seealso See \code{\link[SurfaceMesh]{isValid}} for checking if the mesh is valid.
@@ -696,7 +708,7 @@ hasGarbage <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Is mesh closed?
-#' @description Check if the given 3D surface mesh is closed.
+#' @description Check if the given 3D surface mesh is closed (watertight).
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
@@ -825,8 +837,8 @@ isValid <- function(x) {
 #'     c(5, 7, 8))
 #'
 #' mesh <- makeMesh(vertices, faces=faces)
-#' doesBoundVolume(mesh)
-#' getVolume(mesh)
+#' doesBoundVolume(mesh)    # FALSE
+#' getVolume(mesh)          # NA
 #'
 #' mesh_bv <- orientToBoundVolume(mesh)
 #' doesBoundVolume(mesh_bv) # TRUE
@@ -873,7 +885,6 @@ orientToBoundVolume <- function(x, normals = FALSE) {
 #' mesh_rgl <- toRGL(mesh)
 #' open3d(windowRect=c(50, 50, 562, 562), zoom=0.9)
 #' shade3d(mesh_rgl, color="navy")
-#' # plot the exterior edges only, given in `mesh[["exteriorEdges"]]`
 #' plotEdges(mesh[["vertices"]],
 #'           mesh[["exteriorEdges"]],
 #'           color        ="gold",
@@ -1015,6 +1026,50 @@ samplePoints <- function(x,
   meshCPP <- fromR(x)
   ## output matrix already transposed in samplePoints_cpp()
   samplePoints_cpp(meshCPP, sampleOptL)
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
+#' @title Assign normal vectors to mesh vertices
+#' @description Assign given per-vertex normal vectors to a 3D surface mesh.
+#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param normals A numeric matrix with three columns and as many rows as
+#'   the number of vertices. Should be unit vectors, not currently checked.
+#' @returns A \code{CGALmesh} object.
+#' @details Note: This function is currently not doing anything except adding
+#'   a list component \code{normals} to the \code{CGALmesh} object after
+#'   setting the property map on the C++ / CGAL side, and then exporting it
+#'   back to R. This is a test case for working with CGAL property maps that
+#'   may be useful in the future.
+#' @seealso \code{\link[SurfaceMesh]{getVertexNormals}}
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' mesh <- makeMesh(dataPentaPrism, triangulate=TRUE, normals=FALSE)
+#'
+#' ## random unit normal vectors
+#' nVerts  <- nrow(mesh[["vertices"]])
+#' nrmls0  <- matrix(runif(nVerts*3), ncol=3)
+#' lens    <- sqrt(diag(tcrossprod(nrmls0)))
+#' nrmls   <- diag(1/lens) %*% nrmls0
+#' mesh_vn <- setVertexNormals(mesh, nrmls)
+#' head(mesh_vn[["normals"]])
+#' head(nrmls)
+#' @export
+setVertexNormals <- function(x, normals) {
+  if(!inherits(x, "CGALmesh")) {
+      stop("The `x` argument must be of class 'CGALmesh'",
+			       " (i.e., the output of the `makeMesh()` function).")
+  }
+  stopifnot(is.matrix(normals), is.numeric(normals), ncol(normals) == 3L)
+  storage.mode(normals) <- "double"
+  if(anyNA(normals)) {
+    stop("Vectors in `normals` with missing values are not allowed.", call. = TRUE)
+  }
+  meshCPP <- fromR(x)
+  meshOut <- setVertexNormals_cpp(meshCPP, t(normals))
+  fromCPP(meshOut)
 }
 
 ## ----------------------------------------------------------------------- //

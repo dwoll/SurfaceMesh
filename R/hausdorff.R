@@ -11,7 +11,7 @@
 ## ----------------------------------------------------------------------- //
 
 #' @title Hausdorff distance between two meshes
-#' @description Hausdorff distance between two meshes. Either the
+#' @description Hausdorff distance between two 3D surface meshes. Either the
 #'   approximate distance, or the distance estimate with a given error bound.
 #' @param mesh1 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param mesh2 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -81,7 +81,6 @@ getHausdorff <- function(mesh1, mesh2, symmetric = TRUE, n, errorBound) {
 #' @seealso See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance,
 #'   \code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics, and
 #'   \code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
-#'   (JSC, DSC).
 #' @author Daniel Wollschlaeger.
 #'
 #' @examples
@@ -101,7 +100,7 @@ getHausdorffQuantile <- function(mesh1, mesh2, symmetric = TRUE, p = 0.95, ...) 
 
 #' @title Several distance metrics between two meshes
 #' @description Quantile Hausdorff distance (HD), average symmetric surface distance (ASSD),
-#'   and root mean squared error (RMSE) for the surface distance between two meshes.
+#'   and root mean squared error (RMSE) for the surface distance between two 3D surface meshes.
 #' @param mesh1 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param mesh2 A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param returnDists Boolean. Return the sampled distances from mesh 1 to 2, and from 2 to 1?
@@ -144,7 +143,6 @@ getHausdorffQuantile <- function(mesh1, mesh2, symmetric = TRUE, p = 0.95, ...) 
 #' @seealso See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance,
 #'   \code{\link[SurfaceMesh]{getHausdorffQuantile}} for the quantile Hausdorff distance, and
 #'   \code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
-#' @author Daniel Wollschlaeger.
 #'
 #' @examples
 #' library(SurfaceMesh)

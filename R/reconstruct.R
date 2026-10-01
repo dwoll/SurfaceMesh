@@ -10,7 +10,7 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title Compute average spacing input points
+#' @title Compute average spacing of input points
 #' @description Computes the average spacing of all input points to their
 #'   \code{nNeighbors} nearest neighbor points. This provides an order of a
 #'   point set density, useful in a surface reconstruction pipeline.
@@ -47,8 +47,8 @@ getAverageSpacing <- function(x, nNeighbors = 6L) {
   getAverageSpacing_cpp(t(x), as.integer(nNeighbors))
 }
 
-#' @title Remove outliers from point cloud
-#' @description Remove outliers from point cloud based on their distance to
+#' @title Remove outliers from 3D point cloud
+#' @description Remove outliers from 3D point cloud based on their distance to
 #'   neighboring points.
 #' @param x Numeric matrix with 3 columns which stores the points, one point per row.
 #' @param nNeighbors \code{integer}. How many neighboring points to consider
@@ -111,8 +111,7 @@ removeOutliers <- function(x,
 }
 
 #' @title Advancing front surface reconstruction
-#' @description Reconstruction of a surface mesh from a cloud of 3D points.
-#'
+#' @description Advancing front surface reconstruction of a 3D surface mesh from a cloud of 3D points.
 #' @param x Numeric matrix with 3 columns which stores the points, one point per row.
 #' @param jetSmoothing Optional integer >= 2. If specified,
 #'   the point cloud is smoothed before the reconstruction, using
@@ -172,11 +171,10 @@ reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
 }
 
 #' @title Poisson surface reconstruction
-#' @description Poisson reconstruction of a surface, from a cloud of 3D points.
-#'   Performs well if the aim is to approximate a noisy point cloud with a smooth surface.
-#'   Not appropriate if the surface is expected to interpolate the input points.
+#' @description Poisson reconstruction of a 3D surface mesh from a cloud of 3D points.
 #' @param x Numeric matrix with 3 columns which stores the points, one point per row.
-#' @param normalsFun A function to generate normals, e.g., as returned by
+#' @param normalsFun A function that accepts a matrix with 3D points and uses it to
+#'   return a matrix with normals. Such a function is returned by
 #'   \code{\link[SurfaceMesh]{getNormalsFun}}.
 #' @param spacing Optional size parameter. Smaller values increase the precision
 #'   of the output mesh at the cost of higher computation time. If missing,
@@ -187,7 +185,8 @@ reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/}
-#'   for details.
+#'   for details. Performs well if the aim is to approximate a noisy point cloud with a smooth surface.
+#'   Not appropriate if the surface is expected to interpolate the input points.
 #' @seealso \code{\link[SurfaceMesh]{removeOutliers}},
 #'    \code{\link[SurfaceMesh]{reconstructAFS}},
 #'    \code{\link[SurfaceMesh]{reconstructSSS}},
@@ -251,9 +250,7 @@ reconstructPoisson <- function(
 }
 
 #' @title Scale-space surface reconstruction
-#' @description Reconstruction of a surface from a cloud of 3D points.
-#'   A good choice if the input point cloud is noisy but the user still wants the
-#'   surface to pass exactly through the points.
+#' @description Scale-space surface reconstruction of a 3D surface mesh from a cloud of 3D points.
 #' @param x Numeric matrix with 3 columns which stores the points, one point per row.
 #' @param scaleIterations Positive integer. Number of iterations used to increase the scale.
 #' @param neighbors Positive integer. Number of neighbors used to smooth the point cloud.
@@ -266,7 +263,8 @@ reconstructPoisson <- function(
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object or a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
 #' @details See \url{https://doc.cgal.org/latest/Scale_space_reconstruction_3/}
-#'   for details.
+#'   for details. A good choice if the input point cloud is noisy but the user still wants the
+#'   surface to pass exactly through the points.
 #' @seealso \code{\link[SurfaceMesh]{removeOutliers}},
 #'    \code{\link[SurfaceMesh]{reconstructAFS}},
 #'    \code{\link[SurfaceMesh]{reconstructPoisson}}, \code{\link[SurfaceMesh]{alphaWrap}}

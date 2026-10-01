@@ -27,8 +27,8 @@ output that is closer to input mesh.}
 A \code{CGALmesh} object.
 }
 \description{
-Reconstruction of a surface mesh from a cloud of 3D points
-by alpha wrapping.
+Reconstruction of a 3D surface mesh from a cloud of 3D
+points by alpha wrapping.
 }
 \details{
 See \url{https://doc.cgal.org/latest/Alpha_wrap_3/} for details.

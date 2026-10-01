@@ -10,23 +10,23 @@
 ## License: GPL-3
 ## ----------------------------------------------------------------------- //
 
-#' @title Normals for a point cloud
+#' @title Function to generate normals for a point cloud
 #' @description Returns a function which estimates normals for a
 #'   3D point cloud.
 #' @param x \code{integer}. Number of neighbors used to estimate the normals.
 #' @param method One of \code{"PCA"} to estimate the normal direction at
 #'   each point by linear least squares fitting of a plane over its nearest
 #'   neighbors, or \code{"Jet"} to estimate the normal direction at each
-#'   point by fitting a jet surface over its nearest neighbors). See details.
+#'   point by fitting a jet surface over its nearest neighbors. See details.
 #' @returns A function which takes one argument: a numeric matrix with
 #'   three columns, each row represents a point, and the function returns a
 #'   matrix of the same size as the input matrix, with each row giving one
 #'   unit normal per point.
-#' @note The \code{getNormalsFun} function is intended to be used in the
+#' @details See \url{https://doc.cgal.org/latest/Point_set_processing_3/} for details.
+#'   The \code{getNormalsFun} function is intended to be used in the
 #'   \code{\link[SurfaceMesh]{reconstructPoisson}} function. If you want to use it for
 #'   another purpose, be careful because the function it returns does not
 #'   check the matrix it takes as argument.
-#' @details See \url{https://doc.cgal.org/latest/Point_set_processing_3/} for details.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
