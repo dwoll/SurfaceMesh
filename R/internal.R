@@ -82,7 +82,7 @@ isOrthonormal <- function(x, tol=1e-6) {
            identical(dim(x), c(3L, 3L)) &&
            all(is.finite(x))
 
-  isOn <- isTRUE(all.equal(crossprod(dirs),
+  isOn <- isTRUE(all.equal(crossprod(x),
                            diag(3L),
                            check.attributes=FALSE,
                            tolerance=tol))
