@@ -424,71 +424,6 @@ getArea <- function(x) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
-#' @title Get bounding box (axis-parallel or oriented)
-#' @description Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
-#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param oriented Boolean. Get the optimal (oriented) bounding box?
-#' @param triangulate Boolean. Triangulate the faces of the bounding box?
-#' @param normals Boolean. Return vertex normals?
-#' @returns A \code{CGALmesh} object.
-#' @seealso See \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull.
-#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
-#'
-#' @examples
-#' library(SurfaceMesh)
-#' library(rgl)
-#'
-#' mesh1     <- dataOloid
-#' mesh1_rgl <- toRGL(mesh1)
-#' bb1       <- getBoundingBox(mesh1)
-#' bb1_rgl   <- toRGL(bb1)
-#' view3d(0, 30, zoom=0.9)
-#' wire3d(mesh1_rgl)
-#' wire3d(bb1_rgl)
-#'
-#' mesh2     <- dataHeart1
-#' mesh2_rgl <- toRGL(mesh2)
-#' bb2       <- getBoundingBox(mesh2, oriented=TRUE)
-#' bb2_rgl   <- toRGL(bb2)
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
-#' wire3d(mesh2_rgl)
-#' wire3d(bb2_rgl)
-
-#' @export
-#' @importFrom rgl translate3d scale3d cube3d
-getBoundingBox <- function(x,
-                           oriented    = FALSE,
-                           triangulate = FALSE,
-                           normals     = FALSE) {
-  if(!inherits(x, "CGALmesh")) {
-      stop("The `x` argument must be of class 'CGALmesh'",
-			       " (i.e., the output of the `makeMesh()` function).")
-  }
-  stopifnot(isBoolean(oriented))
-  stopifnot(isBoolean(triangulate))
-  stopifnot(isBoolean(normals))
-  meshCPP <- fromR(x)
-  meshOut <- if(oriented) {
-    outL <- getBoundingBoxOptimal_cpp(meshCPP, triangulate, normals)
-    fromCPP(outL[["mesh"]])
-  } else {
-    outL    <- getBoundingBox_cpp(meshCPP)
-    lcorner <- outL[["lcorner"]]
-    ucorner <- outL[["ucorner"]]
-    center  <- (lcorner + ucorner) / 2
-    ax      <- ucorner[1L] - lcorner[1L]
-    ay      <- ucorner[2L] - lcorner[2L]
-    az      <- ucorner[3L] - lcorner[3L]
-    m_rgl   <- translate3d(scale3d(cube3d(), ax/2, ay/2, az/2),
-                           center[1L], center[2L], center[3L])
-
-    makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
-  }
-  meshOut
-}
-
-## ----------------------------------------------------------------------- //
-## ----------------------------------------------------------------------- //
 #' @title Get mesh centroid (center of mass)
 #' @description Get the centroid (center of mass) of a given 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -509,47 +444,6 @@ getCentroid <- function(x) {
   }
   meshCPP <- fromR(x)
   getCentroid_cpp(meshCPP)
-}
-
-## ----------------------------------------------------------------------- //
-## ----------------------------------------------------------------------- //
-#' @title Convex hull of a set of 3D points
-#' @description Get the convex hull of a given set of 3D points
-#'   using the quickhull algorithm.
-#' @param x \code{numeric} matrix with 3 columns with one point per row.
-#' @param normals Boolean. Return vertex normals?
-#' @returns A \code{CGALmesh} object.
-#' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}} for the bounding box.
-#' @details See \url{https://doc.cgal.org/latest/Convex_hull_3/} for details.
-#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
-#'
-#' @examples
-#' library(SurfaceMesh)
-#' library(rgl)
-#'
-#' mesh     <- makeMesh(dataHopfTorus)
-#' mesh_rgl <- toRGL(mesh)
-#' hull     <- getConvexHull(mesh[["vertices"]])
-#' hull_rgl <- toRGL(hull)
-#'
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
-#' mfrow3d(1, 2)
-#' wire3d(mesh_rgl)
-#' next3d()
-#' wire3d(hull_rgl)
-#'
-#' @export
-getConvexHull <- function(x, normals = FALSE) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
-    stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Points in `x` with missing values are not allowed.", call. = TRUE)
-  }
-  stopifnot(isBoolean(normals))
-  meshCPP <- getConvexHull_cpp(t(x), normals)
-  fromCPP(meshCPP)
 }
 
 ## ----------------------------------------------------------------------- //
@@ -886,7 +780,7 @@ orientToBoundVolume <- function(x, normals = FALSE) {
 #' open3d(windowRect=c(50, 50, 562, 562), zoom=0.9)
 #' shade3d(mesh_rgl, color="navy")
 #' plotEdges(mesh[["vertices"]],
-#'           mesh[["exteriorEdges"]],
+#'           mesh[["edgesExterior"]],
 #'           color        ="gold",
 #'           tubesRadius  =0.02,
 #'           spheresRadius=0.02)
@@ -1051,7 +945,7 @@ samplePoints <- function(x,
 #' ## random unit normal vectors
 #' nVerts  <- nrow(mesh[["vertices"]])
 #' nrmls0  <- matrix(runif(nVerts*3), ncol=3)
-#' lens    <- sqrt(diag(tcrossprod(nrmls0)))
+#' lens    <- sqrt(rowSums(nrmls0^2))
 #' nrmls   <- diag(1/lens) %*% nrmls0
 #' mesh_vn <- setVertexNormals(mesh, nrmls)
 #' head(mesh_vn[["normals"]])
@@ -1063,6 +957,8 @@ setVertexNormals <- function(x, normals) {
 			       " (i.e., the output of the `makeMesh()` function).")
   }
   stopifnot(is.matrix(normals), is.numeric(normals), ncol(normals) == 3L)
+  # TODO check unit length of normals
+  # lens <- sqrt(rowSums(normals^2)) - 1
   storage.mode(normals) <- "double"
   if(anyNA(normals)) {
     stop("Vectors in `normals` with missing values are not allowed.", call. = TRUE)

@@ -95,17 +95,76 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getBoundingBox_cpp
+Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh);
+RcppExport SEXP _SurfaceMesh_getBoundingBox_cpp(SEXP rmeshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBoundingBox_cpp(rmesh));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getBoundingBoxOptimal_cpp
+Rcpp::List getBoundingBoxOptimal_cpp(const Rcpp::List rmeshIn, const bool triangulate, const bool normals);
+RcppExport SEXP _SurfaceMesh_getBoundingBoxOptimal_cpp(SEXP rmeshInSEXP, SEXP triangulateSEXP, SEXP normalsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmeshIn(rmeshInSEXP);
+    Rcpp::traits::input_parameter< const bool >::type triangulate(triangulateSEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBoundingBoxOptimal_cpp(rmeshIn, triangulate, normals));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getBoundingEllipsoid_cpp
+Rcpp::List getBoundingEllipsoid_cpp(const Rcpp::NumericMatrix rpoints, const double eps);
+RcppExport SEXP _SurfaceMesh_getBoundingEllipsoid_cpp(SEXP rpointsSEXP, SEXP epsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type rpoints(rpointsSEXP);
+    Rcpp::traits::input_parameter< const double >::type eps(epsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBoundingEllipsoid_cpp(rpoints, eps));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getBoundingSphere_cpp
+Rcpp::List getBoundingSphere_cpp(const Rcpp::NumericMatrix rpoints);
+RcppExport SEXP _SurfaceMesh_getBoundingSphere_cpp(SEXP rpointsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type rpoints(rpointsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBoundingSphere_cpp(rpoints));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getConvexHull_cpp
+Rcpp::List getConvexHull_cpp(const Rcpp::NumericMatrix rpoints, const bool normals);
+RcppExport SEXP _SurfaceMesh_getConvexHull_cpp(SEXP rpointsSEXP, SEXP normalsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type rpoints(rpointsSEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getConvexHull_cpp(rpoints, normals));
+    return rcpp_result_gen;
+END_RCPP
+}
 // getHausdorffApprox_cpp
-double getHausdorffApprox_cpp(const Rcpp::List rmesh1, const Rcpp::List rmesh2, const bool symmetric, const unsigned int n);
-RcppExport SEXP _SurfaceMesh_getHausdorffApprox_cpp(SEXP rmesh1SEXP, SEXP rmesh2SEXP, SEXP symmetricSEXP, SEXP nSEXP) {
+double getHausdorffApprox_cpp(const Rcpp::List rmesh1, const Rcpp::List rmesh2, const bool symmetric, const Rcpp::List ropts);
+RcppExport SEXP _SurfaceMesh_getHausdorffApprox_cpp(SEXP rmesh1SEXP, SEXP rmesh2SEXP, SEXP symmetricSEXP, SEXP roptsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh1(rmesh1SEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh2(rmesh2SEXP);
     Rcpp::traits::input_parameter< const bool >::type symmetric(symmetricSEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(getHausdorffApprox_cpp(rmesh1, rmesh2, symmetric, n));
+    Rcpp::traits::input_parameter< const Rcpp::List >::type ropts(roptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getHausdorffApprox_cpp(rmesh1, rmesh2, symmetric, ropts));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -268,30 +327,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// getBoundingBox_cpp
-Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh);
-RcppExport SEXP _SurfaceMesh_getBoundingBox_cpp(SEXP rmeshSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
-    rcpp_result_gen = Rcpp::wrap(getBoundingBox_cpp(rmesh));
-    return rcpp_result_gen;
-END_RCPP
-}
-// getBoundingBoxOptimal_cpp
-Rcpp::List getBoundingBoxOptimal_cpp(const Rcpp::List rmeshIn, const bool triangulate, const bool normals);
-RcppExport SEXP _SurfaceMesh_getBoundingBoxOptimal_cpp(SEXP rmeshInSEXP, SEXP triangulateSEXP, SEXP normalsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type rmeshIn(rmeshInSEXP);
-    Rcpp::traits::input_parameter< const bool >::type triangulate(triangulateSEXP);
-    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(getBoundingBoxOptimal_cpp(rmeshIn, triangulate, normals));
-    return rcpp_result_gen;
-END_RCPP
-}
 // getCentroid_cpp
 Rcpp::NumericVector getCentroid_cpp(const Rcpp::List rmesh);
 RcppExport SEXP _SurfaceMesh_getCentroid_cpp(SEXP rmeshSEXP) {
@@ -300,18 +335,6 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
     rcpp_result_gen = Rcpp::wrap(getCentroid_cpp(rmesh));
-    return rcpp_result_gen;
-END_RCPP
-}
-// getConvexHull_cpp
-Rcpp::List getConvexHull_cpp(const Rcpp::NumericMatrix rpoints, const bool normals);
-RcppExport SEXP _SurfaceMesh_getConvexHull_cpp(SEXP rpointsSEXP, SEXP normalsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type rpoints(rpointsSEXP);
-    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(getConvexHull_cpp(rpoints, normals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -749,6 +772,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_boolDifferenceEK_cpp", (DL_FUNC) &_SurfaceMesh_boolDifferenceEK_cpp, 5},
     {"_SurfaceMesh_boolUnionEK_cpp", (DL_FUNC) &_SurfaceMesh_boolUnionEK_cpp, 4},
     {"_SurfaceMesh_getJSCDSC_cpp", (DL_FUNC) &_SurfaceMesh_getJSCDSC_cpp, 3},
+    {"_SurfaceMesh_getBoundingBox_cpp", (DL_FUNC) &_SurfaceMesh_getBoundingBox_cpp, 1},
+    {"_SurfaceMesh_getBoundingBoxOptimal_cpp", (DL_FUNC) &_SurfaceMesh_getBoundingBoxOptimal_cpp, 3},
+    {"_SurfaceMesh_getBoundingEllipsoid_cpp", (DL_FUNC) &_SurfaceMesh_getBoundingEllipsoid_cpp, 2},
+    {"_SurfaceMesh_getBoundingSphere_cpp", (DL_FUNC) &_SurfaceMesh_getBoundingSphere_cpp, 1},
+    {"_SurfaceMesh_getConvexHull_cpp", (DL_FUNC) &_SurfaceMesh_getConvexHull_cpp, 2},
     {"_SurfaceMesh_getHausdorffApprox_cpp", (DL_FUNC) &_SurfaceMesh_getHausdorffApprox_cpp, 4},
     {"_SurfaceMesh_getHausdorffEst_cpp", (DL_FUNC) &_SurfaceMesh_getHausdorffEst_cpp, 4},
     {"_SurfaceMesh_getSurfaceDist_cpp", (DL_FUNC) &_SurfaceMesh_getSurfaceDist_cpp, 6},
@@ -761,10 +789,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_doesSelfIntersect_cpp", (DL_FUNC) &_SurfaceMesh_doesSelfIntersect_cpp, 1},
     {"_SurfaceMesh_fillBoundaryHoles_cpp", (DL_FUNC) &_SurfaceMesh_fillBoundaryHoles_cpp, 5},
     {"_SurfaceMesh_getArea_cpp", (DL_FUNC) &_SurfaceMesh_getArea_cpp, 1},
-    {"_SurfaceMesh_getBoundingBox_cpp", (DL_FUNC) &_SurfaceMesh_getBoundingBox_cpp, 1},
-    {"_SurfaceMesh_getBoundingBoxOptimal_cpp", (DL_FUNC) &_SurfaceMesh_getBoundingBoxOptimal_cpp, 3},
     {"_SurfaceMesh_getCentroid_cpp", (DL_FUNC) &_SurfaceMesh_getCentroid_cpp, 1},
-    {"_SurfaceMesh_getConvexHull_cpp", (DL_FUNC) &_SurfaceMesh_getConvexHull_cpp, 2},
     {"_SurfaceMesh_getDistance_cpp", (DL_FUNC) &_SurfaceMesh_getDistance_cpp, 2},
     {"_SurfaceMesh_getVertexNormals_cpp", (DL_FUNC) &_SurfaceMesh_getVertexNormals_cpp, 1},
     {"_SurfaceMesh_getVolume_cpp", (DL_FUNC) &_SurfaceMesh_getVolume_cpp, 1},

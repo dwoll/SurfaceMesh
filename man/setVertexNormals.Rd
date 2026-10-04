@@ -32,7 +32,7 @@ mesh <- makeMesh(dataPentaPrism, triangulate=TRUE, normals=FALSE)
 ## random unit normal vectors
 nVerts  <- nrow(mesh[["vertices"]])
 nrmls0  <- matrix(runif(nVerts*3), ncol=3)
-lens    <- sqrt(diag(tcrossprod(nrmls0)))
+lens    <- sqrt(rowSums(nrmls0^2))
 nrmls   <- diag(1/lens) \%*\% nrmls0
 mesh_vn <- setVertexNormals(mesh, nrmls)
 head(mesh_vn[["normals"]])

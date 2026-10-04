@@ -59,7 +59,7 @@ template std::vector<Vector3>  compute_vnormals<K,  Mesh3,  Vector3>(Mesh3);
 template std::vector<EVector3> compute_vnormals<EK, EMesh3, EVector3>(EMesh3);
 
 // ----------------------------------------------------------------------- //
-// return existing v:normal property map as R matrix
+// return existing v:normal property map as vector of Vector_3
 template <typename KernelT, typename MeshT, typename VectorT>
 std::optional<std::vector<VectorT>> get_vnormals(const MeshT &mesh) {
     using vertex_descriptor  = typename boost::graph_traits<MeshT>::vertex_descriptor;

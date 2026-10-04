@@ -32,7 +32,7 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
 
 # Introduction
 
-`SurfaceMesh` is an R package that supports basic processing of 3D surface meshes using as backend the C++ library [`CGAL`](https://www.cgal.org/) for computational geometry via R package [`RcppCGAL`](https://cran.r-project.org/package=RcppCGAL). Features include:
+`SurfaceMesh` is an R package that supports processing of 3D surface meshes using as backend the C++ library for computational geometry [`CGAL`](https://www.cgal.org/) via R package [`RcppCGAL`](https://cran.r-project.org/package=RcppCGAL). Features include:
 
   * Read in and write mesh files in common formats (STL, PLY, OBJ, OFF)
   * Conversion to / from class `mesh3d` from package [`rgl`](https://cran.r-project.org/package=rgl), also compatible with package [`Rvcg`](https://cran.r-project.org/package=Rvcg)
@@ -41,7 +41,7 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
   * Remeshing
   * Subdivision
   * Surface reconstruction
-  * Bounding box
+  * (Oriented) bounding box, bounding sphere, bounding ellipse
   * Convex hull
   * Distance from points to mesh
   * Centroid (center of mass)
@@ -50,7 +50,13 @@ rgl_webshot_org <- Sys.setenv("RGL_USE_WEBSHOT"=FALSE)
   * Vertex normals
   * Randomly sampling points on a mesh
 
-The package also calculates surface distance and volume-overlap based similarity metrics for a given pair of 3D surface meshes (see [dkfz metrics reloaded](https://metrics-reloaded.dkfz.de/metric-library)).
+The package also calculates surface distance and volume-overlap based similarity metrics for a given pair of 3D surface meshes (see [dkfz metrics reloaded](https://metrics-reloaded.dkfz.de/metric-library)):
+
+  * (Quantile) Hausdorff distance
+  * Average symmetric surface distance
+  * RMSE
+  * JSC (IoU)
+  * DSC
 
 # Background
 
@@ -140,7 +146,7 @@ Set vertex normals to given matrix.
 mesh    <- makeMesh(dataPentaPrism, triangulate=TRUE, normals=FALSE)
 nVerts  <- nrow(mesh[["vertices"]])
 nrmls0  <- matrix(runif(nVerts*3), ncol=3)
-lens    <- sqrt(diag(tcrossprod(nrmls0)))
+lens    <- sqrt(rowSums(nrmls0^2))
 nrmls   <- diag(1/lens) %*% nrmls0
 
 ## set vertex normals
@@ -512,6 +518,26 @@ wire3d(mesh2_rgl)
 wire3d(bb2_rgl)
 ```
 
+## Bounding Sphere
+
+```{r}
+mesh     <- makeMesh(dataToroHelix)
+mesh_rgl <- toRGL(mesh)
+bs_rgl   <- getBoundingSphere(mesh[["vertices"]], out="rgl")
+shade3d(mesh_rgl, color="seashell")
+wire3d(bs_rgl)
+```
+
+## Bounding Ellipse
+
+```{r}
+mesh     <- dataHeart1
+mesh_rgl <- toRGL(mesh)
+bell_rgl <- getBoundingEll(mesh[["vertices"]], out="rgl", eps=0.01)
+shade3d(mesh_rgl, color="lightgreen")
+wire3d(bell_rgl)
+```
+
 ## Convex Hull
 
 ```{r}
@@ -586,13 +612,13 @@ getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE)
 Bounded error
 
 ```{r}
-getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE, errorBound=0.001)
+getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE, errBound=0.01)
 ```
 
-Quantile (e.g., 'HD95')
+Quantile (e.g., 'HD95'), see [dkfz metrics reloaded: xHD](https://metrics-reloaded.dkfz.de/metric-library/xhd)
 
 ```{r}
-getHausdorffQuantile(dataHeart1, dataHeart2, p=0.95)
+getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE, p=0.95)
 ```
 
 ### Average symmetric surface distance (ASSD) and Root Mean Squared Error (RMSE)

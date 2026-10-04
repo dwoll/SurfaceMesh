@@ -17,8 +17,6 @@
 #include <CGAL/AABB_tree.h>
 #include <CGAL/AABB_face_graph_triangle_primitive.h>
 #include <CGAL/AABB_traits_3.h>
-#include <CGAL/optimal_bounding_box.h>
-#include <CGAL/convex_hull_3.h>
 
 #include <CGAL/Polygon_mesh_processing/distance.h>
 #include <CGAL/Polygon_mesh_processing/measure.h>
@@ -202,55 +200,6 @@ double getArea_cpp(const Rcpp::List rmesh) {
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
-Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
-      rmesh,
-      false,       // soup
-      false,       // triangulate
-      false,       // repair_soup
-      false);      // verbose
-  CGAL::Bbox_3 bbox = PMP::bbox(mesh);
-  Rcpp::NumericVector lcorner = { bbox.xmin(), bbox.ymin(), bbox.zmin() };
-  Rcpp::NumericVector ucorner = { bbox.xmax(), bbox.ymax(), bbox.zmax() };
-  return Rcpp::List::create(
-    Rcpp::Named("lcorner") = lcorner,
-    Rcpp::Named("ucorner") = ucorner);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::List getBoundingBoxOptimal_cpp(
-  const Rcpp::List rmeshIn, const bool triangulate, const bool normals) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
-      rmeshIn,
-      false,       // soup
-      false,       // triangulate
-      false,       // repair_soup
-      false);      // verbose
-   std::array<Point3, 8> obb_pts;
-  CGAL::oriented_bounding_box(mesh, obb_pts,
-                              CGAL::parameters::use_convex_hull(true));
-  // make mesh out of oriented bounding box
-  Mesh3 obb_mesh;
-  CGAL::make_hexahedron(
-    obb_pts[0], obb_pts[1], obb_pts[2], obb_pts[3],
-    obb_pts[4], obb_pts[5], obb_pts[6], obb_pts[7],
-    obb_mesh);
-  Rcpp::List rmesh_obb = get_rmesh<K, Mesh3, Point3, Vector3>(obb_mesh, triangulate, normals);
-  Rcpp::NumericMatrix hex_verts(3, 8);
-  for(int i = 0; i < 8; i++) {
-    Point3 pt = obb_pts[i];
-    Rcpp::NumericVector v =
-      Rcpp::NumericVector::create(pt.x(), pt.y(), pt.z());
-    hex_verts(Rcpp::_, i) = v;
-  }
-  return Rcpp::List::create(
-    Rcpp::Named("mesh")       = rmesh_obb,
-    Rcpp::Named("hxVertices") = hex_verts);
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
 Rcpp::NumericVector getCentroid_cpp(const Rcpp::List rmesh) {
   Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh,
@@ -258,7 +207,7 @@ Rcpp::NumericVector getCentroid_cpp(const Rcpp::List rmesh) {
       true,        // triangulate - must be triangle
       false,       // repair_soup
       false);      // verbose
-   Rcpp::NumericVector ctr(3);
+  Rcpp::NumericVector ctr(3);
   if(!CGAL::is_triangle_mesh(mesh)) {
       Rcpp::warning("The mesh is not triangle.");
       ctr(0) = Rcpp::NumericVector::get_na();
@@ -271,21 +220,6 @@ Rcpp::NumericVector getCentroid_cpp(const Rcpp::List rmesh) {
       ctr(2) = CGAL::to_double<K::FT>(centroid.z());
   }
   return ctr;
-}
-
-// ----------------------------------------------------------------------- //
-// [[Rcpp::export]]
-Rcpp::List getConvexHull_cpp(const Rcpp::NumericMatrix rpoints, const bool normals) {
-  const std::size_t nPts = rpoints.ncol();
-  std::vector<Point3> points;
-  points.reserve(nPts);
-  for(std::size_t i = 0; i < nPts; i++) {
-    Rcpp::NumericVector pt = rpoints(Rcpp::_, i);
-    points.emplace_back(Point3(pt(0), pt(1), pt(2)));
-  }
-  Mesh3 mesh;
-  CGAL::convex_hull_3(points.begin(), points.end(), mesh);
-  return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, normals);
 }
 
 // ----------------------------------------------------------------------- //

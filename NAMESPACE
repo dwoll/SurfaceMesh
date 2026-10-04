@@ -12,12 +12,13 @@ export(fillBoundaryHoles)
 export(getArea)
 export(getAverageSpacing)
 export(getBoundingBox)
+export(getBoundingEll)
+export(getBoundingSphere)
 export(getCentroid)
 export(getConvexHull)
 export(getDCOM)
 export(getDistance)
 export(getHausdorff)
-export(getHausdorffQuantile)
 export(getJSCDSC)
 export(getNormalsFun)
 export(getSurfaceDist)
@@ -30,6 +31,9 @@ export(isTriangle)
 export(isValid)
 export(makeMesh)
 export(makeMeshValid)
+export(meshEllipsoid)
+export(meshIsoCuboid)
+export(meshSphere)
 export(orientToBoundVolume)
 export(plotEdges)
 export(readMeshFile)
@@ -53,11 +57,14 @@ importFrom(Rcpp,evalCpp)
 importFrom(rgl,
   cube3d,
   cylinder3d,
+  icosahedron3d,
   lines3d,
   mesh3d,
+  rotate3d,
   scale3d,
   shade3d,
   spheres3d,
+  subdivision3d,
   tmesh3d,
   translate3d
 )

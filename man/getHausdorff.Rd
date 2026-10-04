@@ -2,9 +2,9 @@
 % Please edit documentation in R/hausdorff.R
 \name{getHausdorff}
 \alias{getHausdorff}
-\title{Hausdorff distance between two meshes}
+\title{Hausdorff distance between two meshes (full or quantile)}
 \usage{
-getHausdorff(mesh1, mesh2, symmetric = TRUE, n, errorBound)
+getHausdorff(mesh1, mesh2, symmetric = TRUE, errBound, p, ...)
 }
 \arguments{
 \item{mesh1}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
@@ -13,25 +13,39 @@ getHausdorff(mesh1, mesh2, symmetric = TRUE, n, errorBound)
 
 \item{symmetric}{Boolean. Report the symmetric Hausdorff distance?}
 
-\item{n}{\code{integer}. Number of points sampled for the approximate Hausdorff distance.
-If missing and \code{errorBound} is missing as well, the number of vertices is used.}
+\item{errBound}{A positive number. If provided, upper bound on the
+error of the Hausdorff distance estimate. If missing, and \code{p}
+is also missing, the approximate distance is returned.}
 
-\item{errorBound}{A positive number. Upper bound on the error of the
-estimate. If missing, the approximate distance is returned.}
+\item{p}{A number in \eqn{[0, 1]}. The quantile probability, defaults
+to \code{0.95}. If provided and \code{errBound} is missing,
+the quantile Hausdorff distance is returned.}
+
+\item{...}{Options for random sampling passed to
+\code{\link[SurfaceMesh]{getSurfaceDist}}. See there fore details.
+Relevant for the approximate and quantile distance.}
 }
 \value{
-A number. For the apprixmate distance, the algorithm uses
-simulation, and thus the result can vary.
+A number. For the apprixmate and quantile distance,
+the algorithm uses random sampling, and thus the result can vary.
 }
 \description{
-Hausdorff distance between two 3D surface meshes. Either the
-approximate distance, or the distance estimate with a given error bound.
+Hausdorff distance between two 3D surface meshes. The
+approximate distance, the distance estimate with a given error bound,
+or the quantile Hausdorff distance, e.g., HD95.
 }
 \details{
-See \url{https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance} for details.
-The approximate distance uses random uniform vertex sampling, edge sampling, face sampling. See
-\url{https://doc.cgal.org/latest/Polygon_mesh_processing/group__PMP__distance__grp.html}
-for details.
+The quantile Hausdorff distance approximates the Hausdorff distance
+using a quantile (often the 95th percentile, i.e. "HD95") of the
+distances from a random sample of points on one mesh to the other mesh,
+instead of their maximum. This is less sensitive to small, isolated
+outlying regions than the full Hausdorff distance.
+
+See \url{https://metrics-reloaded.dkfz.de/metric-library/hd} and
+\url{https://metrics-reloaded.dkfz.de/metric-library/xhd} for more information
+on the (quantile) Hausdorff distance.
+See \url{https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance}
+for implementation details.
 }
 \examples{
 library(SurfaceMesh)
@@ -39,13 +53,13 @@ library(SurfaceMesh)
 getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE)
 
 ## estimate with error bound
-getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE,
-                     errorBound=0.001)
+getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE, errBound=0.01)
 
+## quantile Hausdorff distance
+getHausdorff(dataHeart1, dataHeart2, symmetric=TRUE, p=0.95)
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getHausdorffQuantile}} for the quantile Hausdorff distance,
-\code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics, and
+See \code{\link[SurfaceMesh]{getSurfaceDist}} for other surface distance metrics, and
 \code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
 }
 \author{

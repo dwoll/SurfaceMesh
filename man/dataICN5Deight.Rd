@@ -20,8 +20,8 @@ An object of class \code{\link[rgl]{mesh3d}} from package
 ICN5D on forum \url{https://hi.gher.space/forum/}.
 
 An object of class \code{\link[rgl]{mesh3d}} from package
-\strong{rgl} representing an ICN5D eight, a shape from from user ICN5D
-on forum \url{https://hi.gher.space/forum/}.
+\strong{rgl} representing an ICN5D eight, a shape presented by user
+ICN5D on forum \url{https://hi.gher.space/forum/}.
 }
 \examples{
 ## The following files were used to generate this mesh.

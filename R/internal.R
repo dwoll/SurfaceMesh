@@ -26,8 +26,23 @@ isAtomicVector <- function(x) {
 }
 
 #' @noRd
+isNumber <- function(x) {
+	is.numeric(x) && (length(x) == 1L) && !is.na(x)
+}
+
+#' @noRd
+isNumberVector <- function(x) {
+  is.vector(x) && !anyNA(x) && is.numeric(x)
+}
+
+#' @noRd
 isPositiveNumber <- function(x) {
 	is.numeric(x) && (length(x) == 1L) && (x > 0) && !is.na(x)
+}
+
+#' @noRd
+isPositiveNumberVector <- function(x) {
+  is.vector(x) && !anyNA(x) && is.numeric(x) && all(x > 0)
 }
 
 #' @noRd
@@ -57,9 +72,26 @@ isString <- function(x){
 
 #' @noRd
 isStringVector <- function(x) {
-  is.character(x) && !anyNA(x)
+  is.vector(x) && is.character(x) && !anyNA(x)
 }
 
+#' @noRd
+isOrthonormal <- function(x, tol=1e-6) {
+  isMat <- is.matrix(x)  &&
+           is.numeric(x) &&
+           identical(dim(x), c(3L, 3L)) &&
+           all(is.finite(x))
+
+  isOn <- isTRUE(all.equal(crossprod(dirs),
+                           diag(3L),
+                           check.attributes=FALSE,
+                           tolerance=tol))
+
+  isMat && isOn
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @noRd
 getVFT <- function(x, beforeCheck = FALSE) {
   transposed <- !beforeCheck
@@ -69,22 +101,23 @@ getVFT <- function(x, beforeCheck = FALSE) {
     if(!is.null(triangles)) {
       triangles <- lapply(seq_len(ncol(triangles)), function(i) { triangles[, i] - i0 })
     }
-    quads <- x[["ib"]]
-    isTriangle <- is.null(quads)
-    isQuad     <- is.null(triangles)
-    if(!isTriangle) {
+    quads       <- x[["ib"]]
+    mIsTriangle <- is.null(quads)
+    mIsQuad     <- is.null(triangles)
+    if(!mIsTriangle) {
       quads <- lapply(seq_len(ncol(quads)), function(i) { quads[, i] - i0 })
     }
-    faces <- c(triangles, quads)
+    ## triangles, quads may be NULL, automatically removed by c()
+    faces    <- c(triangles, quads)
     vertices <- x[["vb"]][-4L, ]
     if(!transposed) {
       vertices <- t(vertices)
     }
-    rmesh <- list("vertices" = vertices, "faces" = faces)
+    rmesh <- list(vertices=vertices, faces=faces)
   } else if(inherits(x, "CGALmesh")) {
-    isTriangle <- attr(x, "toRGL") == 3L
-    isQuad     <- attr(x, "toRGL") == 4L
-    vertices   <- x[["vertices"]]
+    mIsTriangle <- attr(x, "toRGL") == 3L
+    mIsQuad     <- attr(x, "toRGL") == 4L
+    vertices    <- x[["vertices"]]
     if(transposed) {
       vertices <- t(vertices)
     }
@@ -94,26 +127,29 @@ getVFT <- function(x, beforeCheck = FALSE) {
     } else if(!beforeCheck) {
       faces <- lapply(faces, function(face) { face - 1L })
     }
-    rmesh <- list("vertices" = vertices, "faces" = faces)
+    rmesh <- list(vertices=vertices, faces=faces)
   } else if(is.list(x)) {
-    rmesh <- checkMesh(x[["vertices"]], x[["faces"]], aslist = TRUE)
-    isTriangle <- rmesh[["isTriangle"]]
-    isQuad     <- rmesh[["isQuad"]]
+    rmesh <- checkMesh(x[["vertices"]], x[["faces"]], aslist=TRUE)
+    mIsTriangle <- rmesh[["isTriangle"]]
+    mIsQuad     <- rmesh[["isQuad"]]
     if(beforeCheck) {
       rmesh[["vertices"]] <- t(rmesh[["vertices"]])
-      rmesh[["faces"]] <- lapply(rmesh[["faces"]], function(face) { face + 1L })
+      rmesh[["faces"]]    <- lapply(rmesh[["faces"]], function(face) { face + 1L })
     }
   } else {
     stop("Invalid `x` argument.", call. = FALSE)
   }
-  list("rmesh" = rmesh, "isTriangle" = isTriangle, "isQuad" = isQuad)
+  list(rmesh=rmesh, isTriangle=mIsTriangle, isQuad=mIsQuad)
 }
 
-## convert R mesh to format required for CPP
+## ----------------------------------------------------------------------- //
+## convert R mesh to format required for C++
+## ----------------------------------------------------------------------- //
 #' @noRd
 fromR <- function(x) {
   vertices <- t(x[["vertices"]])
   stopifnot(is.numeric(vertices))
+  storage.mode(vertices) <- "double"
 
   ## create list of faces, reduce index by 1 for C++ counting
   faces <- if(is.matrix(x[["faces"]])) {
@@ -125,7 +161,6 @@ fromR <- function(x) {
     lapply(x[["faces"]], function(face) { as.integer(face - 1L) })
   }
 
-  storage.mode(vertices) <- "double"
   if(hasName(x, "normals")) {
     normals <- t(x[["normals"]])
     storage.mode(normals) <- "double"
@@ -135,7 +170,9 @@ fromR <- function(x) {
   }
 }
 
+## ----------------------------------------------------------------------- //
 ## convert CPP mesh to format required in R
+## ----------------------------------------------------------------------- //
 #' @importFrom utils hasName
 #' @noRd
 fromCPP <- function(x) {
@@ -144,9 +181,9 @@ fromCPP <- function(x) {
     edgesDF                 <- x[["edges"]]
     x[["edgesDF"]]          <- edgesDF
     x[["edges"]]            <- as.matrix(edgesDF[, c("i1", "i2")])
-    exteriorEdges           <- as.matrix(subset(edgesDF, exterior)[, c("i1", "i2")])
-    x[["exteriorEdges"]]    <- exteriorEdges
-    x[["exteriorVertices"]] <- which(table(exteriorEdges) != 2L)
+    edgesExterior           <- as.matrix(subset(edgesDF, exterior)[, c("i1", "i2")])
+    x[["edgesExterior"]]    <- edgesExterior
+    x[["verticesExterior"]] <- which(table(edgesExterior) != 2L)
   }
 
   if(hasName(x, "normals")) {
@@ -178,23 +215,25 @@ fromCPP <- function(x) {
   x
 }
 
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @noRd
 checkMesh <- function(vertices, faces, aslist) {
   if(!is.matrix(vertices) || (ncol(vertices) != 3L) || !is.numeric(vertices)) {
-    stop("The `vertices` argument must be a numeric matrix with three columns.")
+    stop("The `vertices` argument must be a numeric matrix with 3 columns.")
   }
   storage.mode(vertices) <- "double"
   if(anyNA(vertices)) {
     stop("Found missing values in `vertices`.")
   }
 
-  homogeneousFaces <- FALSE
-  isTriangle       <- FALSE
-  isQuad           <- FALSE
-  toRGL            <- FALSE
+  homFaces    <- FALSE
+  mIsTriangle <- FALSE
+  mIsQuad     <- FALSE
+  mToRGL      <- FALSE
   if(is.matrix(faces)) {
     if(ncol(faces) < 3L) {
-      stop("Faces must be given by at least three indices.")
+      stop("Faces must be given by at least 3 indices.")
     }
     storage.mode(faces) <- "integer"
     if(anyNA(faces)) {
@@ -207,11 +246,11 @@ checkMesh <- function(vertices, faces, aslist) {
       stop("Faces cannot contain indices higher than the number of vertices.")
     }
 
-    homogeneousFaces <- ncol(faces)
-    if(homogeneousFaces %in% c(3L, 4L)) {
-      isTriangle <- homogeneousFaces == 3L
-      isQuad     <- homogeneousFaces == 4L
-      toRGL      <- homogeneousFaces
+    homFaces <- ncol(faces)
+    if(homFaces %in% c(3L, 4L)) {
+      mIsTriangle <- homFaces == 3L
+      mIsQuad     <- homFaces == 4L
+      mToRGL      <- homFaces
     }
 
     if(aslist) {
@@ -233,42 +272,42 @@ checkMesh <- function(vertices, faces, aslist) {
     faces <- lapply(faces, function(x) { as.integer(x) - 1L })
     sizes <- lengths(faces)
     if(any(sizes < 3L)) {
-      stop("Faces must be given by at least three indices.")
+      stop("Faces must be given by at least 3 indices.")
     }
 
     check <- any(vapply(faces, function(f) {
-              any(f < 0L) || any(f >= nrow(vertices))
-            }, logical(1L)))
+        any(f < 0L) || any(f >= nrow(vertices)) }, logical(1L)))
     if(check) {
       stop("Faces cannot contain indices lower than 1 or higher ",
           "than the number of vertices.")
     }
     usizes <- length(unique(sizes))
     if(usizes == 1L) {
-      homogeneousFaces <- sizes[1L]
-      isTriangle <- homogeneousFaces == 3L
-      isQuad     <- homogeneousFaces == 4L
-      if(homogeneousFaces %in% c(3L, 4L)) {
-        toRGL <- homogeneousFaces
+      homFaces    <- sizes[1L]
+      mIsTriangle <- homFaces == 3L
+      mIsQuad     <- homFaces == 4L
+      if(homFaces %in% c(3L, 4L)) {
+        mToRGL <- homFaces
       }
     } else if((usizes == 2L) && all(sizes %in% c(3L, 4L))) {
-      toRGL <- 34L
+      mToRGL <- 34L
     }
   } else {
     stop("The `faces` argument must be a list or a matrix.")
   }
-  list("vertices"        =t(vertices),
-       "faces"           =faces,
-       "homogeneousFaces"=homogeneousFaces,
-       "isTriangle"      =isTriangle,
-       "isQuad"          =isQuad,
-       "toRGL"           =toRGL)
+  list("vertices"  =t(vertices),
+       "faces"     =faces,
+       "homFaces"  =homFaces,
+       "isTriangle"=mIsTriangle,
+       "isQuad"    =mIsQuad,
+       "toRGL"     =mToRGL)
 }
 
-## assume
+## ----------------------------------------------------------------------- //
 # vertices = numeric matrix with 3 columns
 # faces = integer matrix or list
 # no missings
+## ----------------------------------------------------------------------- //
 #' @noRd
 checkMeshValid <- function(vertices, faces, aslist) {
   if(!is.matrix(vertices) || (ncol(vertices) != 3L) || !is.numeric(vertices)) {
@@ -276,17 +315,17 @@ checkMeshValid <- function(vertices, faces, aslist) {
   }
   storage.mode(vertices) <- "double"
 
-  homogeneousFaces <- FALSE
-  isTriangle       <- FALSE
-  isQuad           <- FALSE
-  toRGL            <- FALSE
+  homFaces    <- FALSE
+  mIsTriangle <- FALSE
+  mIsQuad     <- FALSE
+  mToRGL      <- FALSE
   if(is.matrix(faces)) {
     storage.mode(faces) <- "integer"
-    homogeneousFaces <- ncol(faces)
-    if(homogeneousFaces %in% c(3L, 4L)) {
-      isTriangle <- homogeneousFaces == 3L
-      isQuad     <- homogeneousFaces == 4L
-      toRGL      <- homogeneousFaces
+    homFaces <- ncol(faces)
+    if(homFaces %in% c(3L, 4L)) {
+      mIsTriangle <- homFaces == 3L
+      mIsQuad     <- homFaces == 4L
+      mToRGL      <- homFaces
     }
 
     if(aslist) {
@@ -299,30 +338,39 @@ checkMeshValid <- function(vertices, faces, aslist) {
     sizes  <- lengths(faces)
     usizes <- length(unique(sizes))
     if(usizes == 1L) {
-      homogeneousFaces <- sizes[1L]
-      isTriangle       <- homogeneousFaces == 3L
-      isQuad           <- homogeneousFaces == 4L
-      if(homogeneousFaces %in% c(3L, 4L)) {
-        toRGL <- homogeneousFaces
+      homFaces    <- sizes[1L]
+      mIsTriangle <- homFaces == 3L
+      mIsQuad     <- homFaces == 4L
+      if(homFaces %in% c(3L, 4L)) {
+        mToRGL <- homFaces
       }
     } else if((usizes == 2L) && all(sizes %in% c(3L, 4L))) {
-      toRGL <- 34L
+      mToRGL <- 34L
     }
   } else {
     stop("The `faces` argument must be a list or a matrix.")
   }
-  list("vertices"        =t(vertices),
-       "faces"           =faces,
-       "homogeneousFaces"=homogeneousFaces,
-       "isTriangle"      =isTriangle,
-       "isQuad"          =isQuad,
-       "toRGL"           =toRGL)
+  list("vertices"  =t(vertices),
+       "faces"     =faces,
+       "homFaces"  =homFaces,
+       "isTriangle"=mIsTriangle,
+       "isQuad"    =mIsQuad,
+       "toRGL"     =mToRGL)
 }
 
+## ----------------------------------------------------------------------- //
+## options for point sampling on mesh
+## see internal_utils.cpp -> CGAL sample_triangle_mesh()
+## ----------------------------------------------------------------------- //
+#' @noRd
 checkSampleOpts <- function(x) {
-  method_choices <- c("random", "grid", "mc")
-  method         <- match.arg(x[["method"]], choices=method_choices)
-  x[["method"]]  <- match(method, method_choices)
+  if(!hasName(x, "method") || is.null(x[["method"]])) {
+    x[["method"]]  <- 1L
+  } else {
+    method_choices <- c("random", "grid", "mc")
+    method         <- match.arg(x[["method"]], choices=method_choices)
+    x[["method"]]  <- match(method, method_choices)
+  }
   if(!hasName(x, "sampleVerts") || is.null(x[["sampleVerts"]])) {
     x[["sampleVerts"]] <- TRUE
   } else {
@@ -385,4 +433,27 @@ checkSampleOpts <- function(x) {
   storage.mode(x[["ptsPerArea"]])  <- "double"
 
   x
+}
+
+## ----------------------------------------------------------------------- //
+## Euler angles from 3D rotation matrix
+## ----------------------------------------------------------------------- //
+#' @noRd
+getEulerAngles <- function(x, tol=1e-6) {
+    stopifnot(isOrthonormal(x))
+    if(det(x) < 0) {
+        x[, 3L] <- -x[, 3L]
+    }
+    theta <- acos(max(-1, min(1, x[3L, 3L])))
+    if(abs(sin(theta)) > 1e-8) {
+        phi <- atan2(x[2L, 3L],  x[1L, 3L])
+        psi <- atan2(x[3L, 2L], -x[3L, 1L])
+    } else if(x[3L, 3L] > 0) {      # gimbal lock: only phi -/+ psi is determined
+        phi <- atan2(x[2L, 1L], x[1L, 1L])
+        psi <- 0
+    } else {
+        phi <- atan2(-x[2L, 1L], -x[1L, 1L])
+        psi <- 0
+    }
+    c(phi, theta, psi)
 }

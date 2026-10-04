@@ -22,7 +22,10 @@ double getHausdorffApprox_cpp(
     const Rcpp::List rmesh1,
     const Rcpp::List rmesh2,
     const bool symmetric,
-    const unsigned int n) {
+    const Rcpp::List ropts) {
+  Rcpp::List ropts_l = Rcpp::as<Rcpp::List>(ropts);
+  sample_opts opts = ropts_to_sample_opts(ropts_l);
+
   Mesh3 mesh1 = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
       rmesh1,
       true,        // soup
@@ -51,23 +54,29 @@ double getHausdorffApprox_cpp(
     Rcpp::warning("Mesh 2 is not triangle.");
     return Rcpp::NumericVector::get_na();
   }
+
+  auto params =
+      PMP::parameters::use_random_uniform_sampling(opts.method == 1)
+          .use_grid_sampling(opts.method == 2)
+          .use_monte_carlo_sampling(opts.method == 3)
+          .do_sample_vertices(opts.sampleVerts)
+          .do_sample_edges(opts.sampleEdges)
+          .do_sample_faces(opts.sampleFaces)
+          .grid_spacing(opts.gridSpacing)
+          .number_of_points_on_edges(opts.ptsOnEdges)
+          .number_of_points_on_faces(opts.ptsOnFaces)
+          .number_of_points_per_distance_unit(opts.ptsPerDist)
+          .number_of_points_per_edge(opts.ptsPerEdge)
+          .number_of_points_per_area_unit(opts.ptsPerArea)
+          .number_of_points_per_face(opts.ptsPerFace);
+
   double d;
   if(symmetric) {
-    if(n > 0) {
-        d = CGAL::to_double<K::FT>(PMP::approximate_symmetric_Hausdorff_distance<PIA_TAG>(
-          mesh1, mesh2, PMP::parameters::number_of_points_on_faces(n)));
-    } else {
-        d = CGAL::to_double<K::FT>(PMP::approximate_symmetric_Hausdorff_distance<PIA_TAG>(
-          mesh1, mesh2));
-    }
+    d = CGAL::to_double<K::FT>(PMP::approximate_symmetric_Hausdorff_distance<PIA_TAG>(
+      mesh1, mesh2, params));
   } else {
-    if(n > 0) {
-        d = CGAL::to_double<K::FT>(PMP::approximate_Hausdorff_distance<PIA_TAG>(
-          mesh1, mesh2, PMP::parameters::number_of_points_on_faces(n)));
-    } else {
-        d = CGAL::to_double<K::FT>(PMP::approximate_Hausdorff_distance<PIA_TAG>(
-          mesh1, mesh2));
-    }
+    d = CGAL::to_double<K::FT>(PMP::approximate_Hausdorff_distance<PIA_TAG>(
+      mesh1, mesh2, params));
   }
   return d;
 }
