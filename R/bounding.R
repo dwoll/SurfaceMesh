@@ -101,7 +101,7 @@ getBoundingBox <- function(x,
             c(bx, by, bz),
             c(ax, by, bz))
     } else {
-      m_rgl <- meshIsoCuboid(ptLo, ptUps)
+      m_rgl <- meshIsoCuboid(ptLo, ptUp)
       if(out == "cgalmesh") {
         makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
       } else if(out == "rgl") {
