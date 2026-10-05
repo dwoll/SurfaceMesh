@@ -123,7 +123,7 @@ Rcpp::List getBoundingEllipsoid_cpp(const Rcpp::NumericMatrix rpoints, const dou
     Rcpp::NumericMatrix rsa_dirs = points3_to_matrix<K, Point3>(sa_dirs);
     return Rcpp::List::create(Rcpp::Named("center")     = rctr,
                               Rcpp::Named("lengths")    = rsa_lens,
-                              Rcpp::Named("directions") = Rcpp::transpose(rsa_dirs));
+                              Rcpp::Named("directions") = rsa_dirs);
 }
 
 // ----------------------------------------------------------------------- //

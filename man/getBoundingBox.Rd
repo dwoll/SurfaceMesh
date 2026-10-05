@@ -37,21 +37,21 @@ Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
 library(SurfaceMesh)
 library(rgl)
 
-mesh1     <- dataOloid
+mesh1     <- makeMesh(dataTubularKnot)
 mesh1_rgl <- toRGL(mesh1)
-bb1       <- getBoundingBox(mesh1[["vertices"]])
-bb1_rgl   <- toRGL(bb1)
+bb1_rgl   <- getBoundingBox(mesh1[["vertices"]], out="rgl")
+open3d(windowRect=50 + c(0, 0, 400, 400))
 view3d(0, 30, zoom=0.9)
-wire3d(mesh1_rgl)
+shade3d(mesh1_rgl, color="seashell")
 wire3d(bb1_rgl)
 
 mesh2     <- dataHeart1
 mesh2_rgl <- toRGL(mesh2)
-bb2       <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE)
-bb2_rgl   <- toRGL(bb2)
-open3d(windowRect=50 + c(0, 0, 800, 400))
-wire3d(mesh2_rgl)
+bb2_rgl   <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE, out="rgl")
+open3d(windowRect=50 + c(0, 0, 400, 400))
+shade3d(mesh2_rgl, color="seashell")
 wire3d(bb2_rgl)
+
 }
 \seealso{
 See \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull,

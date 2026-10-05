@@ -24,6 +24,14 @@ to the axes.
 CAVE: Y-axis direction is assumed to be front-back,
 corresponding to \strong{rgl} (OpenGL) convention.
 }
+\examples{
+library(SurfaceMesh)
+library(rgl)
+lo <- c(-4, -2, -1)
+up <- c( 4,  2,  1)
+cuboid_rgl <- meshIsoCuboid(lo, up)
+wire3d(cuboid_rgl)
+}
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 }

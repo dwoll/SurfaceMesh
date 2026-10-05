@@ -33,24 +33,23 @@
 #' library(SurfaceMesh)
 #' library(rgl)
 #'
-#' mesh1     <- dataOloid
+#' mesh1     <- makeMesh(dataTubularKnot)
 #' mesh1_rgl <- toRGL(mesh1)
-#' bb1       <- getBoundingBox(mesh1[["vertices"]])
-#' bb1_rgl   <- toRGL(bb1)
+#' bb1_rgl   <- getBoundingBox(mesh1[["vertices"]], out="rgl")
+#' open3d(windowRect=50 + c(0, 0, 400, 400))
 #' view3d(0, 30, zoom=0.9)
-#' wire3d(mesh1_rgl)
+#' shade3d(mesh1_rgl, color="seashell")
 #' wire3d(bb1_rgl)
 #'
 #' mesh2     <- dataHeart1
 #' mesh2_rgl <- toRGL(mesh2)
-#' bb2       <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE)
-#' bb2_rgl   <- toRGL(bb2)
-#' open3d(windowRect=50 + c(0, 0, 800, 400))
-#' wire3d(mesh2_rgl)
+#' bb2_rgl   <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE, out="rgl")
+#' open3d(windowRect=50 + c(0, 0, 400, 400))
+#' shade3d(mesh2_rgl, color="seashell")
 #' wire3d(bb2_rgl)
-
+#'
 #' @export
-#' @importFrom rgl translate3d scale3d cube3d qmesh3d
+#' @importFrom rgl translate3d scale3d cube3d
 getBoundingBox <- function(x,
                            oriented    = FALSE,
                            out         = c("CGALmesh", "rgl", "Points"),
@@ -71,25 +70,16 @@ getBoundingBox <- function(x,
   if(oriented) {
     outL <- getBoundingBoxOptimal_cpp(t(x), triangulate, normals)
     if(out == "points") {
-      outL[["vertices"]]
-    } else if(out == "cgalmesh") {
-      fromCPP(outL[["mesh"]])
-    } else if(out == "rgl") {
-      ## CAVE: input from CGAL y is up-down,
-      ## but rgl y is front-back
-      vertices        <- outL[["vertices"]]
-      vertices[ , 2L] <- outL[["vertices"]][ , 3L]
-      vertices[ , 3L] <- outL[["vertices"]][ , 2L]
-      faces <- cbind(c(1, 5, 7, 3),
-                     c(2, 6, 8, 4),
-                     c(1, 2, 4, 3),
-                     c(5, 6, 8, 7),
-                     c(3, 7, 8, 4),
-                     c(1, 5, 6, 2))
-
-      qmesh3d(vertices = vertices, indices = faces, homogeneous = FALSE)
+      t(outL[["vertices"]])
     } else {
-      stop("Wrong output format.")
+      obb <- fromCPP(outL[["mesh"]])
+      if(out == "cgalmesh") {
+        obb
+      } else if(out == "rgl") {
+        toRGL(obb)
+      } else {
+        stop("Wrong output format.")
+      }
     }
   } else {
     outL <- getBoundingBox_cpp(t(x))
@@ -111,15 +101,7 @@ getBoundingBox <- function(x,
             c(bx, by, bz),
             c(ax, by, bz))
     } else {
-      ## CAVE: input from CGAL y is up-down,
-      ## but rgl y is front-back
-      ptLoUse <- ptLo
-      ptUpUse <- ptUp
-      ptLoUse[2L] <- ptLo[3L]
-      ptLoUse[3L] <- ptLo[2L]
-      ptUpUse[2L] <- ptUp[3L]
-      ptUpUse[3L] <- ptUp[2L]
-      m_rgl <- meshIsoCuboid(ptLoUse, ptUpUse)
+      m_rgl <- meshIsoCuboid(ptLo, ptUps)
       if(out == "cgalmesh") {
         makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
       } else if(out == "rgl") {
@@ -146,7 +128,7 @@ getBoundingBox <- function(x,
 #'   by iteratively subdividing the faces of an icosahedron).
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{list} with components \code{"center"}, \code{"lengths"},
-#'   and \code{directions};
+#'   and \code{"directions"};
 #'   a \code{CGALmesh} object; or a \code{\link[rgl]{mesh3d}} object -
 #'   depending on argument \code{out}.
 #' @seealso See \code{\link[SurfaceMesh]{getBoundingBox}} for the bounding box,

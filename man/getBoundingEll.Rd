@@ -30,7 +30,7 @@ See details.}
 }
 \value{
 A \code{list} with components \code{"center"}, \code{"lengths"},
-and \code{directions};
+and \code{"directions"};
 a \code{CGALmesh} object; or a \code{\link[rgl]{mesh3d}} object -
 depending on argument \code{out}.
 }
