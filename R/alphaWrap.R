@@ -14,9 +14,11 @@
 #' @description Reconstruction of a 3D surface mesh from a cloud of 3D
 #'   points by alpha wrapping.
 #'
-#' @param x A \code{CGALmesh} object, i.e.,
-#'   the output of \code{\link[SurfaceMesh]{makeMesh}}, or a numeric matrix
-#'   with 3 columns which stores the points, one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param alphaRel Relative alpha parameter. The actual alpha parameter (see
 #'   details) is defined as the length of the diagonal of the bounding box of
 #'   the point cloud divided by the relative alpha parameter. Increase for
@@ -61,25 +63,9 @@ alphaWrap <- function(x, alphaRel, offsetRel, normals=FALSE) {
   stopifnot(isPositiveNumber(alphaRel))
   stopifnot(isPositiveNumber(offsetRel))
   stopifnot(isBoolean(normals))
-
-  if(!inherits(x, "CGALmesh") && !is.matrix(x)) {
-      stop("The `x` argument must be either of class 'CGALmesh'",
-           " (i.e., the output of the `makeMesh()` function),",
-           " or a numeric matrix with 3 columns.")
-  }
-
-  meshOut <- if(is.matrix(x)) {
-    if(!is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
-      stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
-    }
-    storage.mode(x) <- "double"
-    if(anyNA(x)) {
-      stop("Points in `x` with missing values are not allowed.", call. = TRUE)
-    }
-    alphaWrapPoints_cpp(t(x), alphaRel, offsetRel, normals)
-  } else {
-    meshCPP <- fromR(x)
-    alphaWrapMesh_cpp(meshCPP, alphaRel, offsetRel, normals)
-  }
+  xIn     <- getVertsMat(x, nPtsMin=4L)
+  meshOut <- alphaWrapPoints_cpp(t(xIn), alphaRel, offsetRel, normals)
+  # meshCPP <- fromR(x)
+  # alphaWrapMesh_cpp(meshCPP, alphaRel, offsetRel, normals)
   fromCPP(meshOut)
 }

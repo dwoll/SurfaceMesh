@@ -10,7 +10,6 @@
 
 # Wishlist
 
-  * functions that accept a matrix should also accept a `CGALmesh` object, `mesh3d` object and extract vertices - via S3 methods
   * face normals
   * https://doc.cgal.org/latest/Polygon_mesh_processing/Polygon_mesh_processing_2interpolated_corrected_curvatures_PH_8cpp-example.html#a5
   * https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/Advancing_front_surface_reconstruction_2reconstruction_structured_8cpp-example.html

@@ -14,7 +14,11 @@
 ## ----------------------------------------------------------------------- //
 #' @title Get bounding box (axis-parallel or oriented)
 #' @description Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
-#' @param x \code{numeric} matrix with 3 columns with one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param oriented Boolean. Get the optimal (oriented) bounding box?
 #' @param out \code{character}. Type of return value. One of \code{"Points"}
 #'   for a matrix giving the corner points, \code{"CGALmesh"} for a \code{CGALmesh}
@@ -55,20 +59,14 @@ getBoundingBox <- function(x,
                            out         = c("CGALmesh", "rgl", "Points"),
                            triangulate = FALSE,
                            normals     = FALSE) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
-    stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Points in `x` with missing values are not allowed.", call. = TRUE)
-  }
+  xIn <- getVertsMat(x, nPtsMin=4L)
   stopifnot(isBoolean(oriented))
   out_choices <- tolower(c("CGALmesh", "rgl", "Points"))
   out         <- match.arg(tolower(out), choices=out_choices)
   stopifnot(isBoolean(triangulate))
   stopifnot(isBoolean(normals))
   if(oriented) {
-    outL <- getBoundingBoxOptimal_cpp(t(x), triangulate, normals)
+    outL <- getBoundingBoxOptimal_cpp(t(xIn), triangulate, normals)
     if(out == "points") {
       t(outL[["vertices"]])
     } else {
@@ -82,7 +80,7 @@ getBoundingBox <- function(x,
       }
     }
   } else {
-    outL <- getBoundingBox_cpp(t(x))
+    outL <- getBoundingBox_cpp(t(xIn))
     ptLo <- outL[["lo"]]
     ptUp <- outL[["up"]]
     if(out == "points") {
@@ -117,7 +115,11 @@ getBoundingBox <- function(x,
 ## ----------------------------------------------------------------------- //
 #' @title Bounding ellipsoid of a set of 3D points
 #' @description Get the approximate bounding ellipsoid of a given set of 3D points.
-#' @param x \code{numeric} matrix with 3 columns with one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param out \code{character}. Type of return value. One of \code{"CtrRadDir"}
 #'   for a list giving the sphere's center, semi-axis lengths, and semi-axis
 #'   directions, \code{"CGALmesh"} for a \code{CGALmesh} object, and
@@ -153,13 +155,7 @@ getBoundingEll <- function(x,
                            nIter = 3L,
                            eps = 0.01,
                            normals = FALSE) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
-    stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Points in `x` with missing values are not allowed.", call. = TRUE)
-  }
+  xIn         <- getVertsMat(x, nPtsMin=4L)
   out_choices <- tolower(c("CGALmesh", "rgl", "CtrRadDir"))
   out         <- match.arg(tolower(out), choices=out_choices)
   stopifnot(isStrictPositiveInteger(nIter))
@@ -167,7 +163,7 @@ getBoundingEll <- function(x,
   storage.mode(eps) <- "double"
   stopifnot(isBoolean(normals))
 
-  bellL <- getBoundingEllipsoid_cpp(t(x), eps)
+  bellL <- getBoundingEllipsoid_cpp(t(xIn), eps)
   if(out == "ctrraddir") {
     bellL
   } else {
@@ -199,7 +195,11 @@ getBoundingEll <- function(x,
 ## ----------------------------------------------------------------------- //
 #' @title Bounding sphere of a set of 3D points
 #' @description Get the bounding sphere of a given set of 3D points.
-#' @param x \code{numeric} matrix with 3 columns with one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param out \code{character}. Type of return value. One of \code{"CtrRad"}
 #'   for a list giving the sphere's center and radius, \code{"CGALmesh"} for
 #'   a \code{CGALmesh} object, and \code{"rgl"} for a \code{\link[rgl]{mesh3d}}
@@ -231,19 +231,13 @@ getBoundingSphere <- function(x,
                               out = c("CGALmesh", "rgl", "CtrRad"),
                               nIter = 3L,
                               normals = FALSE) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
-    stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Points in `x` with missing values are not allowed.", call. = TRUE)
-  }
+  xIn         <- getVertsMat(x, nPtsMin=4L)
   out_choices <- tolower(c("CGALmesh", "rgl", "CtrRad"))
   out         <- match.arg(tolower(out), choices=out_choices)
   stopifnot(isStrictPositiveInteger(nIter))
   stopifnot(isBoolean(normals))
 
-  bsL <- getBoundingSphere_cpp(t(x))
+  bsL <- getBoundingSphere_cpp(t(xIn))
   if(out == "ctrrad") {
     bsL
   } else {
@@ -292,14 +286,8 @@ getBoundingSphere <- function(x,
 #'
 #' @export
 getConvexHull <- function(x, normals = FALSE) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
-    stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Points in `x` with missing values are not allowed.", call. = TRUE)
-  }
   stopifnot(isBoolean(normals))
-  meshCPP <- getConvexHull_cpp(t(x), normals)
+  xIn     <- getVertsMat(x, nPtsMin=4L)
+  meshCPP <- getConvexHull_cpp(t(xIn), normals)
   fromCPP(meshCPP)
 }

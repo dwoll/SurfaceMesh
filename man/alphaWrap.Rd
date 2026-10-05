@@ -7,9 +7,11 @@
 alphaWrap(x, alphaRel, offsetRel, normals = FALSE)
 }
 \arguments{
-\item{x}{A \code{CGALmesh} object, i.e.,
-the output of \code{\link[SurfaceMesh]{makeMesh}}, or a numeric matrix
-with 3 columns which stores the points, one point per row.}
+\item{x}{A \code{CGALmesh} object, i.e., the output of
+\code{\link[SurfaceMesh]{makeMesh}},
+a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+or a numeric matrix with 3 columns which stores the point coordinates,
+one point per row, and at least 4 points.}
 
 \item{alphaRel}{Relative alpha parameter. The actual alpha parameter (see
 details) is defined as the length of the diagonal of the bounding box of

@@ -121,7 +121,7 @@ meshSphere <- function(ctr = c(0, 0, 0), r = 1, nIter = 3L) {
 #'
 #' @return A \strong{rgl} mesh, i.e. a \code{mesh3d} object.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
-#' @exmaples
+#' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
 #' lo <- c(-4, -2, -1)

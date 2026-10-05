@@ -171,6 +171,34 @@ fromR <- function(x) {
 }
 
 ## ----------------------------------------------------------------------- //
+## get matrix of vertices from input: matrix, CGALmesh object, mesh3d object
+## ----------------------------------------------------------------------- //
+#' @importFrom utils hasName
+#' @noRd
+getVertsMat <- function(x, nPtsMin=4L) {
+  if(inherits(x, "CGALmesh")) {
+    x[["vertices"]]
+  } else if(is.matrix(x)) {
+    if(!is.numeric(x) || (ncol(x) != 3L) || (nrow(x) < nPtsMin)) {
+      msg <- paste0("`x` must be a numeric matrix with 3 columns and at least ", nPtsMin, " points.")
+      stop(msg, call. = TRUE)
+    }
+    storage.mode(x) <- "double"
+    if(anyNA(x)) {
+      stop("Points in `x` with missing values are not allowed.", call. = TRUE)
+    }
+    x
+  } else if(inherits(x, "mesh3d")) {
+    vft <- getVFT(x, beforeCheck = TRUE)
+    vft[["rmesh"]][["vertices"]]
+  } else {
+    msg <- paste0("The `x` argument must be a 'CGALmesh' object, a 'mesh3d' object,",
+                  " or a numeric matrix with 3 columns and at least ", nPtsMin , " points")
+    stop(msg)
+  }
+}
+
+## ----------------------------------------------------------------------- //
 ## convert CPP mesh to format required in R
 ## ----------------------------------------------------------------------- //
 #' @importFrom utils hasName

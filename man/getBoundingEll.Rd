@@ -13,7 +13,11 @@ getBoundingEll(
 )
 }
 \arguments{
-\item{x}{\code{numeric} matrix with 3 columns with one point per row.}
+\item{x}{A \code{CGALmesh} object, i.e., the output of
+\code{\link[SurfaceMesh]{makeMesh}},
+a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+or a numeric matrix with 3 columns which stores the point coordinates,
+one point per row, and at least 4 points.}
 
 \item{out}{\code{character}. Type of return value. One of \code{"CtrRadDir"}
 for a list giving the sphere's center, semi-axis lengths, and semi-axis

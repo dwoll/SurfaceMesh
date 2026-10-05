@@ -5,15 +5,13 @@
 \title{Bounding sphere of a set of 3D points}
 \usage{
 getBoundingSphere(
-  x,
+  xIn,
   out = c("CGALmesh", "rgl", "CtrRad"),
   nIter = 3L,
   normals = FALSE
 )
 }
 \arguments{
-\item{x}{\code{numeric} matrix with 3 columns with one point per row.}
-
 \item{out}{\code{character}. Type of return value. One of \code{"CtrRad"}
 for a list giving the sphere's center and radius, \code{"CGALmesh"} for
 a \code{CGALmesh} object, and \code{"rgl"} for a \code{\link[rgl]{mesh3d}}
@@ -23,6 +21,12 @@ object from package \strong{rgl}.}
 by iteratively subdividing the faces of an icosahedron)}
 
 \item{normals}{Boolean. Return vertex normals?}
+
+\item{x}{A \code{CGALmesh} object, i.e., the output of
+\code{\link[SurfaceMesh]{makeMesh}},
+a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+or a numeric matrix with 3 columns which stores the point coordinates,
+one point per row, and at least 4 points.}
 }
 \value{
 A \code{list} with components \code{"center"} and \code{"radius"},
