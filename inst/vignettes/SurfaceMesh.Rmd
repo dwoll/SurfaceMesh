@@ -498,7 +498,7 @@ shade3d(mesh_aw_rgl, col="mediumseagreen")
 ```{r}
 mesh1     <- dataOloid
 mesh1_rgl <- toRGL(mesh1)
-bb1       <- getBoundingBox(mesh1)
+bb1       <- getBoundingBox(mesh1[["vertices"]])
 bb1_rgl   <- toRGL(bb1)
 
 view3d(0, 30, zoom=0.9)
@@ -511,7 +511,7 @@ wire3d(bb1_rgl)
 ```{r}
 mesh2     <- dataHeart1
 mesh2_rgl <- toRGL(mesh2)
-bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+bb2       <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE)
 bb2_rgl   <- toRGL(bb2)
 open3d(windowRect=50 + c(0, 0, 800, 400))
 wire3d(mesh2_rgl)

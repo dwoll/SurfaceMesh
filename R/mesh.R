@@ -47,6 +47,9 @@
 #' @returns A list of class \code{CGALmesh} giving the vertices, the edges, the faces
 #'   of the mesh, the exterior edges, the exterior vertices, and optionally the
 #'   vertex normals.
+#' @details CAVE: Y-axis direction is front-back in \strong{rgl} (OpenGL)
+#'   convention but down-up in CGAL convention. This is ignored here when
+#'   importing a \code{\link[rgl]{mesh3d}} object.
 #' @seealso See \code{\link[SurfaceMesh]{plotEdges}} for details about the edges
 #'   returned by this function.
 #'   See \code{\link[SurfaceMesh]{makeMeshValid}} for a similar function that assumes
@@ -188,6 +191,9 @@ makeMesh <- function(x,
 #' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns A list of class \code{CGALmesh} giving the vertices, the edges, the faces
 #'   of the mesh, the exterior edges, the exterior vertices, and optionally the normals.
+#' @details CAVE: Y-axis direction is front-back in \strong{rgl} (OpenGL)
+#'   convention but down-up in CGAL convention. This is ignored here when
+#'   importing a \code{\link[rgl]{mesh3d}} object.
 #' @seealso See \code{\link[SurfaceMesh]{plotEdges}} for details about the edges
 #'   returned by this function.
 #'   See \code{\link[SurfaceMesh]{makeMesh}} for a similar function that does not assume
@@ -978,6 +984,8 @@ setVertexNormals <- function(x, normals) {
 #'   \strong{rgl}, its faces must have at most four sides.
 #' @param ... Arguments passed to \code{\link[rgl]{mesh3d}}.
 #' @returns A \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
+#' @details CAVE: Y-axis direction is front-back in \strong{rgl} (OpenGL)
+#'   convention but down-up in CGAL convention. This is ignored here.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples

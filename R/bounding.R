@@ -14,11 +14,16 @@
 ## ----------------------------------------------------------------------- //
 #' @title Get bounding box (axis-parallel or oriented)
 #' @description Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
-#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param x \code{numeric} matrix with 3 columns with one point per row.
 #' @param oriented Boolean. Get the optimal (oriented) bounding box?
+#' @param out \code{character}. Type of return value. One of \code{"Points"}
+#'   for a matrix giving the corner points, \code{"CGALmesh"} for a \code{CGALmesh}
+#'   object, and \code{"rgl"} for a \code{\link[rgl]{mesh3d}} object from
+#'   package \strong{rgl}.
 #' @param triangulate Boolean. Triangulate the faces of the bounding box?
 #' @param normals Boolean. Return vertex normals?
-#' @returns A \code{CGALmesh} object.
+#' @returns A \code{CGALmesh} object, a \code{\link[rgl]{mesh3d}} object,
+#'   or a matrix with the corner points as rows.
 #' @seealso See \code{\link[SurfaceMesh]{getConvexHull}} for the convex hull,
 #'   \code{\link[SurfaceMesh]{getBoundingSphere}} for the bounding sphere,
 #'   \code{\link[SurfaceMesh]{getBoundingEll}} for the bounding ellipse.
@@ -30,7 +35,7 @@
 #'
 #' mesh1     <- dataOloid
 #' mesh1_rgl <- toRGL(mesh1)
-#' bb1       <- getBoundingBox(mesh1)
+#' bb1       <- getBoundingBox(mesh1[["vertices"]])
 #' bb1_rgl   <- toRGL(bb1)
 #' view3d(0, 30, zoom=0.9)
 #' wire3d(mesh1_rgl)
@@ -38,43 +43,92 @@
 #'
 #' mesh2     <- dataHeart1
 #' mesh2_rgl <- toRGL(mesh2)
-#' bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+#' bb2       <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE)
 #' bb2_rgl   <- toRGL(bb2)
 #' open3d(windowRect=50 + c(0, 0, 800, 400))
 #' wire3d(mesh2_rgl)
 #' wire3d(bb2_rgl)
 
 #' @export
-#' @importFrom rgl translate3d scale3d cube3d
+#' @importFrom rgl translate3d scale3d cube3d qmesh3d
 getBoundingBox <- function(x,
                            oriented    = FALSE,
+                           out         = c("CGALmesh", "rgl", "Points"),
                            triangulate = FALSE,
                            normals     = FALSE) {
-  if(!inherits(x, "CGALmesh")) {
-      stop("The `x` argument must be of class 'CGALmesh'",
-			       " (i.e., the output of the `makeMesh()` function).")
+  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
+    stop("`x` must be a numeric matrix with 3 columns and at least 3 points.", call. = TRUE)
+  }
+  storage.mode(x) <- "double"
+  if(anyNA(x)) {
+    stop("Points in `x` with missing values are not allowed.", call. = TRUE)
   }
   stopifnot(isBoolean(oriented))
+  out_choices <- tolower(c("CGALmesh", "rgl", "Points"))
+  out         <- match.arg(tolower(out), choices=out_choices)
   stopifnot(isBoolean(triangulate))
   stopifnot(isBoolean(normals))
-  meshCPP <- fromR(x)
-  meshOut <- if(oriented) {
-    outL <- getBoundingBoxOptimal_cpp(meshCPP, triangulate, normals)
-    fromCPP(outL[["mesh"]])
-  } else {
-    outL    <- getBoundingBox_cpp(meshCPP)
-    lcorner <- outL[["lcorner"]]
-    ucorner <- outL[["ucorner"]]
-    center  <- (lcorner + ucorner) / 2
-    ax      <- ucorner[1L] - lcorner[1L]
-    ay      <- ucorner[2L] - lcorner[2L]
-    az      <- ucorner[3L] - lcorner[3L]
-    m_rgl   <- rgl::translate3d(rgl::scale3d(rgl::cube3d(), ax/2, ay/2, az/2),
-                                center[1L], center[2L], center[3L])
+  if(oriented) {
+    outL <- getBoundingBoxOptimal_cpp(t(x), triangulate, normals)
+    if(out == "points") {
+      outL[["vertices"]]
+    } else if(out == "cgalmesh") {
+      fromCPP(outL[["mesh"]])
+    } else if(out == "rgl") {
+      ## CAVE: input from CGAL y is up-down,
+      ## but rgl y is front-back
+      vertices        <- outL[["vertices"]]
+      vertices[ , 2L] <- outL[["vertices"]][ , 3L]
+      vertices[ , 3L] <- outL[["vertices"]][ , 2L]
+      faces <- cbind(c(1, 5, 7, 3),
+                     c(2, 6, 8, 4),
+                     c(1, 2, 4, 3),
+                     c(5, 6, 8, 7),
+                     c(3, 7, 8, 4),
+                     c(1, 5, 6, 2))
 
-    makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
+      qmesh3d(vertices = vertices, indices = faces, homogeneous = FALSE)
+    } else {
+      stop("Wrong output format.")
+    }
+  } else {
+    outL <- getBoundingBox_cpp(t(x))
+    ptLo <- outL[["lo"]]
+    ptUp <- outL[["up"]]
+    if(out == "points") {
+      ax <- ptLo[1L]
+      ay <- ptLo[2L]
+      az <- ptLo[3L]
+      bx <- ptUp[1L]
+      by <- ptUp[2L]
+      bz <- ptUp[3L]
+      rbind(c(ax, ay, az),
+            c(bx, ay, az),
+            c(bx, ay, bz),
+            c(ax, ax, bz),
+            c(ax, by, az),
+            c(bx, by, az),
+            c(bx, by, bz),
+            c(ax, by, bz))
+    } else {
+      ## CAVE: input from CGAL y is up-down,
+      ## but rgl y is front-back
+      ptLoUse <- ptLo
+      ptUpUse <- ptUp
+      ptLoUse[2L] <- ptLo[3L]
+      ptLoUse[3L] <- ptLo[2L]
+      ptUpUse[2L] <- ptUp[3L]
+      ptUpUse[3L] <- ptUp[2L]
+      m_rgl <- meshIsoCuboid(ptLoUse, ptUpUse)
+      if(out == "cgalmesh") {
+        makeMesh(m_rgl, repairSoup=FALSE, triangulate=triangulate, normals=normals)
+      } else if(out == "rgl") {
+        m_rgl
+      } else {
+        stop("Wrong output format.")
+      }
+    }
   }
-  meshOut
 }
 
 ## ----------------------------------------------------------------------- //
@@ -113,7 +167,7 @@ getBoundingBox <- function(x,
 #'
 #' @export
 getBoundingEll <- function(x,
-                           out = c("CtrRadDir", "CGALmesh", "rgl"),
+                           out = c("CGALmesh", "rgl", "CtrRadDir"),
                            nIter = 3L,
                            eps = 0.01,
                            normals = FALSE) {
@@ -124,7 +178,7 @@ getBoundingEll <- function(x,
   if(anyNA(x)) {
     stop("Points in `x` with missing values are not allowed.", call. = TRUE)
   }
-  out_choices <- tolower(c("CtrRadDir", "CGALmesh", "rgl"))
+  out_choices <- tolower(c("CGALmesh", "rgl", "CtrRadDir"))
   out         <- match.arg(tolower(out), choices=out_choices)
   stopifnot(isStrictPositiveInteger(nIter))
   stopifnot(isPositiveNumber(eps))
@@ -132,7 +186,7 @@ getBoundingEll <- function(x,
   stopifnot(isBoolean(normals))
 
   bellL <- getBoundingEllipsoid_cpp(t(x), eps)
-  if(out == "CtrRadDir") {
+  if(out == "ctrraddir") {
     bellL
   } else {
     ctr  <- bellL[["center"]]
@@ -146,7 +200,7 @@ getBoundingEll <- function(x,
     dirsUse[ , 3L] <- dirs[ , 2L]
 
     bell_rgl <- meshEllipsoid(ctr, r=r, dirs=dirsUse, nIter=nIter)
-    if(out == "CGALmesh") {
+    if(out == "cgalmesh") {
       makeMeshValid(bell_rgl, normals=normals)
     } else if(out == "rgl") {
       if(!normals) {
@@ -192,7 +246,7 @@ getBoundingEll <- function(x,
 #'
 #' @export
 getBoundingSphere <- function(x,
-                              out = c("CtrRad", "CGALmesh", "rgl"),
+                              out = c("CGALmesh", "rgl", "CtrRad"),
                               nIter = 3L,
                               normals = FALSE) {
   if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L) || (nrow(x) <= 3L)) {
@@ -202,17 +256,17 @@ getBoundingSphere <- function(x,
   if(anyNA(x)) {
     stop("Points in `x` with missing values are not allowed.", call. = TRUE)
   }
-  out_choices <- tolower(c("CtrRad", "CGALmesh", "rgl"))
+  out_choices <- tolower(c("CGALmesh", "rgl", "CtrRad"))
   out         <- match.arg(tolower(out), choices=out_choices)
   stopifnot(isStrictPositiveInteger(nIter))
   stopifnot(isBoolean(normals))
 
   bsL <- getBoundingSphere_cpp(t(x))
-  if(out == "CtrRad") {
+  if(out == "ctrrad") {
     bsL
   } else {
     bs_rgl <- meshSphere(bsL[["center"]], r=bsL[["radius"]], nIter=nIter)
-    if(out == "CGALmesh") {
+    if(out == "cgalmesh") {
       makeMeshValid(bs_rgl, normals=normals)
     } else if(out == "rgl") {
       if(!normals) {

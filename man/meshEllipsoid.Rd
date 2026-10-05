@@ -18,8 +18,9 @@ meshEllipsoid(
 \item{r}{\code{numeric}. Vector with the 3 semi-axis lengths.}
 
 \item{dirs}{\code{numeric}. 3-by-3 matrix. Columns are the unit
-direction vectors of the ellipsoid's semi-axes. Y-axis is assumed to be
-front-back, according to rgl (OpenGL) convention.}
+direction vectors of the ellipsoid's semi-axes.
+CAVE: Y-axis direction is assumed to be front-back, corresponding to
+\strong{rgl} (OpenGL) convention.}
 
 \item{euler}{\code{numeric}. Euler rotation angles phi, theta, psi. If
 given, takes precedence over \code{dirs}.}

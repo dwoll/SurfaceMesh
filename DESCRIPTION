@@ -16,9 +16,10 @@ Description: Processing of 3D surface meshes based on the 'C++'
     polygon soups.
     Supports mesh repair, remeshing, subdivision, Boolean
     operations on bounded volumes, outlier removal, surface
-    reconstruction, (optimal) bounding box, convex hull,
-    vertex normals, surface distance metrics (such as
-    Hausdorff), and volume-overlap similarity measures
+    reconstruction, (optimal) bounding box, bounding sphere,
+    bounding ellipsoid,
+    convex hull, vertex normals, surface distance metrics
+    (such as Hausdorff), and volume-overlap similarity measures
     ('JSC', 'DSC').
     Adapts code from packages 'Boov' and 'cgalMeshes'
     developed by Stephane Laurent.

@@ -47,6 +47,11 @@ Omitted validity checks save some processing time.
 The returned faces are coherently oriented (if possible),
 normals are computed if requested, triangulation is performed if requested.
 }
+\details{
+CAVE: Y-axis direction is front-back in \strong{rgl} (OpenGL)
+convention but down-up in CGAL convention. This is ignored here when
+importing a \code{\link[rgl]{mesh3d}} object.
+}
 \examples{
 library(SurfaceMesh)
 library(rgl)

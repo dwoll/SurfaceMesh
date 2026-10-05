@@ -4,19 +4,31 @@
 \alias{getBoundingBox}
 \title{Get bounding box (axis-parallel or oriented)}
 \usage{
-getBoundingBox(x, oriented = FALSE, triangulate = FALSE, normals = FALSE)
+getBoundingBox(
+  x,
+  oriented = FALSE,
+  out = c("CGALmesh", "rgl", "Points"),
+  triangulate = FALSE,
+  normals = FALSE
+)
 }
 \arguments{
-\item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
+\item{x}{\code{numeric} matrix with 3 columns with one point per row.}
 
 \item{oriented}{Boolean. Get the optimal (oriented) bounding box?}
+
+\item{out}{\code{character}. Type of return value. One of \code{"Points"}
+for a matrix giving the corner points, \code{"CGALmesh"} for a \code{CGALmesh}
+object, and \code{"rgl"} for a \code{\link[rgl]{mesh3d}} object from
+package \strong{rgl}.}
 
 \item{triangulate}{Boolean. Triangulate the faces of the bounding box?}
 
 \item{normals}{Boolean. Return vertex normals?}
 }
 \value{
-A \code{CGALmesh} object.
+A \code{CGALmesh} object, a \code{\link[rgl]{mesh3d}} object,
+or a matrix with the corner points as rows.
 }
 \description{
 Get the axis-parallel or optimal (oriented) bounding box of a 3D surface mesh.
@@ -27,7 +39,7 @@ library(rgl)
 
 mesh1     <- dataOloid
 mesh1_rgl <- toRGL(mesh1)
-bb1       <- getBoundingBox(mesh1)
+bb1       <- getBoundingBox(mesh1[["vertices"]])
 bb1_rgl   <- toRGL(bb1)
 view3d(0, 30, zoom=0.9)
 wire3d(mesh1_rgl)
@@ -35,7 +47,7 @@ wire3d(bb1_rgl)
 
 mesh2     <- dataHeart1
 mesh2_rgl <- toRGL(mesh2)
-bb2       <- getBoundingBox(mesh2, oriented=TRUE)
+bb2       <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE)
 bb2_rgl   <- toRGL(bb2)
 open3d(windowRect=50 + c(0, 0, 800, 400))
 wire3d(mesh2_rgl)

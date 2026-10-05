@@ -96,26 +96,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // getBoundingBox_cpp
-Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh);
-RcppExport SEXP _SurfaceMesh_getBoundingBox_cpp(SEXP rmeshSEXP) {
+Rcpp::List getBoundingBox_cpp(const Rcpp::NumericMatrix rpoints);
+RcppExport SEXP _SurfaceMesh_getBoundingBox_cpp(SEXP rpointsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
-    rcpp_result_gen = Rcpp::wrap(getBoundingBox_cpp(rmesh));
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type rpoints(rpointsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBoundingBox_cpp(rpoints));
     return rcpp_result_gen;
 END_RCPP
 }
 // getBoundingBoxOptimal_cpp
-Rcpp::List getBoundingBoxOptimal_cpp(const Rcpp::List rmeshIn, const bool triangulate, const bool normals);
-RcppExport SEXP _SurfaceMesh_getBoundingBoxOptimal_cpp(SEXP rmeshInSEXP, SEXP triangulateSEXP, SEXP normalsSEXP) {
+Rcpp::List getBoundingBoxOptimal_cpp(const Rcpp::NumericMatrix rpoints, const bool triangulate, const bool normals);
+RcppExport SEXP _SurfaceMesh_getBoundingBoxOptimal_cpp(SEXP rpointsSEXP, SEXP triangulateSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::List >::type rmeshIn(rmeshInSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type rpoints(rpointsSEXP);
     Rcpp::traits::input_parameter< const bool >::type triangulate(triangulateSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(getBoundingBoxOptimal_cpp(rmeshIn, triangulate, normals));
+    rcpp_result_gen = Rcpp::wrap(getBoundingBoxOptimal_cpp(rpoints, triangulate, normals));
     return rcpp_result_gen;
 END_RCPP
 }

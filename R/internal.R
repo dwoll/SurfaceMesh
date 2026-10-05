@@ -440,7 +440,8 @@ checkSampleOpts <- function(x) {
 ## ----------------------------------------------------------------------- //
 #' @noRd
 getEulerAngles <- function(x, tol=1e-6) {
-    stopifnot(isOrthonormal(x))
+    stopifnot(isOrthonormal(x, tol=tol))
+    ## if reflection: flip 1 axis
     if(det(x) < 0) {
         x[, 3L] <- -x[, 3L]
     }

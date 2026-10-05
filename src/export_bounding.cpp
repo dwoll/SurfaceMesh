@@ -14,6 +14,7 @@
 #include "SurfaceMesh.h"
 #endif
 
+#include <CGAL/bounding_box.h>
 #include <CGAL/optimal_bounding_box.h>
 #include <CGAL/convex_hull_3.h>
 #include <CGAL/Simple_cartesian.h>
@@ -29,33 +30,26 @@
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
-Rcpp::List getBoundingBox_cpp(const Rcpp::List rmesh) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
-      rmesh,
-      false,       // soup
-      false,       // triangulate
-      false,       // repair_soup
-      false);      // verbose
-  CGAL::Bbox_3 bbox = PMP::bbox(mesh);
-  Rcpp::NumericVector lcorner = { bbox.xmin(), bbox.ymin(), bbox.zmin() };
-  Rcpp::NumericVector ucorner = { bbox.xmax(), bbox.ymax(), bbox.zmax() };
-  return Rcpp::List::create(
-    Rcpp::Named("lcorner") = lcorner,
-    Rcpp::Named("ucorner") = ucorner);
+Rcpp::List getBoundingBox_cpp(const Rcpp::NumericMatrix rpoints) {
+  const std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
+  K::Iso_cuboid_3 c3 = CGAL::bounding_box(points.begin(), points.end());
+  Rcpp::NumericVector pt_lo = { CGAL::to_double<typename K::FT>(c3.min().x()),
+                                CGAL::to_double<typename K::FT>(c3.min().y()),
+                                CGAL::to_double<typename K::FT>(c3.min().z()) };
+  Rcpp::NumericVector pt_up = { CGAL::to_double<typename K::FT>(c3.max().x()),
+                                CGAL::to_double<typename K::FT>(c3.max().y()),
+                                CGAL::to_double<typename K::FT>(c3.max().z()) };
+  return Rcpp::List::create(Rcpp::Named("lo") = pt_lo,
+                            Rcpp::Named("up") = pt_up);
 }
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List getBoundingBoxOptimal_cpp(
-  const Rcpp::List rmeshIn, const bool triangulate, const bool normals) {
-  Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
-      rmeshIn,
-      false,       // soup
-      false,       // triangulate
-      false,       // repair_soup
-      false);      // verbose
-   std::array<Point3, 8> obb_pts;
-  CGAL::oriented_bounding_box(mesh, obb_pts,
+  const Rcpp::NumericMatrix rpoints, const bool triangulate, const bool normals) {
+  const std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
+  std::array<Point3, 8> obb_pts;
+  CGAL::oriented_bounding_box(points, obb_pts,
                               CGAL::parameters::use_convex_hull(true));
   // make mesh out of oriented bounding box
   Mesh3 obb_mesh;
@@ -71,9 +65,8 @@ Rcpp::List getBoundingBoxOptimal_cpp(
       Rcpp::NumericVector::create(pt.x(), pt.y(), pt.z());
     hex_verts(Rcpp::_, i) = v;
   }
-  return Rcpp::List::create(
-    Rcpp::Named("mesh")       = rmesh_obb,
-    Rcpp::Named("hxVertices") = hex_verts);
+  return Rcpp::List::create(Rcpp::Named("mesh")     = rmesh_obb,
+                            Rcpp::Named("vertices") = hex_verts);
 }
 
 // ----------------------------------------------------------------------- //
@@ -86,7 +79,7 @@ Rcpp::List getBoundingEllipsoid_cpp(const Rcpp::NumericMatrix rpoints, const dou
     using Point_vec = std::vector<Traits::Point>;
     using AME       = CGAL::Approximate_min_ellipsoid_d<Traits>;
 
-    std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
+    const std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
     Point_vec pts_ame;
     const int dim = 3;
 
@@ -140,7 +133,7 @@ Rcpp::List getBoundingEllipsoid_cpp(const Rcpp::NumericMatrix rpoints, const dou
 Rcpp::List getBoundingSphere_cpp(const Rcpp::NumericMatrix rpoints) {
     using Traits     = CGAL::Min_sphere_of_points_d_traits_3<K, double>;
     using Min_sphere = CGAL::Min_sphere_of_spheres_d<Traits>;
-    std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
+    const std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
 
     Min_sphere  ms(points.begin(), points.end());       // smallest enclosing sphere
     Min_sphere::Cartesian_const_iterator ccib = ms.center_cartesian_begin();
@@ -158,13 +151,7 @@ Rcpp::List getBoundingSphere_cpp(const Rcpp::NumericMatrix rpoints) {
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
 Rcpp::List getConvexHull_cpp(const Rcpp::NumericMatrix rpoints, const bool normals) {
-  const std::size_t nPts = rpoints.ncol();
-  std::vector<Point3> points;
-  points.reserve(nPts);
-  for(std::size_t i = 0; i < nPts; i++) {
-    Rcpp::NumericVector pt = rpoints(Rcpp::_, i);
-    points.emplace_back(Point3(pt(0), pt(1), pt(2)));
-  }
+  const std::vector<Point3> points = matrix_to_points3<Point3>(rpoints);
   Mesh3 mesh;
   CGAL::convex_hull_3(points.begin(), points.end(), mesh);
   return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, normals);

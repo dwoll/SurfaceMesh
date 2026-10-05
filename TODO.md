@@ -1,6 +1,8 @@
 # TODO
 
-  * `meshEllipsoid()` check with covariance matrix case
+  * `toRGL()`, `makeMesh()`, `makeMeshValid()`
+      *  handle switching y <-> z coordinates between CGAL, rgl conventions?
+  * `meshEllipsoid()` check using dirs directly
   * read, write more supported file formats
   * read, write normals
   * `setVertexNormals()` check normals are unit vectors
@@ -8,7 +10,7 @@
 
 # Wishlist
 
-  * all functions that accept a matrix should accept a `CGALmesh` object and extract vertices
+  * functions that accept a matrix should also accept a `CGALmesh` object, `mesh3d` object and extract vertices - via S3 methods
   * face normals
   * https://doc.cgal.org/latest/Polygon_mesh_processing/Polygon_mesh_processing_2interpolated_corrected_curvatures_PH_8cpp-example.html#a5
   * https://doc.cgal.org/latest/Advancing_front_surface_reconstruction/Advancing_front_surface_reconstruction_2reconstruction_structured_8cpp-example.html

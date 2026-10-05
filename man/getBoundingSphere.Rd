@@ -6,7 +6,7 @@
 \usage{
 getBoundingSphere(
   x,
-  out = c("CtrRad", "CGALmesh", "rgl"),
+  out = c("CGALmesh", "rgl", "CtrRad"),
   nIter = 3L,
   normals = FALSE
 )

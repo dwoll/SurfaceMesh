@@ -25,12 +25,12 @@ getJSCDSC_cpp <- function(rmeshes, repairSoup, verbose) {
     .Call(`_SurfaceMesh_getJSCDSC_cpp`, rmeshes, repairSoup, verbose)
 }
 
-getBoundingBox_cpp <- function(rmesh) {
-    .Call(`_SurfaceMesh_getBoundingBox_cpp`, rmesh)
+getBoundingBox_cpp <- function(rpoints) {
+    .Call(`_SurfaceMesh_getBoundingBox_cpp`, rpoints)
 }
 
-getBoundingBoxOptimal_cpp <- function(rmeshIn, triangulate, normals) {
-    .Call(`_SurfaceMesh_getBoundingBoxOptimal_cpp`, rmeshIn, triangulate, normals)
+getBoundingBoxOptimal_cpp <- function(rpoints, triangulate, normals) {
+    .Call(`_SurfaceMesh_getBoundingBoxOptimal_cpp`, rpoints, triangulate, normals)
 }
 
 getBoundingEllipsoid_cpp <- function(rpoints, eps) {

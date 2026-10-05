@@ -6,7 +6,7 @@
 \usage{
 getBoundingEll(
   x,
-  out = c("CtrRadDir", "CGALmesh", "rgl"),
+  out = c("CGALmesh", "rgl", "CtrRadDir"),
   nIter = 3L,
   eps = 0.01,
   normals = FALSE

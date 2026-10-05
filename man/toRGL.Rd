@@ -20,6 +20,10 @@ A \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
 Converts a \code{CGALmesh} object (the output of the \code{\link{makeMesh}}
 function) to a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
 }
+\details{
+CAVE: Y-axis direction is front-back in \strong{rgl} (OpenGL)
+convention but down-up in CGAL convention. This is ignored here.
+}
 \examples{
 library(SurfaceMesh)
 library(rgl)

@@ -4,21 +4,25 @@
 \alias{meshIsoCuboid}
 \title{Iso-oriented cuboid}
 \usage{
-meshIsoCuboid(lcorner, ucorner)
+meshIsoCuboid(lo, up)
 }
 \arguments{
-\item{lcorner}{lower corner, a point whose coordinates must be
-lower than those of the upper corner.}
+\item{lo}{\code{numeric} 3-vector. Lower left front corner, a point
+whose coordinates must all be lower than those of the upper corner.}
 
-\item{ucorner}{upper corner, a point whose coordinates must be
-greater than those of the lower corner.}
+\item{up}{\code{numeric} 3-vector. Upper right back corner, a point
+whose coordinates must all be higher than those of the lower corner.}
 }
 \value{
 A \strong{rgl} mesh, i.e. a \code{mesh3d} object.
 }
 \description{
-Mesh of an iso-oriented cuboid, i.e. a cuboid with
-edges parallel to the axes.
+Mesh of an iso-oriented cuboid, i.e. with edges parallel
+to the axes.
+}
+\details{
+CAVE: Y-axis direction is assumed to be front-back,
+corresponding to \strong{rgl} (OpenGL) convention.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
