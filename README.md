@@ -28,9 +28,11 @@
       * SSS
       * Poisson
       * Alpha wrapping
-  * Bounding box
+  * Bounding shapes
       * Axis-parallel bounding box
       * Optimal (oriented) bounding box
+      * Bounding sphere
+      * Bounding ellipsid
   * Convex hull
   * Distance from points to mesh
   * Centroid (center of mass)

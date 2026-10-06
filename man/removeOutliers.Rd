@@ -7,7 +7,11 @@
 removeOutliers(x, nNeighbors = 6L, threshPerc, threshDst)
 }
 \arguments{
-\item{x}{Numeric matrix with 3 columns which stores the points, one point per row.}
+\item{x}{A \code{CGALmesh} object, i.e., the output of
+\code{\link[SurfaceMesh]{makeMesh}},
+a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+or a numeric matrix with 3 columns which stores the point coordinates,
+one point per row, and at least 3 points.}
 
 \item{nNeighbors}{\code{integer}. How many neighboring points to consider
 for distance calculation.}

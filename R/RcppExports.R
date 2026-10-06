@@ -25,8 +25,28 @@ getJSCDSC_cpp <- function(rmeshes, repairSoup, verbose) {
     .Call(`_SurfaceMesh_getJSCDSC_cpp`, rmeshes, repairSoup, verbose)
 }
 
-getHausdorffApprox_cpp <- function(rmesh1, rmesh2, symmetric, n) {
-    .Call(`_SurfaceMesh_getHausdorffApprox_cpp`, rmesh1, rmesh2, symmetric, n)
+getBoundingBox_cpp <- function(rpoints) {
+    .Call(`_SurfaceMesh_getBoundingBox_cpp`, rpoints)
+}
+
+getBoundingBoxOptimal_cpp <- function(rpoints, triangulate, normals) {
+    .Call(`_SurfaceMesh_getBoundingBoxOptimal_cpp`, rpoints, triangulate, normals)
+}
+
+getBoundingEllipsoid_cpp <- function(rpoints, eps) {
+    .Call(`_SurfaceMesh_getBoundingEllipsoid_cpp`, rpoints, eps)
+}
+
+getBoundingSphere_cpp <- function(rpoints) {
+    .Call(`_SurfaceMesh_getBoundingSphere_cpp`, rpoints)
+}
+
+getConvexHull_cpp <- function(rpoints, normals) {
+    .Call(`_SurfaceMesh_getConvexHull_cpp`, rpoints, normals)
+}
+
+getHausdorffApprox_cpp <- function(rmesh1, rmesh2, symmetric, ropts) {
+    .Call(`_SurfaceMesh_getHausdorffApprox_cpp`, rmesh1, rmesh2, symmetric, ropts)
 }
 
 getHausdorffEst_cpp <- function(rmesh1, rmesh2, symmetric, error_bound) {
@@ -73,20 +93,8 @@ getArea_cpp <- function(rmesh) {
     .Call(`_SurfaceMesh_getArea_cpp`, rmesh)
 }
 
-getBoundingBox_cpp <- function(rmesh) {
-    .Call(`_SurfaceMesh_getBoundingBox_cpp`, rmesh)
-}
-
-getBoundingBoxOptimal_cpp <- function(rmeshIn, triangulate, normals) {
-    .Call(`_SurfaceMesh_getBoundingBoxOptimal_cpp`, rmeshIn, triangulate, normals)
-}
-
 getCentroid_cpp <- function(rmesh) {
     .Call(`_SurfaceMesh_getCentroid_cpp`, rmesh)
-}
-
-getConvexHull_cpp <- function(rpoints, normals) {
-    .Call(`_SurfaceMesh_getConvexHull_cpp`, rpoints, normals)
 }
 
 getDistance_cpp <- function(rmesh, rpoints) {

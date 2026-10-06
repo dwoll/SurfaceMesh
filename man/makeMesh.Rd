@@ -67,6 +67,11 @@ duplicated vertices or faces are merged, and isolated vertices are removed.
 The returned faces are coherently oriented, normals are computed if requested, and
 triangulation is performed if requested.
 }
+\details{
+CAVE: Y-axis direction is front-back in \strong{rgl} (OpenGL)
+convention but down-up in CGAL convention. This is ignored here when
+importing a \code{\link[rgl]{mesh3d}} object.
+}
 \examples{
 library(SurfaceMesh)
 library(rgl)

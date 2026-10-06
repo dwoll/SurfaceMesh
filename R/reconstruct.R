@@ -14,7 +14,11 @@
 #' @description Computes the average spacing of all input points to their
 #'   \code{nNeighbors} nearest neighbor points. This provides an order of a
 #'   point set density, useful in a surface reconstruction pipeline.
-#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 3 points.
 #' @param nNeighbors \code{integer}. How many neighboring points to consider
 #'   for distance calculation.
 #' @returns The average spacing.
@@ -33,24 +37,19 @@
 #'
 #' @export
 getAverageSpacing <- function(x, nNeighbors = 6L) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L)) {
-    stop("The `x` argument must be a numeric matrix with 3 columns.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Missing values in the `x` matrix are not allowed.", call. = TRUE)
-  }
-  if(nrow(x) <= ncol(x)) {
-    stop("Insufficient number of points.", call. = TRUE)
-  }
+  xIn <- getVertsMat(x, nPtsMin=3L)
   stopifnot(isStrictPositiveInteger(nNeighbors))
-  getAverageSpacing_cpp(t(x), as.integer(nNeighbors))
+  getAverageSpacing_cpp(t(xIn), as.integer(nNeighbors))
 }
 
 #' @title Remove outliers from 3D point cloud
 #' @description Remove outliers from 3D point cloud based on their distance to
 #'   neighboring points.
-#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 3 points.
 #' @param nNeighbors \code{integer}. How many neighboring points to consider
 #'   for distance calculation.
 #' @param threshPerc \code{numeric}. The maximum percentage of points to remove.
@@ -84,16 +83,7 @@ removeOutliers <- function(x,
                            nNeighbors = 6L,
                            threshPerc,
                            threshDst) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L)) {
-    stop("The `x` argument must be a numeric matrix with 3 columns.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Missing values in the `x` matrix are not allowed.", call. = TRUE)
-  }
-  if(nrow(x) <= ncol(x)) {
-    stop("Insufficient number of points.", call. = TRUE)
-  }
+  xIn <- getVertsMat(x, nPtsMin=3L)
   stopifnot(isStrictPositiveInteger(nNeighbors))
   if(missing(threshPerc)) {
     threshPerc <- -1.0
@@ -106,13 +96,17 @@ removeOutliers <- function(x,
     stopifnot(isPositiveNumber(threshDst))
   }
   pointsOut <- removeOutliers_cpp(
-    t(x), as.integer(nNeighbors), threshPerc, threshDst)
+    t(xIn), as.integer(nNeighbors), threshPerc, threshDst)
   t(pointsOut)
 }
 
 #' @title Advancing front surface reconstruction
 #' @description Advancing front surface reconstruction of a 3D surface mesh from a cloud of 3D points.
-#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param jetSmoothing Optional integer >= 2. If specified,
 #'   the point cloud is smoothed before the reconstruction, using
 #'   this integer as the number of neighbors for the smoothing. Note that this
@@ -147,32 +141,24 @@ removeOutliers <- function(x,
 #'
 #' @export
 reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
-  if(!is.matrix(x) || !is.numeric(x)) {
-    stop("The `x` argument must be a numeric matrix.", call. = TRUE)
-  }
-  if(ncol(x) != 3L) {
-    stop("The `x` matrix must have three columns.", call. = TRUE)
-  }
-  if(nrow(x) <= 3L) {
-    stop("Insufficient number of points in `x`.", call. = TRUE)
-  }
-  if(anyNA(x)) {
-    stop("Points with missing values are not allowed.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
+  xIn <- getVertsMat(x, nPtsMin=4L)
   if(!missing(jetSmoothing)) {
     stopifnot(isPositiveInteger(jetSmoothing), jetSmoothing >= 2L)
   } else {
     jetSmoothing <- 0L
   }
   stopifnot(isBoolean(repairSoup))
-  mesh_cpp <- reconstructAFS_cpp(t(x), as.integer(jetSmoothing), repairSoup, normals)
+  mesh_cpp <- reconstructAFS_cpp(t(xIn), as.integer(jetSmoothing), repairSoup, normals)
   fromCPP(mesh_cpp)
 }
 
 #' @title Poisson surface reconstruction
 #' @description Poisson reconstruction of a 3D surface mesh from a cloud of 3D points.
-#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param normalsFun A function that accepts a matrix with 3D points and uses it to
 #'   return a matrix with normals. Such a function is returned by
 #'   \code{\link[SurfaceMesh]{getNormalsFun}}.
@@ -220,18 +206,9 @@ reconstructPoisson <- function(
   smRadius  = 30,
   smDistance= 0.375,
   normals   = FALSE) {
-  if(!is.matrix(x) || !is.numeric(x) || (ncol(x) != 3L)) {
-    stop("The `x` argument must be a numeric matrix with 3 columns.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
-  if(anyNA(x)) {
-    stop("Missing values in the `x` matrix are not allowed.", call. = TRUE)
-  }
-  if(nrow(x) <= ncol(x)) {
-    stop("Insufficient number of points.", call. = TRUE)
-  }
+  xIn <- getVertsMat(x, nPtsMin=4L)
   if(!is.function(normalsFun) || !inherits(normalsFun, "CGALnormalsFun")) {
-    stop("Invalid argument `normalsFun`must be a function as ",
+    stop("Invalid argument `normalsFun` must be a function as ",
          "returned by `getNormalsFun`")
   }
   if(missing(spacing)) {
@@ -243,15 +220,19 @@ reconstructPoisson <- function(
   stopifnot(isPositiveNumber(smRadius))
   stopifnot(isPositiveNumber(smDistance))
   ## normalsIn matrix does not need to be transposed because it comes vom C++
-  normalsIn <- normalsFun(x)
-  mesh_cpp <- reconstructPoisson_cpp(
-    t(x), normalsIn, spacing, smAngle, smRadius, smDistance, normals)
+  normalsIn <- normalsFun(xIn)
+  mesh_cpp  <- reconstructPoisson_cpp(
+    t(xIn), normalsIn, spacing, smAngle, smRadius, smDistance, normals)
   fromCPP(mesh_cpp)
 }
 
 #' @title Scale-space surface reconstruction
 #' @description Scale-space surface reconstruction of a 3D surface mesh from a cloud of 3D points.
-#' @param x Numeric matrix with 3 columns which stores the points, one point per row.
+#' @param x A \code{CGALmesh} object, i.e., the output of
+#'   \code{\link[SurfaceMesh]{makeMesh}},
+#'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
+#'   or a numeric matrix with 3 columns which stores the point coordinates,
+#'   one point per row, and at least 4 points.
 #' @param scaleIterations Positive integer. Number of iterations used to increase the scale.
 #' @param neighbors Positive integer. Number of neighbors used to smooth the point cloud.
 #' @param samples Positive integer. Number of samples used to smooth the point cloud.
@@ -300,21 +281,9 @@ reconstructSSS <- function(
   borderAngle    =45,
   repairSoup     =TRUE,
   normals        =FALSE) {
-  if(!is.matrix(x) || !is.numeric(x)) {
-    stop("The `x` argument must be a numeric matrix.", call. = TRUE)
-  }
-  if(ncol(x) != 3L) {
-    stop("The `x` matrix must have three columns.", call. = TRUE)
-  }
-  if(nrow(x) <= 3L) {
-    stop("Insufficient number of points.", call. = TRUE)
-  }
-  if(anyNA(x)) {
-    stop("Points with missing values are not allowed.", call. = TRUE)
-  }
-  storage.mode(x) <- "double"
+  xIn <- getVertsMat(x, nPtsMin=4L)
   stopifnot(isStrictPositiveInteger(scaleIterations))
-  stopifnot(isStrictPositiveInteger(neighbors), neighbors >= 2)
+  stopifnot(isStrictPositiveInteger(neighbors), neighbors >= 2L)
   stopifnot(isStrictPositiveInteger(samples))
   stopifnot(isBoolean(separateShells))
   stopifnot(isBoolean(forceManifold))
@@ -322,7 +291,7 @@ reconstructSSS <- function(
   stopifnot(isBoolean(repairSoup))
   stopifnot(isBoolean(normals))
   mesh_cpp <- reconstructSSS_cpp(
-    t(x),
+    t(xIn),
     as.integer(scaleIterations),
     as.integer(neighbors),
     as.integer(samples),

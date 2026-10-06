@@ -82,6 +82,18 @@ void writeFile_cpp(const std::string filename,
                    const int precision,
                    const Rcpp::NumericMatrix vertices,
                    const Rcpp::List faceList) {
+  // using P3V3 = std::pair<Point3, Vector3>;  // Point3 with normal Vector3
+  // std::vector<P3V3> points_nv;
+  // if(rmesh.containsElementNamed("normals")) {
+  //     const Rcpp::NumericMatrix rnormals = Rcpp::as<Rcpp::NumericMatrix>(rmesh["normals"]);
+  //     const std::vector<VectorT> vnormals = matrix_to_points3<VectorT>(rnormals);
+  //     set_vnormals<MeshT, VectorT>(mesh, vnormals);
+  // }
+  // points_nv.push_back(P3V3(Point3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 1.0)));
+  // CGAL::IO::write_PLY(filename, points_nv, faces.first,
+  //                     CGAL::parameters::point_map(CGAL::First_of_pair_property_map<P3V3>())
+  //                                     .normal_map(CGAL::Second_of_pair_property_map<P3V3>()));
+
   const std::vector<Point3> points = matrix_to_points3<Point3>(vertices);
   const std::pair<std::vector<std::vector<std::size_t>>, bool> faces =
       list_to_faces2(faceList);

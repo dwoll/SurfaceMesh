@@ -58,7 +58,7 @@ shade3d(mesh1_rgl,  color="yellow", alpha=0.2)
 shade3d(mesh2_rgl,  color="cyan",   alpha=0.2)
 shade3d(mesh_d_rgl, color="red")
 plotEdges(mesh_d[["vertices"]],
-          edges            =mesh_d[["exteriorEdges"]],
+          edges            =mesh_d[["edgesExterior"]],
           edgesAsTubes     =TRUE,
           verticesAsSpheres=TRUE)
 

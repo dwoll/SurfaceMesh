@@ -58,16 +58,13 @@ getNormalsFun <- function(x, method = c("PCA", "Jet")) {
     stop("There must be at least two neighbors.", call. = TRUE)
   }
   fun <- function(points) {
-    if(!is.matrix(points) || !is.numeric(points)) {
-      stop("The `points` argument must be a numeric matrix.", call. = TRUE)
-    }
-    if(ncol(points) != 3L) {
-      stop("The `points` matrix must have three columns.", call. = TRUE)
-    }
-    if(nrow(points) <= 3L) {
-      stop("Insufficient number of points.", call. = TRUE)
+    if(!is.matrix(points) || !is.numeric(points) || (ncol(points) != 3L) || (nrow(points) <= 3L)) {
+      stop("The `points` argument must be a numeric matrix with 3 columns and at least 4 points.", call. = TRUE)
     }
     storage.mode(points) <- "double"
+    if(anyNA(points)) {
+      stop("`points` may not have missing values.", call. =TRUE)
+    }
     normals_jet_pca_cpp(t(points), x, method)
   }
   class(fun) <- "CGALnormalsFun"

@@ -26,21 +26,21 @@ Rcpp::NumericMatrix normals_jet_pca_cpp(const Rcpp::NumericMatrix pts,
                                         const Rcpp::String method) {
   using P3V3 = std::pair<Point3, Vector3>;  // Point3 with normal Vector3
   const std::size_t nPts = pts.ncol();
-  std::vector<P3V3> points_wn(nPts);
+  std::vector<P3V3> points_vn(nPts);
   for(std::size_t i = 0; i < nPts; i++) {
     const Rcpp::NumericVector pt_i = pts(Rcpp::_, i);
-    points_wn[i] = std::make_pair(Point3(pt_i(0), pt_i(1), pt_i(2)),
+    points_vn[i] = std::make_pair(Point3(pt_i(0), pt_i(1), pt_i(2)),
                                   Vector3(0.0, 0.0, 0.0));
   }
 
   if(method == "jet") {
       CGAL::jet_estimate_normals<PIA_TAG>(
-          points_wn, nNeighbors,
+          points_vn, nNeighbors,
           CGAL::parameters::point_map(CGAL::First_of_pair_property_map<P3V3>())
                           .normal_map(CGAL::Second_of_pair_property_map<P3V3>()));
   } else if(method == "pca") {
       CGAL::pca_estimate_normals<PIA_TAG>(
-          points_wn, nNeighbors,
+          points_vn, nNeighbors,
           CGAL::parameters::point_map(CGAL::First_of_pair_property_map<P3V3>())
                           .normal_map(CGAL::Second_of_pair_property_map<P3V3>()));
   } else {
@@ -48,17 +48,17 @@ Rcpp::NumericMatrix normals_jet_pca_cpp(const Rcpp::NumericMatrix pts,
   }
 
   CGAL::mst_orient_normals(
-      points_wn, nNeighbors,
+      points_vn, nNeighbors,
       CGAL::parameters::point_map(CGAL::First_of_pair_property_map<P3V3>())
                       .normal_map(CGAL::Second_of_pair_property_map<P3V3>()));
 
   Rcpp::NumericMatrix normals_mat(3, nPts);
   for(std::size_t i = 0; i < nPts; i++) {
     Rcpp::NumericVector normal_i(3);
-    const Vector3 normal = points_wn[i].second;
-    normal_i(0) = normal.x();
-    normal_i(1) = normal.y();
-    normal_i(2) = normal.z();
+    const Vector3 nv = points_vn[i].second;
+    normal_i(0) = CGAL::to_double<typename K::FT>(nv.x());
+    normal_i(1) = CGAL::to_double<typename K::FT>(nv.y());
+    normal_i(2) = CGAL::to_double<typename K::FT>(nv.z());
     normals_mat(Rcpp::_, i) = normal_i;
   }
 

@@ -81,7 +81,7 @@ Quantile Hausdorff distance (HD), average symmetric surface distance (ASSD),
 and root mean squared error (RMSE) for the surface distance between two 3D surface meshes.
 }
 \details{
-See \code{\link[SurfaceMesh]{getHausdorffQuantile}} for details on the quantile
+See \code{\link[SurfaceMesh]{getHausdorff}} for details on the quantile
 Hausdorff distance, \url{https://metrics-reloaded.dkfz.de/metric-library/assd} for ASSD.
 Inspired by \url{http://vcglib.net/metro.html}.
 For details on sampling options, see
@@ -93,7 +93,6 @@ getSurfaceDist(dataHeart1, dataHeart2, p=0.95, ptsOnFaces=1000L)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance,
-\code{\link[SurfaceMesh]{getHausdorffQuantile}} for the quantile Hausdorff distance, and
+See \code{\link[SurfaceMesh]{getHausdorff}} for the (approximate) Hausdorff distance, and
 \code{\link[SurfaceMesh]{getJSCDSC}} for volume-overlap based mesh similarity metrics (JSC, DSC).
 }
