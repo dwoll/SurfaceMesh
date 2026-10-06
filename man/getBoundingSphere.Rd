@@ -42,12 +42,8 @@ See \url{https://doc.cgal.org/latest/Bounding_volumes/} for details.
 \examples{
 library(SurfaceMesh)
 library(rgl)
-
-mesh     <- makeMesh(dataToroHelix)
-mesh_rgl <- toRGL(mesh)
-bs_rgl   <- getBoundingSphere(mesh[["vertices"]], out="rgl")
-
-shade3d(mesh_rgl, color="seashell")
+bs_rgl <- getBoundingSphere(dataToroHelix, out="rgl")
+shade3d(dataToroHelix, color="plum2")
 wire3d(bs_rgl)
 
 }

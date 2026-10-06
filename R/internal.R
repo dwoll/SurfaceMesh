@@ -173,7 +173,6 @@ fromR <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## get matrix of vertices from input: matrix, CGALmesh object, mesh3d object
 ## ----------------------------------------------------------------------- //
-#' @importFrom utils hasName
 #' @noRd
 getVertsMat <- function(x, nPtsMin=4L) {
   if(inherits(x, "CGALmesh")) {

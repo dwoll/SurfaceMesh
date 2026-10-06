@@ -50,7 +50,7 @@ library(rgl)
 
 mesh     <- makeMesh(dataHeart1)
 mesh_rgl <- toRGL(mesh)
-bell_rgl <- getBoundingEll(mesh[["vertices"]], out="rgl", eps=0.01)
+bell_rgl <- getBoundingEll(mesh, out="rgl", eps=0.01)
 
 shade3d(mesh_rgl, color="lightgreen")
 wire3d(bell_rgl)

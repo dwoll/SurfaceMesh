@@ -508,6 +508,8 @@ wire3d(bb1_rgl)
 
 ## Optimal (Oriented) Bounding Box
 
+Based on matrix of points
+
 ```{r}
 mesh2     <- dataHeart1
 mesh2_rgl <- toRGL(mesh2)
@@ -520,11 +522,11 @@ wire3d(bb2_rgl)
 
 ## Bounding Sphere
 
+Based on `mesh3d` object
+
 ```{r}
-mesh     <- makeMesh(dataToroHelix)
-mesh_rgl <- toRGL(mesh)
-bs_rgl   <- getBoundingSphere(mesh[["vertices"]], out="rgl")
-shade3d(mesh_rgl, color="seashell")
+bs_rgl <- getBoundingSphere(dataToroHelix, out="rgl")
+shade3d(dataToroHelix, color="plum2")
 wire3d(bs_rgl)
 ```
 
@@ -533,7 +535,7 @@ wire3d(bs_rgl)
 ```{r}
 mesh     <- dataHeart1
 mesh_rgl <- toRGL(mesh)
-bell_rgl <- getBoundingEll(mesh[["vertices"]], out="rgl", eps=0.01)
+bell_rgl <- getBoundingEll(mesh, out="rgl", eps=0.01)
 shade3d(mesh_rgl, color="lightgreen")
 wire3d(bell_rgl)
 ```

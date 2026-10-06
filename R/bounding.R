@@ -144,7 +144,7 @@ getBoundingBox <- function(x,
 #'
 #' mesh     <- makeMesh(dataHeart1)
 #' mesh_rgl <- toRGL(mesh)
-#' bell_rgl <- getBoundingEll(mesh[["vertices"]], out="rgl", eps=0.01)
+#' bell_rgl <- getBoundingEll(mesh, out="rgl", eps=0.01)
 #'
 #' shade3d(mesh_rgl, color="lightgreen")
 #' wire3d(bell_rgl)
@@ -218,12 +218,8 @@ getBoundingEll <- function(x,
 #' @examples
 #' library(SurfaceMesh)
 #' library(rgl)
-#'
-#' mesh     <- makeMesh(dataToroHelix)
-#' mesh_rgl <- toRGL(mesh)
-#' bs_rgl   <- getBoundingSphere(mesh[["vertices"]], out="rgl")
-#'
-#' shade3d(mesh_rgl, color="seashell")
+#' bs_rgl <- getBoundingSphere(dataToroHelix, out="rgl")
+#' shade3d(dataToroHelix, color="plum2")
 #' wire3d(bs_rgl)
 #'
 #' @export
