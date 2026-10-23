@@ -4,7 +4,7 @@
 \alias{reconstructAFS}
 \title{Advancing front surface reconstruction}
 \usage{
-reconstructAFS(x, jetSmoothing, repairSoup = TRUE, normals = FALSE)
+reconstructAFS(x, nNeighbors, repairSoup = TRUE, normals = FALSE)
 }
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of
@@ -13,7 +13,7 @@ a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
 or a numeric matrix with 3 columns which stores the point coordinates,
 one point per row, and at least 4 points.}
 
-\item{jetSmoothing}{Optional integer >= 2. If specified,
+\item{nNeighbors}{Optional integer >= 2. If specified,
 the point cloud is smoothed before the reconstruction, using
 this integer as the number of neighbors for the smoothing. Note that this
 smoothing preprocessing relocates the points and then should not be used
@@ -40,7 +40,7 @@ library(rgl)
 
 mesh         <- dataHeart1
 mesh_rgl     <- toRGL(mesh)
-mesh_afs     <- reconstructAFS(mesh[["vertices"]], jetSmoothing=30)
+mesh_afs     <- reconstructAFS(mesh[["vertices"]], nNeighbors=30)
 mesh_afs_rgl <- toRGL(mesh_afs)
 
 mfrow3d(1, 2)

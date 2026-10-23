@@ -323,6 +323,30 @@ bool isClosed_cpp(const Rcpp::List rmesh) {
 
 // ----------------------------------------------------------------------- //
 // [[Rcpp::export]]
+bool isOutwardOriented_cpp(const Rcpp::List rmesh) {
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
+        rmesh,
+        false,       // soup
+        true,        // triangulate - must be triangle
+        false,       // repair_soup
+        false);      // verbose
+    if(!CGAL::is_closed(mesh)) {
+        Rcpp::warning("The mesh is not closed.");
+        return Rcpp::LogicalVector::get_na();
+    }
+    if(!CGAL::is_triangle_mesh(mesh)) {
+        Rcpp::warning("The mesh is not closed.");
+        return Rcpp::LogicalVector::get_na();
+    }
+    if(!PMP::does_bound_a_volume(mesh)) {
+      Rcpp::warning("The mesh does not bound a volume.");
+      return Rcpp::LogicalVector::get_na();
+    }
+    return PMP::is_outward_oriented(mesh);
+}
+
+// ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
 bool isValid_cpp(const Rcpp::List rmesh) {
     Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
         rmesh,
@@ -369,6 +393,43 @@ Rcpp::List removeSelfIntersections_cpp(
             0,           // max_num_holes
             verbose);    // verbose
     return get_rmesh<EK, EMesh3, EPoint3, EVector3>(mesh, false, normals);
+}
+
+// ----------------------------------------------------------------------- //
+// [[Rcpp::export]]
+Rcpp::List reverseFaceOrientations_cpp(
+    const Rcpp::List rmesh,
+    const Rcpp::IntegerVector face_idx,
+    const bool normals) {
+    using face_descriptor = boost::graph_traits<Mesh3>::face_descriptor;
+    Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
+        rmesh,
+        false,       // soup
+        false,       // triangulate
+        false,       // repair_soup
+        false);      // verbose
+    const std::size_t nIdx = face_idx.size();
+    if(nIdx == 0) {
+        PMP::reverse_face_orientations(mesh);
+    } else {
+        std::list<face_descriptor> selectedFaces;
+        const std::size_t nFaces = mesh.number_of_faces();
+        for(std::size_t i = 0; i < nIdx; i++) {
+            const std::size_t idx = face_idx(i);
+            if(idx >= nFaces) {
+                Rcpp::stop("Face index too large.");
+            }
+            // TODO use `CGAL::SM_Face_index(idx)`
+            selectedFaces.push_back(*(mesh.faces().begin() + idx));
+        }
+        PMP::reverse_face_orientations(selectedFaces, mesh);
+        if(!mesh.is_valid(false)) {
+            Rcpp::warning("Mesh is invalid after reversing orientation of selected faces.");
+        }
+    }
+    const std::optional<std::vector<Vector3>> vnormals = get_vnormals<K, Mesh3, Vector3>(mesh);
+    const bool do_normals = normals || vnormals.has_value();
+    return get_rmesh<K, Mesh3, Point3, Vector3>(mesh, false, do_normals);
 }
 
 // ----------------------------------------------------------------------- //

@@ -6,9 +6,9 @@
 \usage{
 reconstructSSS(
   x,
-  scaleIterations = 1L,
-  neighbors = 12L,
-  samples = 300L,
+  nScaleIter = 1L,
+  nNeighbors = 12L,
+  nSamples = 300L,
   separateShells = FALSE,
   forceManifold = TRUE,
   borderAngle = 45,
@@ -23,11 +23,11 @@ a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
 or a numeric matrix with 3 columns which stores the point coordinates,
 one point per row, and at least 4 points.}
 
-\item{scaleIterations}{Positive integer. Number of iterations used to increase the scale.}
+\item{nScaleIter}{Positive integer. Number of iterations used to increase the scale.}
 
-\item{neighbors}{Positive integer. Number of neighbors used to smooth the point cloud.}
+\item{nNeighbors}{Positive integer. Number of neighbors used to smooth the point cloud.}
 
-\item{samples}{Positive integer. Number of samples used to smooth the point cloud.}
+\item{nSamples}{Positive integer. Number of samples used to smooth the point cloud.}
 
 \item{separateShells}{Boolean. Separate the shells?}
 
@@ -58,9 +58,9 @@ library(rgl)
 mesh     <- dataHeart1
 mesh_rgl <- toRGL(mesh)
 mesh_sss <- reconstructSSS(mesh[["vertices"]],
-                           scaleIterations=2L,
-                           forceManifold  =TRUE,
-                           neighbors      =12L)
+                           nScaleIter   =2L,
+                           nNeighbors   =12L,
+                           forceManifold=TRUE)
 mesh_sss_rgl <- toRGL(mesh_sss)
 
 mfrow3d(1, 2)

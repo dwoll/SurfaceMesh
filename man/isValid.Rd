@@ -13,7 +13,7 @@ isValid(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Check if the given mesh is a valid 3D surface mesh.
+Check whether the given mesh is a valid 3D surface mesh.
 }
 \examples{
 library(SurfaceMesh)
@@ -22,7 +22,7 @@ isValid(mesh)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{hasGarbage}} to check if mesh has garbage.
+See \code{\link[SurfaceMesh]{hasGarbage}} to check whether mesh has garbage.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

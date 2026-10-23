@@ -27,7 +27,9 @@
 #' @param verbose Boolean. Print out messages about mesh processing?
 #' @return A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/Surface_mesh_simplification/} for details.
-#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#' @seealso See \code{\link[SurfaceMesh]{remeshACVD}},
+#'   \code{\link[SurfaceMesh]{remeshDelaunay}},
+#'   \code{\link[SurfaceMesh]{remeshIsotropic}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothAngle}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}

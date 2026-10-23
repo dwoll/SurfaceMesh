@@ -72,7 +72,9 @@ wire3d(mesh_s_rgl)
 
 }
 \seealso{
-See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+See \code{\link[SurfaceMesh]{remeshACVD}},
+\code{\link[SurfaceMesh]{remeshDelaunay}},
+\code{\link[SurfaceMesh]{remeshIsotropic}},
 \code{\link[SurfaceMesh]{remeshSmoothShape}},
 \code{\link[SurfaceMesh]{remeshSmoothAngle}},
 \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}

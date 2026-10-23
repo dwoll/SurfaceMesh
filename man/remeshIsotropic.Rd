@@ -45,7 +45,7 @@ The target edge length of the remeshed mesh.}
 \item{protectConstraints}{Boolean. Protect constraints? See details.}
 
 \item{dihedralAngle}{Positive number. Constrain edges with a dihedral
-angle over given value to preserve sharp edges.}
+angle over given value to protect sharp edges.}
 
 \item{normals}{Boolean. Return vertex normals?}
 }
@@ -75,7 +75,9 @@ wire3d(mesh_rem_rgl)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{remeshSimplify}},
+See \code{\link[SurfaceMesh]{remeshACVD}},
+\code{\link[SurfaceMesh]{remeshDelaunay}},
+\code{\link[SurfaceMesh]{remeshSimplify}},
 \code{\link[SurfaceMesh]{remeshSmoothShape}},
 \code{\link[SurfaceMesh]{remeshSmoothAngle}},
 \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}

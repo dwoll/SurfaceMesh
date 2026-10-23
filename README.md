@@ -12,6 +12,8 @@
       * Difference
       * Intersection
   * Remeshing
+      * Approximated centroidal Voronoi diagram remeshing
+      * Surface Delaunay
       * Isotropic
       * Triangulated surface mesh simplification 
       * Smoothing
@@ -32,7 +34,7 @@
       * Axis-parallel bounding box
       * Optimal (oriented) bounding box
       * Bounding sphere
-      * Bounding ellipsid
+      * Bounding ellipsoid
   * Convex hull
   * Distance from points to mesh
   * Centroid (center of mass)

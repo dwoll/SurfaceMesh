@@ -54,7 +54,7 @@ The package also calculates surface distance and volume-overlap based similarity
 
   * (Quantile) Hausdorff distance
   * Average symmetric surface distance
-  * RMSE
+  * Surface RMSE
   * JSC (IoU)
   * DSC
 
@@ -155,6 +155,88 @@ head(mesh_vn[["normals"]])
 head(nrmls)
 ```
 
+# Mesh Characteristics
+## Check Mesh Status
+
+```{r}
+mesh <- makeMeshValid(dataTorus)
+isValid(mesh)
+hasGarbage(mesh)
+isTriangle(mesh)
+isQuad(mesh)
+doesBoundVolume(mesh)
+isClosed(mesh)
+doesSelfIntersect(mesh)
+```
+
+## Check and Change Mesh Orientation
+
+```{r}
+mesh_rgl <- meshIsoCuboid(c(-1, -2, -3), c(1, 2, 3))
+mesh     <- makeMeshValid(mesh_rgl)
+mesh_rfo <- reverseFaceOrientations(mesh)
+isOutwardOriented(mesh)
+isOutwardOriented(mesh_rfo)
+```
+
+Two tetraeders, one with positive orientation, one with negative orientation.
+
+```{r}
+vertices <- rbind(
+    c(0, 0, 0),
+    c(2, 2, 0),
+    c(2, 0, 2),
+    c(0, 2, 2),
+    c(3, 3, 3),
+    c(5, 5, 3),
+    c(5, 3, 5),
+    c(3, 5, 5))
+
+faces <- rbind(
+    c(3, 2, 1),
+    c(3, 4, 2),
+    c(1, 2, 4),
+    c(4, 3, 1),
+    c(5, 6, 7),
+    c(6, 8, 7),
+    c(8, 6, 5),
+    c(5, 7, 8))
+
+mesh    <- makeMesh(vertices, faces=faces)
+mesh_bv <- orientToBoundVolume(mesh)
+doesBoundVolume(mesh)
+doesBoundVolume(mesh_bv)
+```
+
+## Measurements
+### Centroid (Center of Mass)
+
+```{r}
+mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
+getCentroid(mesh)
+```
+
+### Surface Area
+
+```{r}
+mesh <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+getArea(mesh)
+```
+
+### Volume
+
+```{r}
+mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE)
+getVolume(mesh)
+```
+
+### Average Spacing
+
+```{r}
+mesh <- makeMesh(dataToroHelix, triangulate=TRUE)
+getAverageSpacing(mesh[["vertices"]], nNeighbors=12L)
+```
+
 # Mesh Repair
 
 See [`CGAL` mesh repair](https://doc.cgal.org/latest/PMP_Mesh_repair/)
@@ -244,20 +326,55 @@ shade3d(mesh_i_rgl, color="red")
 
 See [`CGAL` remeshing](https://doc.cgal.org/latest/PMP_Remeshing/)
 
+## Approximated centroidal Voronoi diagram remeshing
+
+```{r}
+mesh       <- makeMeshValid(dataOloid)
+mesh_rgl   <- toRGL(mesh)
+mesh_d     <- remeshACVD(mesh, method="uniform_iso_qem", nVerts=100L)
+mesh_d_rgl <- toRGL(mesh_d)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_d_rgl)
+```
+
+## Surface Delaunay
+
+```{r}
+mesh     <- makeMesh(dataPentaPrism, triangulate=TRUE)
+mesh_rgl <- toRGL(mesh)
+mesh_d   <- remeshDelaunay(mesh,
+                           edgeSize=0.2,
+                           facetDist=0.2,
+                           protectConstraints=TRUE)
+mesh_d_rgl <- toRGL(mesh_d)
+
+mfrow3d(1, 2)
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_rgl)
+next3d()
+view3d(0, 30, zoom=0.8)
+wire3d(mesh_d_rgl)
+```
+
 ## Isotropic
 
 ```{r}
-mesh         <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
-mesh_rgl     <- toRGL(mesh)
-mesh_rem     <- remeshIsotropic(mesh, targetEdgeLen=0.7)
-mesh_rem_rgl <- toRGL(mesh_rem)
+mesh       <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
+mesh_rgl   <- toRGL(mesh)
+mesh_i     <- remeshIsotropic(mesh, targetEdgeLen=0.7)
+mesh_i_rgl <- toRGL(mesh_i)
 
 mfrow3d(1, 2)
 view3d(0, 0, zoom=0.7)
 wire3d(mesh_rgl)
 next3d()
 view3d(0, 0, zoom=0.7)
-wire3d(mesh_rem_rgl)
+wire3d(mesh_i_rgl)
 ```
 
 ## Triangulated Surface Mesh Simplification
@@ -420,7 +537,7 @@ See [`CGAL` AFS](https://doc.cgal.org/latest/Advancing_front_surface_reconstruct
 ```{r}
 mesh         <- dataHeart1
 mesh_rgl     <- toRGL(mesh)
-mesh_afs     <- reconstructAFS(mesh[["vertices"]], jetSmoothing=30)
+mesh_afs     <- reconstructAFS(mesh[["vertices"]], nNeighbors=30)
 mesh_afs_rgl <- toRGL(mesh_afs)
 
 mfrow3d(1, 2)
@@ -439,9 +556,9 @@ See [`CGAL` SSS](https://doc.cgal.org/latest/Scale_space_reconstruction_3/)
 mesh     <- dataHeart1
 mesh_rgl <- toRGL(mesh)
 mesh_sss <- reconstructSSS(mesh[["vertices"]],
-                           scaleIterations=2L,
-                           forceManifold  =TRUE,
-                           neighbors      =12L)
+                           nScaleIter   =2L,
+                           forceManifold=TRUE,
+                           nNeighbors   =12L)
 mesh_sss_rgl <- toRGL(mesh_sss)
 
 mfrow3d(1, 2)
@@ -515,7 +632,6 @@ mesh2     <- dataHeart1
 mesh2_rgl <- toRGL(mesh2)
 bb2       <- getBoundingBox(mesh2[["vertices"]], oriented=TRUE)
 bb2_rgl   <- toRGL(bb2)
-open3d(windowRect=50 + c(0, 0, 800, 400))
 shade3d(mesh2_rgl, color="peachpuff")
 wire3d(bb2_rgl)
 ```
@@ -556,35 +672,6 @@ view3d(15, 45, zoom=0.8)
 wire3d(hull_rgl)
 ```
 
-# Measurements
-## Centroid (Center of Mass)
-
-```{r}
-mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
-getCentroid(mesh)
-```
-
-## Surface Area
-
-```{r}
-mesh <- makeMesh(dataTruncIcosahedron, triangulate=TRUE)
-getArea(mesh)
-```
-
-## Volume
-
-```{r}
-mesh <- makeMesh(dataSeptuaginta, triangulate=TRUE)
-getVolume(mesh)
-```
-
-## Average Spacing
-
-```{r}
-mesh <- makeMesh(dataToroHelix, triangulate=TRUE)
-getAverageSpacing(mesh[["vertices"]], nNeighbors=12L)
-```
-
 # Distace and Agreement Measures
 ## Euclidean Distance from Points to a Mesh
 
@@ -594,13 +681,13 @@ points <- matrix(2*runif(3*4), ncol=3)
 getDistance(mesh, points)
 ```
 
-## Surface Distance Between two Meshes
-### Distance Between the two Respective Centers of Mass (DCOM)
+## Distance Between the Two Respective Centers of Mass (DCOM)
 
 ```{r}
 getDCOM(dataHeart1, dataHeart2)
 ```
 
+## Surface Distance Between two Meshes
 ### Hausdorff Distance
 
 See [`CGAL` Hausdorff distance](https://doc.cgal.org/latest/Polygon_mesh_processing/index.html#PMPDistance), [dkfz metrics reloaded: HD](https://metrics-reloaded.dkfz.de/metric-library/hd)

@@ -13,7 +13,7 @@
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Ellipsoid mesh
-#' @description Create a triangle mesh of a 3D ellipsoid.
+#' @description Generate a triangle surface smesh of a 3D ellipsoid.
 #' @param ctr \code{numeric}. Vector with the x, y, z-coordinates of the centroid.
 #' @param r \code{numeric}. Vector with the 3 semi-axis lengths.
 #' @param dirs \code{numeric}. 3-by-3 matrix. Columns are the unit
@@ -72,7 +72,7 @@ meshEllipsoid <- function(ctr = c(0, 0, 0),
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Sphere mesh
-#' @description Triangle mesh of a 3D sphere.
+#' @description Generate a triangle surface mesh of a 3D sphere.
 #' @param ctr \code{numeric}. Vector with the x, y, z-coordinates of the centroid.
 #' @param r \code{numeric}. Radius.
 #' @param nIter \code{integer}. Number of iterations (the mesh is obtained
@@ -108,9 +108,9 @@ meshSphere <- function(ctr = c(0, 0, 0), r = 1, nIter = 3L) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
-#' @title Iso-oriented cuboid
-#' @description Mesh of an iso-oriented cuboid, i.e. with edges parallel
-#'   to the axes.
+#' @title Iso-oriented cuboid mesh
+#' @description Generate a surface mesh of an iso-oriented cuboid,
+#'   i.e. with edges parallel to the axes.
 #'
 #' @param lo \code{numeric} 3-vector. Lower left front corner, a point
 #'   whose coordinates must all be lower than those of the upper corner.

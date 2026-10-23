@@ -107,7 +107,7 @@ removeOutliers <- function(x,
 #'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
 #'   or a numeric matrix with 3 columns which stores the point coordinates,
 #'   one point per row, and at least 4 points.
-#' @param jetSmoothing Optional integer >= 2. If specified,
+#' @param nNeighbors Optional integer >= 2. If specified,
 #'   the point cloud is smoothed before the reconstruction, using
 #'   this integer as the number of neighbors for the smoothing. Note that this
 #'   smoothing preprocessing relocates the points and then should not be used
@@ -129,7 +129,7 @@ removeOutliers <- function(x,
 #'
 #' mesh         <- dataHeart1
 #' mesh_rgl     <- toRGL(mesh)
-#' mesh_afs     <- reconstructAFS(mesh[["vertices"]], jetSmoothing=30)
+#' mesh_afs     <- reconstructAFS(mesh[["vertices"]], nNeighbors=30L)
 #' mesh_afs_rgl <- toRGL(mesh_afs)
 #'
 #' mfrow3d(1, 2)
@@ -140,15 +140,15 @@ removeOutliers <- function(x,
 #' shade3d(mesh_afs_rgl, col="gray")
 #'
 #' @export
-reconstructAFS <- function(x, jetSmoothing, repairSoup=TRUE, normals=FALSE) {
+reconstructAFS <- function(x, nNeighbors, repairSoup=TRUE, normals=FALSE) {
   xIn <- getVertsMat(x, nPtsMin=4L)
-  if(!missing(jetSmoothing)) {
-    stopifnot(isPositiveInteger(jetSmoothing), jetSmoothing >= 2L)
+  if(!missing(nNeighbors)) {
+    stopifnot(isPositiveInteger(nNeighbors), nNeighbors >= 2L)
   } else {
-    jetSmoothing <- 0L
+    nNeighbors <- 0L
   }
   stopifnot(isBoolean(repairSoup))
-  mesh_cpp <- reconstructAFS_cpp(t(xIn), as.integer(jetSmoothing), repairSoup, normals)
+  mesh_cpp <- reconstructAFS_cpp(t(xIn), as.integer(nNeighbors), repairSoup, normals)
   fromCPP(mesh_cpp)
 }
 
@@ -233,9 +233,9 @@ reconstructPoisson <- function(
 #'   a \code{\link[rgl]{mesh3d}} object from package \strong{rgl},
 #'   or a numeric matrix with 3 columns which stores the point coordinates,
 #'   one point per row, and at least 4 points.
-#' @param scaleIterations Positive integer. Number of iterations used to increase the scale.
-#' @param neighbors Positive integer. Number of neighbors used to smooth the point cloud.
-#' @param samples Positive integer. Number of samples used to smooth the point cloud.
+#' @param nScaleIter Positive integer. Number of iterations used to increase the scale.
+#' @param nNeighbors Positive integer. Number of neighbors used to smooth the point cloud.
+#' @param nSamples Positive integer. Number of samples used to smooth the point cloud.
 #' @param separateShells Boolean. Separate the shells?
 #' @param forceManifold Boolean. Force a manifold output mesh?
 #' @param borderAngle Bound on the angle in degrees used to detect border edges.
@@ -258,9 +258,9 @@ reconstructPoisson <- function(
 #' mesh     <- dataHeart1
 #' mesh_rgl <- toRGL(mesh)
 #' mesh_sss <- reconstructSSS(mesh[["vertices"]],
-#'                            scaleIterations=2L,
-#'                            forceManifold  =TRUE,
-#'                            neighbors      =12L)
+#'                            nScaleIter   =2L,
+#'                            nNeighbors   =12L,
+#'                            forceManifold=TRUE)
 #' mesh_sss_rgl <- toRGL(mesh_sss)
 #'
 #' mfrow3d(1, 2)
@@ -273,18 +273,18 @@ reconstructPoisson <- function(
 #' @export
 reconstructSSS <- function(
   x,
-  scaleIterations=1L,
-  neighbors      =12L,
-  samples        =300L,
-  separateShells =FALSE,
-  forceManifold  =TRUE,
-  borderAngle    =45,
-  repairSoup     =TRUE,
-  normals        =FALSE) {
+  nScaleIter    =1L,
+  nNeighbors    =12L,
+  nSamples      =300L,
+  separateShells=FALSE,
+  forceManifold =TRUE,
+  borderAngle   =45,
+  repairSoup    =TRUE,
+  normals       =FALSE) {
   xIn <- getVertsMat(x, nPtsMin=4L)
-  stopifnot(isStrictPositiveInteger(scaleIterations))
-  stopifnot(isStrictPositiveInteger(neighbors), neighbors >= 2L)
-  stopifnot(isStrictPositiveInteger(samples))
+  stopifnot(isStrictPositiveInteger(nScaleIter))
+  stopifnot(isStrictPositiveInteger(nNeighbors), neighbors >= 2L)
+  stopifnot(isStrictPositiveInteger(nSamples))
   stopifnot(isBoolean(separateShells))
   stopifnot(isBoolean(forceManifold))
   stopifnot(isNonNegativeNumber(borderAngle))
@@ -292,9 +292,9 @@ reconstructSSS <- function(
   stopifnot(isBoolean(normals))
   mesh_cpp <- reconstructSSS_cpp(
     t(xIn),
-    as.integer(scaleIterations),
-    as.integer(neighbors),
-    as.integer(samples),
+    as.integer(nScaleIter),
+    as.integer(nNeighbors),
+    as.integer(nSamples),
     separateShells,
     forceManifold,
     as.double(borderAngle),

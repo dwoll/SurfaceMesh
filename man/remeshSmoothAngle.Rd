@@ -61,7 +61,9 @@ shade3d(mesh_s_rgl, col="gray")
 
 }
 \seealso{
-See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+See \code{\link[SurfaceMesh]{remeshACVD}},
+\code{\link[SurfaceMesh]{remeshDelaunay}},
+\code{\link[SurfaceMesh]{remeshIsotropic}},
 \code{\link[SurfaceMesh]{remeshSimplify}},
 \code{\link[SurfaceMesh]{remeshSmoothShape}},
 \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}

@@ -16,7 +16,7 @@
 #'   Includes triangulation if mesh is not already triangle.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #'   The mesh must be triangle or be able to be made triangle.
-#' @param indices Indices of the faces to be smoothed.
+#' @param faces Indices of the faces to be smoothed.
 #'   If missing, the whole mesh is smoothed.
 #' @param nIter Positive \code{integer}: Number of iterations.
 #' @param time Positive number: A time step that corresponds to the speed by
@@ -25,7 +25,9 @@
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
-#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#' @seealso See \code{\link[SurfaceMesh]{remeshACVD}},
+#'   \code{\link[SurfaceMesh]{remeshDelaunay}},
+#'   \code{\link[SurfaceMesh]{remeshIsotropic}},
 #'   \code{\link[SurfaceMesh]{remeshSimplify}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothAngle}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
@@ -49,7 +51,7 @@
 #' shade3d(mesh_s_rgl, col="gray")
 #'
 #' @export
-remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FALSE) {
+remeshSmoothShape <- function(x, faces, nIter = 1L, time = 0.001, normals = FALSE) {
   if(!inherits(x, "CGALmesh")) {
       stop("The `x` argument must be of class 'CGALmesh'",
            " (i.e., the output of the `makeMesh()` function).")
@@ -57,24 +59,24 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
   stopifnot(isStrictPositiveInteger(nIter))
   stopifnot(isPositiveNumber(time))
   stopifnot(isBoolean(normals))
-  if(missing(indices)) {
-    indices <- integer(0L)
+  if(missing(faces)) {
+    faces <- integer(0L)
   } else {
-    stopifnot(isAtomicVector(indices))
-    stopifnot(is.numeric(indices))
-    integers <- isTRUE(all.equal(indices, floor(indices)))
+    stopifnot(isAtomicVector(faces))
+    stopifnot(is.numeric(faces))
+    integers <- isTRUE(all.equal(faces, floor(faces)))
     if(!integers) {
-      stop("The indices must be positive integers.")
+      stop("The face indices must be positive integers.")
     }
-    positive <- all(indices >= 1L)
+    positive <- all(faces >= 1L)
     if(!positive) {
-      stop("The indices must be positive integers.")
+      stop("The face indices must be positive integers.")
     }
-    indices <- unique(as.integer(indices)) - 1L
+    faces <- unique(as.integer(faces)) - 1L
   }
   meshCPP <- fromR(x)
   meshOut <- remeshSmoothShape_cpp(
-    meshCPP, indices, as.integer(nIter), time, normals)
+    meshCPP, faces, as.integer(nIter), time, normals)
   fromCPP(meshOut)
 }
 
@@ -96,7 +98,9 @@ remeshSmoothShape <- function(x, indices, nIter = 1L, time = 0.001, normals = FA
 #'   optimization as well. However, this feature requires the external
 #'   Ceres library (\url{http://ceres-solver.org/}) and thus is currently
 #'   not enabled here.
-#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#' @seealso See \code{\link[SurfaceMesh]{remeshACVD}},
+#'   \code{\link[SurfaceMesh]{remeshDelaunay}},
+#'   \code{\link[SurfaceMesh]{remeshIsotropic}},
 #'   \code{\link[SurfaceMesh]{remeshSimplify}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}
@@ -157,7 +161,9 @@ remeshSmoothAngle <- function(x,
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
-#' @seealso See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+#' @seealso See \code{\link[SurfaceMesh]{remeshACVD}},
+#'   \code{\link[SurfaceMesh]{remeshDelaunay}},
+#'   \code{\link[SurfaceMesh]{remeshIsotropic}},
 #'   \code{\link[SurfaceMesh]{remeshSimplify}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothAngle}}

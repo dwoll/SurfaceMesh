@@ -26,7 +26,7 @@
 // [[Rcpp::export]]
 Rcpp::List remeshSmoothShape_cpp(
   const Rcpp::List rmesh,
-  const Rcpp::IntegerVector indices,
+  const Rcpp::IntegerVector face_idx,
   const unsigned int nIter,
   const double time,
   const bool normals) {
@@ -44,7 +44,7 @@ Rcpp::List remeshSmoothShape_cpp(
       }
     }
     CGAL::Boolean_property_map<std::set<Mesh3::Vertex_index>> vcmap(constrained_vertices);
-    const std::size_t nIdx = indices.size();
+    const std::size_t nIdx = face_idx.size();
     if(nIdx == 0) {
         PMP::smooth_shape(mesh, time,
                           CGAL::parameters::number_of_iterations(nIter)
@@ -53,7 +53,7 @@ Rcpp::List remeshSmoothShape_cpp(
         std::list<face_descriptor> selectedFaces;
         const std::size_t nFaces = mesh.number_of_faces();
         for(std::size_t i = 0; i < nIdx; i++) {
-          const std::size_t idx = indices(i);
+          const std::size_t idx = face_idx(i);
           if(idx >= nFaces) {
             Rcpp::stop("Face index too large.");
           }

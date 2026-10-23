@@ -13,7 +13,7 @@ isClosed(x)
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Check if the given 3D surface mesh is closed (watertight).
+Check whether the given 3D surface mesh is closed (watertight).
 }
 \examples{
 library(SurfaceMesh)

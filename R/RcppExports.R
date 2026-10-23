@@ -117,6 +117,10 @@ isClosed_cpp <- function(rmesh) {
     .Call(`_SurfaceMesh_isClosed_cpp`, rmesh)
 }
 
+isOutwardOriented_cpp <- function(rmesh) {
+    .Call(`_SurfaceMesh_isOutwardOriented_cpp`, rmesh)
+}
+
 isValid_cpp <- function(rmesh) {
     .Call(`_SurfaceMesh_isValid_cpp`, rmesh)
 }
@@ -127,6 +131,10 @@ orientToBoundVolume_cpp <- function(rmesh, normals) {
 
 removeSelfIntersections_cpp <- function(rmesh, method, normals, verbose) {
     .Call(`_SurfaceMesh_removeSelfIntersections_cpp`, rmesh, method, normals, verbose)
+}
+
+reverseFaceOrientations_cpp <- function(rmesh, face_idx, normals) {
+    .Call(`_SurfaceMesh_reverseFaceOrientations_cpp`, rmesh, face_idx, normals)
 }
 
 samplePoints_cpp <- function(rmesh, ropts) {
@@ -177,6 +185,14 @@ reconstructSSS_cpp <- function(pts, scaleIterations, nNeighbors, nSamples, separ
     .Call(`_SurfaceMesh_reconstructSSS_cpp`, pts, scaleIterations, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals)
 }
 
+remeshACVD_cpp <- function(rmesh, method, nb_clusters, vert_count_ratio, gradation_factor, normals) {
+    .Call(`_SurfaceMesh_remeshACVD_cpp`, rmesh, method, nb_clusters, vert_count_ratio, gradation_factor, normals)
+}
+
+remeshDelaunay_cpp <- function(rmesh, edgeSize, facetAngle, facetDist, protectConstraints, dihedralAngle, normals) {
+    .Call(`_SurfaceMesh_remeshDelaunay_cpp`, rmesh, edgeSize, facetAngle, facetDist, protectConstraints, dihedralAngle, normals)
+}
+
 remeshIsoUniform_cpp <- function(rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, dihedralAngle, normals) {
     .Call(`_SurfaceMesh_remeshIsoUniform_cpp`, rmesh, targetEdgeLen, nIter, nRelaxSteps, protectConstraints, dihedralAngle, normals)
 }
@@ -193,8 +209,8 @@ simplifyGH_cpp <- function(rmesh, repairSoup, repairMesh, ueRatio, policy, norma
     .Call(`_SurfaceMesh_simplifyGH_cpp`, rmesh, repairSoup, repairMesh, ueRatio, policy, normals, verbose)
 }
 
-remeshSmoothShape_cpp <- function(rmesh, indices, nIter, time, normals) {
-    .Call(`_SurfaceMesh_remeshSmoothShape_cpp`, rmesh, indices, nIter, time, normals)
+remeshSmoothShape_cpp <- function(rmesh, face_idx, nIter, time, normals) {
+    .Call(`_SurfaceMesh_remeshSmoothShape_cpp`, rmesh, face_idx, nIter, time, normals)
 }
 
 remeshSmoothAA_cpp <- function(rmesh, dihedralAngle, nIter, useSafeConstr, doProject, normals) {

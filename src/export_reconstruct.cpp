@@ -249,7 +249,7 @@ Rcpp::List reconstructPoisson_cpp(const Rcpp::NumericMatrix pts,
 // [[Rcpp::export]]
 Rcpp::List reconstructSSS_cpp(
   const Rcpp::NumericMatrix pts,
-  const int scaleIterations,
+  const int nScaleIter,
   const int nNeighbors,
   const int nSamples,
   const bool separateShells,
@@ -260,7 +260,7 @@ Rcpp::List reconstructSSS_cpp(
   std::vector<Point3> points = matrix_to_points3<Point3>(pts);
   SSS_reconstruction SSSR(points.begin(), points.end());
   SSS_smoother smoother(nNeighbors, nSamples);
-  SSSR.increase_scale(scaleIterations, smoother);
+  SSSR.increase_scale(nScaleIter, smoother);
   SSS_mesher mesher(
     smoother.squared_radius(), separateShells, forceManifold, borderAngle);
   SSSR.reconstruct_surface(mesher);

@@ -14,7 +14,7 @@ e.g., a \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{mak
 \code{TRUE} or \code{FALSE}.
 }
 \description{
-Check if the given 3D surface mesh is a quad mesh.
+Check whether the given 3D surface mesh is a quad mesh.
 }
 \examples{
 library(SurfaceMesh)
@@ -24,7 +24,7 @@ isQuad(mesh)
 
 }
 \seealso{
-See \code{\link[SurfaceMesh]{isTriangle}} to check if mesh is a triangle mesh.
+See \code{\link[SurfaceMesh]{isTriangle}} to check whether mesh is a triangle mesh.
 }
 \author{
 Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.

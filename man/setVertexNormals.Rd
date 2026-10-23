@@ -4,13 +4,15 @@
 \alias{setVertexNormals}
 \title{Assign normal vectors to mesh vertices}
 \usage{
-setVertexNormals(x, normals)
+setVertexNormals(x, normals, tol = 1e-08)
 }
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
 
-\item{normals}{A numeric matrix with three columns and as many rows as
-the number of vertices. Should be unit vectors, not currently checked.}
+\item{normals}{A numeric matrix providing unit normal vectors with three
+columns and as many rows as the number of vertices.}
+
+\item{tol}{\code{numeric}. Tolerance for checking that normals are unit length.}
 }
 \value{
 A \code{CGALmesh} object.

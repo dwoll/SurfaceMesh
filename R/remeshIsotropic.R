@@ -29,11 +29,13 @@
 #' @param nRelaxSteps Positive \code{integer}: Number of relaxation steps.
 #' @param protectConstraints Boolean. Protect constraints? See details.
 #' @param dihedralAngle Positive number. Constrain edges with a dihedral
-#'   angle over given value to preserve sharp edges.
+#'   angle over given value to protect sharp edges.
 #' @param normals Boolean. Return vertex normals?
 #' @return A \code{CGALmesh} object.
 #' @details See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
-#' @seealso See \code{\link[SurfaceMesh]{remeshSimplify}},
+#' @seealso See \code{\link[SurfaceMesh]{remeshACVD}},
+#'   \code{\link[SurfaceMesh]{remeshDelaunay}},
+#'   \code{\link[SurfaceMesh]{remeshSimplify}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothShape}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothAngle}},
 #'   \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}

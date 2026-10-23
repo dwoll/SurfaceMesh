@@ -394,6 +394,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// isOutwardOriented_cpp
+bool isOutwardOriented_cpp(const Rcpp::List rmesh);
+RcppExport SEXP _SurfaceMesh_isOutwardOriented_cpp(SEXP rmeshSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    rcpp_result_gen = Rcpp::wrap(isOutwardOriented_cpp(rmesh));
+    return rcpp_result_gen;
+END_RCPP
+}
 // isValid_cpp
 bool isValid_cpp(const Rcpp::List rmesh);
 RcppExport SEXP _SurfaceMesh_isValid_cpp(SEXP rmeshSEXP) {
@@ -428,6 +439,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
     Rcpp::traits::input_parameter< const bool >::type verbose(verboseSEXP);
     rcpp_result_gen = Rcpp::wrap(removeSelfIntersections_cpp(rmesh, method, normals, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reverseFaceOrientations_cpp
+Rcpp::List reverseFaceOrientations_cpp(const Rcpp::List rmesh, const Rcpp::IntegerVector face_idx, const bool normals);
+RcppExport SEXP _SurfaceMesh_reverseFaceOrientations_cpp(SEXP rmeshSEXP, SEXP face_idxSEXP, SEXP normalsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector >::type face_idx(face_idxSEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    rcpp_result_gen = Rcpp::wrap(reverseFaceOrientations_cpp(rmesh, face_idx, normals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -595,6 +619,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// remeshACVD_cpp
+Rcpp::List remeshACVD_cpp(const Rcpp::List rmesh, const Rcpp::String method, const unsigned int nb_clusters, const double vert_count_ratio, const double gradation_factor, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshACVD_cpp(SEXP rmeshSEXP, SEXP methodSEXP, SEXP nb_clustersSEXP, SEXP vert_count_ratioSEXP, SEXP gradation_factorSEXP, SEXP normalsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type nb_clusters(nb_clustersSEXP);
+    Rcpp::traits::input_parameter< const double >::type vert_count_ratio(vert_count_ratioSEXP);
+    Rcpp::traits::input_parameter< const double >::type gradation_factor(gradation_factorSEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    rcpp_result_gen = Rcpp::wrap(remeshACVD_cpp(rmesh, method, nb_clusters, vert_count_ratio, gradation_factor, normals));
+    return rcpp_result_gen;
+END_RCPP
+}
+// remeshDelaunay_cpp
+Rcpp::List remeshDelaunay_cpp(const Rcpp::List rmesh, const double edgeSize, const double facetAngle, const double facetDist, const bool protectConstraints, const double dihedralAngle, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshDelaunay_cpp(SEXP rmeshSEXP, SEXP edgeSizeSEXP, SEXP facetAngleSEXP, SEXP facetDistSEXP, SEXP protectConstraintsSEXP, SEXP dihedralAngleSEXP, SEXP normalsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const double >::type edgeSize(edgeSizeSEXP);
+    Rcpp::traits::input_parameter< const double >::type facetAngle(facetAngleSEXP);
+    Rcpp::traits::input_parameter< const double >::type facetDist(facetDistSEXP);
+    Rcpp::traits::input_parameter< const bool >::type protectConstraints(protectConstraintsSEXP);
+    Rcpp::traits::input_parameter< const double >::type dihedralAngle(dihedralAngleSEXP);
+    Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
+    rcpp_result_gen = Rcpp::wrap(remeshDelaunay_cpp(rmesh, edgeSize, facetAngle, facetDist, protectConstraints, dihedralAngle, normals));
+    return rcpp_result_gen;
+END_RCPP
+}
 // remeshIsoUniform_cpp
 Rcpp::List remeshIsoUniform_cpp(const Rcpp::List rmesh, const double targetEdgeLen, const unsigned int nIter, const unsigned int nRelaxSteps, const bool protectConstraints, const double dihedralAngle, const bool normals);
 RcppExport SEXP _SurfaceMesh_remeshIsoUniform_cpp(SEXP rmeshSEXP, SEXP targetEdgeLenSEXP, SEXP nIterSEXP, SEXP nRelaxStepsSEXP, SEXP protectConstraintsSEXP, SEXP dihedralAngleSEXP, SEXP normalsSEXP) {
@@ -667,17 +724,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // remeshSmoothShape_cpp
-Rcpp::List remeshSmoothShape_cpp(const Rcpp::List rmesh, const Rcpp::IntegerVector indices, const unsigned int nIter, const double time, const bool normals);
-RcppExport SEXP _SurfaceMesh_remeshSmoothShape_cpp(SEXP rmeshSEXP, SEXP indicesSEXP, SEXP nIterSEXP, SEXP timeSEXP, SEXP normalsSEXP) {
+Rcpp::List remeshSmoothShape_cpp(const Rcpp::List rmesh, const Rcpp::IntegerVector face_idx, const unsigned int nIter, const double time, const bool normals);
+RcppExport SEXP _SurfaceMesh_remeshSmoothShape_cpp(SEXP rmeshSEXP, SEXP face_idxSEXP, SEXP nIterSEXP, SEXP timeSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::IntegerVector >::type indices(indicesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector >::type face_idx(face_idxSEXP);
     Rcpp::traits::input_parameter< const unsigned int >::type nIter(nIterSEXP);
     Rcpp::traits::input_parameter< const double >::type time(timeSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(remeshSmoothShape_cpp(rmesh, indices, nIter, time, normals));
+    rcpp_result_gen = Rcpp::wrap(remeshSmoothShape_cpp(rmesh, face_idx, nIter, time, normals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -795,9 +852,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_getVolume_cpp", (DL_FUNC) &_SurfaceMesh_getVolume_cpp, 1},
     {"_SurfaceMesh_hasGarbage_cpp", (DL_FUNC) &_SurfaceMesh_hasGarbage_cpp, 1},
     {"_SurfaceMesh_isClosed_cpp", (DL_FUNC) &_SurfaceMesh_isClosed_cpp, 1},
+    {"_SurfaceMesh_isOutwardOriented_cpp", (DL_FUNC) &_SurfaceMesh_isOutwardOriented_cpp, 1},
     {"_SurfaceMesh_isValid_cpp", (DL_FUNC) &_SurfaceMesh_isValid_cpp, 1},
     {"_SurfaceMesh_orientToBoundVolume_cpp", (DL_FUNC) &_SurfaceMesh_orientToBoundVolume_cpp, 2},
     {"_SurfaceMesh_removeSelfIntersections_cpp", (DL_FUNC) &_SurfaceMesh_removeSelfIntersections_cpp, 4},
+    {"_SurfaceMesh_reverseFaceOrientations_cpp", (DL_FUNC) &_SurfaceMesh_reverseFaceOrientations_cpp, 3},
     {"_SurfaceMesh_samplePoints_cpp", (DL_FUNC) &_SurfaceMesh_samplePoints_cpp, 2},
     {"_SurfaceMesh_setVertexNormals_cpp", (DL_FUNC) &_SurfaceMesh_setVertexNormals_cpp, 2},
     {"_SurfaceMesh_triangulateMesh_cpp", (DL_FUNC) &_SurfaceMesh_triangulateMesh_cpp, 2},
@@ -810,6 +869,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_reconstructAFS_cpp", (DL_FUNC) &_SurfaceMesh_reconstructAFS_cpp, 4},
     {"_SurfaceMesh_reconstructPoisson_cpp", (DL_FUNC) &_SurfaceMesh_reconstructPoisson_cpp, 7},
     {"_SurfaceMesh_reconstructSSS_cpp", (DL_FUNC) &_SurfaceMesh_reconstructSSS_cpp, 9},
+    {"_SurfaceMesh_remeshACVD_cpp", (DL_FUNC) &_SurfaceMesh_remeshACVD_cpp, 6},
+    {"_SurfaceMesh_remeshDelaunay_cpp", (DL_FUNC) &_SurfaceMesh_remeshDelaunay_cpp, 7},
     {"_SurfaceMesh_remeshIsoUniform_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsoUniform_cpp, 7},
     {"_SurfaceMesh_remeshIsoAdapt_cpp", (DL_FUNC) &_SurfaceMesh_remeshIsoAdapt_cpp, 9},
     {"_SurfaceMesh_simplifyLT_cpp", (DL_FUNC) &_SurfaceMesh_simplifyLT_cpp, 8},

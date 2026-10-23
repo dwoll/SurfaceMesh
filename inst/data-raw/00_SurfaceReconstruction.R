@@ -5,6 +5,7 @@
 ## ----------------------------------------------------------------------- //
 
 library(SurfaceMesh)
+library(rgl)
 
 ## unfinished
 
@@ -12,27 +13,37 @@ library(SurfaceMesh)
 ## Dupin Cyclide
 ## ----------------------------------------------------------------------- //
 
-mCyclide   <- meshCyclide(aa=0.94, cc=0.34, dd=0.56)
+mCyclide   <- dataCyclide
 ptsCyclide <- t(mCyclide$vb[-4L, ])
 
-cyclide_afs  <- reconstructAFS(ptsCyclide)
+cyclide_afs  <- reconstructAFS(ptsCyclide) # jetSmoothing=4L
+
+cyclide_sss  <- reconstructSSS(ptsCyclide,
+                               scaleIterations=2L,
+                               neighbors=12L,
+                               samples=250L,
+                               separateShells=FALSE,
+                               forceManifold=TRUE,
+                               borderAngle=60)
+
 cyclide_pois <- reconstructPoisson(ptsCyclide,
-                                   spacing=0.01)
+                                   # normalsFun=getNormalsFun(12L),
+                                   spacing=0.01,
+                                   smAngle=10,     # 20
+                                   smRadius=5,    # 30
+                                   smDistance=0.5)  # 0.375
 
 wire3d(mCyclide)
 shade3d(toRGL(cyclide_afs),  color="darkred")
+shade3d(toRGL(cyclide_sss),  color="orangered")
 shade3d(toRGL(cyclide_pois), color="orangered")
-
-## ----------------------------------------------------------------------- //
-## Entzensberger Star
-## ----------------------------------------------------------------------- //
 
 ## ----------------------------------------------------------------------- //
 ## Hopf Torus
 ## ----------------------------------------------------------------------- //
 
-mHopfTorus   <- meshHopfTorus(nu=200L, nv=150L, nlobes=3L, A=0.44)
-ptsHopfTorus <- t(mHopfTorus$vb[-4L, ])
+mHopfTorus   <- dataHopfTorus
+ptsHopfTorus <- mHopfTorus$vertices
 
 ht_afs  <- reconstructAFS(ptsHopfTorus)
 ht_pois <- reconstructPoisson(ptsHopfTorus,
@@ -40,21 +51,9 @@ ht_pois <- reconstructPoisson(ptsHopfTorus,
                               smAngle=10,
                               smDistance=0.4)
 
-wire3d(mHopfTorus)
+wire3d(toRGL(mHopfTorus))
 shade3d(toRGL(ht_afs),  color="darkred")
 shade3d(toRGL(ht_pois), color="orangered")
-
-## ----------------------------------------------------------------------- //
-## ICN5D Eight
-## ----------------------------------------------------------------------- //
-
-## ----------------------------------------------------------------------- //
-## Oloid
-## ----------------------------------------------------------------------- //
-
-## ----------------------------------------------------------------------- //
-## OrthoCircle
-## ----------------------------------------------------------------------- //
 
 ## ----------------------------------------------------------------------- //
 ## Solid Möbius strip
@@ -72,22 +71,6 @@ shade3d(toRGL(sms_afs),  color="darkred")
 shade3d(toRGL(sms_pois), color="orangered")
 
 ## ----------------------------------------------------------------------- //
-## Spider Cage
-## ----------------------------------------------------------------------- //
-
-mSpiderCage   <- meshSpiderCage(a=0.9, nx=250L, ny=250L, nz=250L)
-ptsSpiderCage <- t(mSpiderCage$vb[-4L, ])
-
-dsc_afs  <- reconstructAFS(ptsSpiderCage)
-dsc_pois <- reconstructPoisson(ptsSpiderCage,
-                               spacing=0.01,
-                               smDistance=0.9)
-
-wire3d(mSpiderCage)
-shade3d(toRGL(dsc_afs),  color="violetred")
-shade3d(toRGL(dsc_pois), color="darkviolet")
-
-## ----------------------------------------------------------------------- //
 ## Toroidal Helix
 ## ----------------------------------------------------------------------- //
 
@@ -95,7 +78,7 @@ shade3d(toRGL(dsc_pois), color="darkviolet")
 ## Tubular Knot
 ## ----------------------------------------------------------------------- //
 
-mTubularKnot   <- meshTubularKnot(p=3, q=11, a=0.55, 10*60, 6)
+mTubularKnot   <- dataTubularKnot
 ptsTubularKnot <- t(mTubularKnot$vb[-4L, ])
 
 tk_afs  <- reconstructAFS(mTubularKnot)
@@ -113,6 +96,7 @@ shade3d(toRGL(tk_pois), color="darkviolet")
 
 data(bunny, package="onion")
 bunny_afs  <- reconstructAFS(bunny)
+bunny_sss  <- reconstructSSS(bunny, scaleIterations=2L, neighbors=6L)
 bunny_pois <- reconstructPoisson(bunny,
                                  spacing=0.0001,
                                  smDistance=0.9)
@@ -132,19 +116,3 @@ sd_pois <- reconstructPoisson(ptsStanfordDragon,
 
 shade3d(toRGL(sd_afs),  color="darkolivegreen4")
 shade3d(toRGL(sd_pois), color="forestgreen")
-
-## ----------------------------------------------------------------------- //
-## Sphere
-## ----------------------------------------------------------------------- //
-
-Sphere_path <- "c:/apps/CGAL-6.2_/data/points_3/sphere_20k.off"
-ptsSphere0  <- readMeshFile(Sphere_path)$vertices
-ptsSphere   <- removeOutliers(ptsSphere0)
-sphere_pois <- reconstructPoisson(ptsSphere,
-                                  normalsFun=getNormalsFun(12L, method="PCA"),
-                                  # spacing=0.5,
-                                  smAngle=10,
-                                  smRadius=10,
-                                  smDistance=0.5)
-
-wire3d(toRGL(sphere_pois))

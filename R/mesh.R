@@ -583,7 +583,7 @@ getVolume <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Does mesh have garbage?
-#' @description Check if the given 3D surface mesh has garbage, i.e.,
+#' @description Check whether the given 3D surface mesh has garbage, i.e.,
 #'   there is a mismatch between faces and vertices.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
@@ -608,7 +608,7 @@ hasGarbage <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Is mesh closed?
-#' @description Check if the given 3D surface mesh is closed (watertight).
+#' @description Check whether the given 3D surface mesh is closed (watertight).
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
@@ -631,12 +631,37 @@ isClosed <- function(x) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
+#' @title Is mesh outward oriented?
+#' @description Check whether the given 3D surface mesh has a positive (outward) orientation.
+#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @returns \code{TRUE} or \code{FALSE}.
+#' @seealso \code{\link[SurfaceMesh]{reverseFaceOrientations}},
+#'   \code{\link[SurfaceMesh]{orientToBoundVolume}}.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' mesh <- makeMesh(dataPentaPrism, triangulate=TRUE)
+#' isOutwardOriented(mesh)
+#'
+#' @export
+isOutwardOriented <- function(x) {
+  if(!inherits(x, "CGALmesh")) {
+      stop("The `x` argument must be of class 'CGALmesh'",
+			       " (i.e., the output of the `makeMesh()` function).")
+  }
+  meshCPP <- fromR(x)
+  isOutwardOriented_cpp(meshCPP)
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Is mesh a quad mesh?
-#' @description Check if the given 3D surface mesh is a quad mesh.
+#' @description Check whether the given 3D surface mesh is a quad mesh.
 #' @param x A \code{list} with components \code{vertices} and \code{faces},
 #'   e.g., a \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
-#' @seealso See \code{\link[SurfaceMesh]{isTriangle}} to check if mesh is a triangle mesh.
+#' @seealso See \code{\link[SurfaceMesh]{isTriangle}} to check whether mesh is a triangle mesh.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
@@ -657,11 +682,11 @@ isQuad <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Is mesh a triangle mesh?
-#' @description Check if the given 3D surface mesh is a triangle mesh.
+#' @description Check whether the given 3D surface mesh is a triangle mesh.
 #' @param x A \code{list} with components \code{vertices} and \code{faces},
 #'   e.g., a \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
-#' @seealso See \code{\link[SurfaceMesh]{isQuad}} to check if mesh is a quad mesh.
+#' @seealso See \code{\link[SurfaceMesh]{isQuad}} to check whether mesh is a quad mesh.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
@@ -681,10 +706,10 @@ isTriangle <- function(x) {
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
 #' @title Is mesh a valid mesh?
-#' @description Check if the given mesh is a valid 3D surface mesh.
+#' @description Check whether the given mesh is a valid 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @returns \code{TRUE} or \code{FALSE}.
-#' @seealso See \code{\link[SurfaceMesh]{hasGarbage}} to check if mesh has garbage.
+#' @seealso See \code{\link[SurfaceMesh]{hasGarbage}} to check whether mesh has garbage.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @examples
@@ -709,7 +734,7 @@ isValid <- function(x) {
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 #' @param normals Boolean. Return vertex normals?
 #' @returns A \code{CGALmesh} object.
-#' @seealso \code{\link[SurfaceMesh]{doesBoundVolume}} to check if mesh
+#' @seealso \code{\link[SurfaceMesh]{doesBoundVolume}} to check whether mesh
 #'   bounds a volume and \code{\link[SurfaceMesh]{getVolume}} to get the
 #'   volume bounded by the mesh.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
@@ -862,6 +887,62 @@ print.CGALmesh <- function(x, ...) {
 
 ## ----------------------------------------------------------------------- //
 ## ----------------------------------------------------------------------- //
+#' @title Reverse orientation of mesh faces
+#' @description For the faces of a 3D surface mesh, reverses the order
+#'   of the vertices along the face boundary.
+#' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
+#' @param faces Indices of the faces to select for reversing orientation.
+#'   If missing, the orientation of all faces is reversed.
+#'   Cave: The resulting mesh may be invalid if faces have inconsistent orientation.
+#' @param normals Boolean. Return vertex normals?
+#' @returns A \code{CGALmesh} object.
+#' @seealso \code{\link[SurfaceMesh]{isOutwardOriented}},
+#'   \code{\link[SurfaceMesh]{doesBoundVolume}},
+#'   \code{\link[SurfaceMesh]{orientToBoundVolume}}.
+#' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
+#'
+#' @examples
+#' library(SurfaceMesh)
+#' mesh <- makeMeshValid(dataTorus)
+#' doesBoundVolume(mesh)
+#' getVolume(mesh)  # positive
+#'
+#' mesh_rfo <- reverseFaceOrientations(mesh)
+#' doesBoundVolume(mesh_rfo)
+#' getVolume(mesh_rfo)  # negative
+#'
+#' ## invalid mesh from inconsistent face orientations
+#' mesh_invalid <- reverseFaceOrientations(mesh, faces=501:1000)
+#'
+#' @export
+reverseFaceOrientations <- function(x, faces, normals = FALSE) {
+  if(!inherits(x, "CGALmesh")) {
+      stop("The `x` argument must be of class 'CGALmesh'",
+			       " (i.e., the output of the `makeMesh()` function).")
+  }
+  if(missing(faces)) {
+    faces <- integer(0L)
+  } else {
+    stopifnot(isAtomicVector(faces))
+    stopifnot(is.numeric(faces))
+    integers <- isTRUE(all.equal(faces, floor(faces)))
+    if(!integers) {
+      stop("The face indices must be positive integers.")
+    }
+    positive <- all(faces >= 1L)
+    if(!positive) {
+      stop("The face indices must be positive integers.")
+    }
+    faces <- unique(as.integer(faces)) - 1L
+  }
+  stopifnot(isBoolean(normals))
+  meshCPP <- fromR(x)
+  mesh    <- reverseFaceOrientations_cpp(meshCPP, faces, normals)
+  fromCPP(mesh)
+}
+
+## ----------------------------------------------------------------------- //
+## ----------------------------------------------------------------------- //
 #' @title Sample vertices on mesh
 #' @description Random sampling of vertices on a given 3D triangle surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
@@ -933,8 +1014,9 @@ samplePoints <- function(x,
 #' @title Assign normal vectors to mesh vertices
 #' @description Assign given per-vertex normal vectors to a 3D surface mesh.
 #' @param x A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param normals A numeric matrix with three columns and as many rows as
-#'   the number of vertices. Should be unit vectors, not currently checked.
+#' @param normals A numeric matrix providing unit normal vectors with three
+#'   columns and as many rows as the number of vertices.
+#' @param tol \code{numeric}. Tolerance for checking that normals are unit length.
 #' @returns A \code{CGALmesh} object.
 #' @details Note: This function is currently not doing anything except adding
 #'   a list component \code{normals} to the \code{CGALmesh} object after
@@ -957,14 +1039,14 @@ samplePoints <- function(x,
 #' head(mesh_vn[["normals"]])
 #' head(nrmls)
 #' @export
-setVertexNormals <- function(x, normals) {
+setVertexNormals <- function(x, normals, tol=1e-8) {
   if(!inherits(x, "CGALmesh")) {
       stop("The `x` argument must be of class 'CGALmesh'",
 			       " (i.e., the output of the `makeMesh()` function).")
   }
   stopifnot(is.matrix(normals), is.numeric(normals), ncol(normals) == 3L)
-  # TODO check unit length of normals
-  # lens <- sqrt(rowSums(normals^2)) - 1
+  ## check unit length of normals
+  stopifnot(all((sqrt(rowSums(normals^2)) - 1) < tol))
   storage.mode(normals) <- "double"
   if(anyNA(normals)) {
     stop("Vectors in `normals` with missing values are not allowed.", call. = TRUE)

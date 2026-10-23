@@ -4,13 +4,13 @@
 \alias{remeshSmoothShape}
 \title{Smooth shape}
 \usage{
-remeshSmoothShape(x, indices, nIter = 1L, time = 0.001, normals = FALSE)
+remeshSmoothShape(x, faces, nIter = 1L, time = 0.001, normals = FALSE)
 }
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.
 The mesh must be triangle or be able to be made triangle.}
 
-\item{indices}{Indices of the faces to be smoothed.
+\item{faces}{Indices of the faces to be smoothed.
 If missing, the whole mesh is smoothed.}
 
 \item{nIter}{Positive \code{integer}: Number of iterations.}
@@ -50,7 +50,9 @@ shade3d(mesh_s_rgl, col="gray")
 
 }
 \seealso{
-See  \code{\link[SurfaceMesh]{remeshIsotropic}},
+See \code{\link[SurfaceMesh]{remeshACVD}},
+\code{\link[SurfaceMesh]{remeshDelaunay}},
+\code{\link[SurfaceMesh]{remeshIsotropic}},
 \code{\link[SurfaceMesh]{remeshSimplify}},
 \code{\link[SurfaceMesh]{remeshSmoothAngle}},
 \code{\link[SurfaceMesh]{remeshSmoothTangentRelax}}

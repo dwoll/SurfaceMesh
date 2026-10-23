@@ -178,7 +178,7 @@ Rcpp::List make_rmesh1(const MeshT &mesh, const bool normals) {
     } else if(vnormmap_.has_value()) {
         std::optional<std::vector<VectorT>> vnormals = get_vnormals<KernelT, MeshT, VectorT>(mesh);
         if(vnormals.has_value()) {
-            out["normals"] = points3_to_matrix<KernelT, VectorT>(vnormals.value());;
+            out["normals"] = points3_to_matrix<KernelT, VectorT>(vnormals.value());
         }
     }
     return out;
@@ -198,8 +198,8 @@ Rcpp::List make_rmesh2(const MeshT &mesh, const bool normals, const std::size_t 
     Rcpp::NumericMatrix Vertices = get_vertices<KernelT, MeshT, PointT>(mesh);
     Rcpp::IntegerMatrix Faces    = get_faces2<MeshT>(mesh, nSides);
     Rcpp::List out = Rcpp::List::create(Rcpp::Named("vertices") = Vertices,
-                                        Rcpp::Named("edges") = Edges,
-                                        Rcpp::Named("faces") = Faces);
+                                        Rcpp::Named("edges")    = Edges,
+                                        Rcpp::Named("faces")    = Faces);
 
     // check whether there are vertex normals
     std::optional<vertex_normals_map> vnormmap_ =
@@ -212,7 +212,7 @@ Rcpp::List make_rmesh2(const MeshT &mesh, const bool normals, const std::size_t 
     } else if(vnormmap_.has_value()) {
         std::optional<std::vector<VectorT>> vnormals = get_vnormals<KernelT, MeshT, VectorT>(mesh);
         if(vnormals.has_value()) {
-            out["normals"] = points3_to_matrix<KernelT, VectorT>(vnormals.value());;
+            out["normals"] = points3_to_matrix<KernelT, VectorT>(vnormals.value());
         }
     }
     return out;

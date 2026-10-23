@@ -19,6 +19,10 @@ Orient a given 3D surface mesh to bound a volume.
 }
 \examples{
 library(SurfaceMesh)
+
+## Two tetraeders
+## one with positive orientation
+## one with negative orientation
 vertices <- rbind(
     c(0, 0, 0),
     c(2, 2, 0),
@@ -49,7 +53,7 @@ getVolume(mesh_bv)
 
 }
 \seealso{
-\code{\link[SurfaceMesh]{doesBoundVolume}} to check if mesh
+\code{\link[SurfaceMesh]{doesBoundVolume}} to check whether mesh
 bounds a volume and \code{\link[SurfaceMesh]{getVolume}} to get the
 volume bounded by the mesh.
 }

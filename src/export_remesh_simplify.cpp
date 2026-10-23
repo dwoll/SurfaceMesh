@@ -20,12 +20,6 @@
 // ----------------------------------------------------------------------- //
 namespace SMS = CGAL::Surface_mesh_simplification;
 
-typedef SMS::GarlandHeckbert_plane_policies<Mesh3, K>                  Classic_plane;
-typedef SMS::GarlandHeckbert_probabilistic_plane_policies<Mesh3, K>    Prob_plane;
-typedef SMS::GarlandHeckbert_triangle_policies<Mesh3, K>               Classic_tri;
-typedef SMS::GarlandHeckbert_probabilistic_triangle_policies<Mesh3, K> Prob_tri;
-typedef SMS::GarlandHeckbert_plane_and_line_policies<Mesh3, K>         Plane_and_line;
-
 // ----------------------------------------------------------------------- //
 // code adapted from
 // https://doc.cgal.org/latest/Surface_mesh_simplification/Surface_mesh_simplification_2edge_collapse_surface_mesh_8cpp-example.html
@@ -114,9 +108,9 @@ int collapse_gh(MeshT& mesh, const double ueRatio) {
   SMS::Edge_count_ratio_stop_predicate<MeshT> stop(ueRatio);
 
   // Garland & Heckbert simplification policies
-  typedef typename GHPolicies::Get_cost       GH_cost;
-  typedef typename GHPolicies::Get_placement  GH_placement;
-  typedef SMS::Bounded_normal_change_filter<> Filter;
+  using GH_cost      = typename GHPolicies::Get_cost;
+  using GH_placement = typename GHPolicies::Get_placement;
+  using Filter       = SMS::Bounded_normal_change_filter<>;
 
   GHPolicies gh_policies(mesh);
   const GH_cost& gh_cost = gh_policies.get_cost();
@@ -142,6 +136,12 @@ Rcpp::List simplifyGH_cpp(const Rcpp::List rmesh,
                           const Rcpp::String policy, // "CP", "CT", "PP", "PT", "PL"
                           const bool normals,
                           const bool verbose) {
+  using Classic_plane  = SMS::GarlandHeckbert_plane_policies<Mesh3, K>;
+  using Prob_plane     = SMS::GarlandHeckbert_probabilistic_plane_policies<Mesh3, K>;
+  using Classic_tri    = SMS::GarlandHeckbert_triangle_policies<Mesh3, K>;
+  using Prob_tri       = SMS::GarlandHeckbert_probabilistic_triangle_policies<Mesh3, K>;
+  using Plane_and_line = SMS::GarlandHeckbert_plane_and_line_policies<Mesh3, K>;
+
   Mesh3 mesh = make_surf_mesh_valid<Mesh3, Point3, Vector3>(
     rmesh,
     true,        // soup
