@@ -161,8 +161,12 @@ readFileMesh_cpp <- function(filename, normals, verbose) {
     .Call(`_SurfaceMesh_readFileMesh_cpp`, filename, normals, verbose)
 }
 
-writeFile_cpp <- function(filename, binary, precision, vertices, faceList) {
-    invisible(.Call(`_SurfaceMesh_writeFile_cpp`, filename, binary, precision, vertices, faceList))
+writeFileSoup_cpp <- function(vertices, rfaces, filename, precision, binary) {
+    invisible(.Call(`_SurfaceMesh_writeFileSoup_cpp`, vertices, rfaces, filename, precision, binary))
+}
+
+writeFileMesh_cpp <- function(rmesh, filename, precision, binary, verbose) {
+    invisible(.Call(`_SurfaceMesh_writeFileMesh_cpp`, rmesh, filename, precision, binary, verbose))
 }
 
 getAverageSpacing_cpp <- function(pts, nNeighbors) {
@@ -181,8 +185,8 @@ reconstructPoisson_cpp <- function(pts, normalsIn, spacing, smAngle, smRadius, s
     .Call(`_SurfaceMesh_reconstructPoisson_cpp`, pts, normalsIn, spacing, smAngle, smRadius, smDistance, normals)
 }
 
-reconstructSSS_cpp <- function(pts, scaleIterations, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals) {
-    .Call(`_SurfaceMesh_reconstructSSS_cpp`, pts, scaleIterations, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals)
+reconstructSSS_cpp <- function(pts, nScaleIter, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals) {
+    .Call(`_SurfaceMesh_reconstructSSS_cpp`, pts, nScaleIter, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals)
 }
 
 remeshACVD_cpp <- function(rmesh, method, nb_clusters, vert_count_ratio, gradation_factor, normals) {

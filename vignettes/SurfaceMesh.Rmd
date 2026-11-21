@@ -428,7 +428,7 @@ shade3d(mesh_s_rgl, col="gray")
 
 Note that CGAL `angle_and_area_smoothing()` supports smoothing by area
 optimization as well. However, this feature requires the external
-[Ceres library](http://ceres-solver.org) and is thus currently
+[Ceres library](https://github.com/ceres-solver/ceres-solver) and is thus currently
 not enabled here.
 
 ### Tangential Relaxation

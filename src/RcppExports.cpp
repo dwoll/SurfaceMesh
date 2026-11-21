@@ -529,17 +529,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// writeFile_cpp
-void writeFile_cpp(const std::string filename, const bool binary, const int precision, const Rcpp::NumericMatrix vertices, const Rcpp::List faceList);
-RcppExport SEXP _SurfaceMesh_writeFile_cpp(SEXP filenameSEXP, SEXP binarySEXP, SEXP precisionSEXP, SEXP verticesSEXP, SEXP faceListSEXP) {
+// writeFileSoup_cpp
+void writeFileSoup_cpp(const Rcpp::NumericMatrix vertices, const Rcpp::List rfaces, const std::string filename, const int precision, const bool binary);
+RcppExport SEXP _SurfaceMesh_writeFileSoup_cpp(SEXP verticesSEXP, SEXP rfacesSEXP, SEXP filenameSEXP, SEXP precisionSEXP, SEXP binarySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string >::type filename(filenameSEXP);
-    Rcpp::traits::input_parameter< const bool >::type binary(binarySEXP);
-    Rcpp::traits::input_parameter< const int >::type precision(precisionSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type vertices(verticesSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List >::type faceList(faceListSEXP);
-    writeFile_cpp(filename, binary, precision, vertices, faceList);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rfaces(rfacesSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< const int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< const bool >::type binary(binarySEXP);
+    writeFileSoup_cpp(vertices, rfaces, filename, precision, binary);
+    return R_NilValue;
+END_RCPP
+}
+// writeFileMesh_cpp
+void writeFileMesh_cpp(const Rcpp::List rmesh, const std::string filename, const int precision, const bool binary, const bool verbose);
+RcppExport SEXP _SurfaceMesh_writeFileMesh_cpp(SEXP rmeshSEXP, SEXP filenameSEXP, SEXP precisionSEXP, SEXP binarySEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type rmesh(rmeshSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type filename(filenameSEXP);
+    Rcpp::traits::input_parameter< const int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< const bool >::type binary(binarySEXP);
+    Rcpp::traits::input_parameter< const bool >::type verbose(verboseSEXP);
+    writeFileMesh_cpp(rmesh, filename, precision, binary, verbose);
     return R_NilValue;
 END_RCPP
 }
@@ -601,13 +615,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // reconstructSSS_cpp
-Rcpp::List reconstructSSS_cpp(const Rcpp::NumericMatrix pts, const int scaleIterations, const int nNeighbors, const int nSamples, const bool separateShells, const bool forceManifold, const double borderAngle, const bool repairSoup, const bool normals);
-RcppExport SEXP _SurfaceMesh_reconstructSSS_cpp(SEXP ptsSEXP, SEXP scaleIterationsSEXP, SEXP nNeighborsSEXP, SEXP nSamplesSEXP, SEXP separateShellsSEXP, SEXP forceManifoldSEXP, SEXP borderAngleSEXP, SEXP repairSoupSEXP, SEXP normalsSEXP) {
+Rcpp::List reconstructSSS_cpp(const Rcpp::NumericMatrix pts, const int nScaleIter, const int nNeighbors, const int nSamples, const bool separateShells, const bool forceManifold, const double borderAngle, const bool repairSoup, const bool normals);
+RcppExport SEXP _SurfaceMesh_reconstructSSS_cpp(SEXP ptsSEXP, SEXP nScaleIterSEXP, SEXP nNeighborsSEXP, SEXP nSamplesSEXP, SEXP separateShellsSEXP, SEXP forceManifoldSEXP, SEXP borderAngleSEXP, SEXP repairSoupSEXP, SEXP normalsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type pts(ptsSEXP);
-    Rcpp::traits::input_parameter< const int >::type scaleIterations(scaleIterationsSEXP);
+    Rcpp::traits::input_parameter< const int >::type nScaleIter(nScaleIterSEXP);
     Rcpp::traits::input_parameter< const int >::type nNeighbors(nNeighborsSEXP);
     Rcpp::traits::input_parameter< const int >::type nSamples(nSamplesSEXP);
     Rcpp::traits::input_parameter< const bool >::type separateShells(separateShellsSEXP);
@@ -615,7 +629,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type borderAngle(borderAngleSEXP);
     Rcpp::traits::input_parameter< const bool >::type repairSoup(repairSoupSEXP);
     Rcpp::traits::input_parameter< const bool >::type normals(normalsSEXP);
-    rcpp_result_gen = Rcpp::wrap(reconstructSSS_cpp(pts, scaleIterations, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals));
+    rcpp_result_gen = Rcpp::wrap(reconstructSSS_cpp(pts, nScaleIter, nNeighbors, nSamples, separateShells, forceManifold, borderAngle, repairSoup, normals));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -863,7 +877,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_SurfaceMesh_normals_jet_pca_cpp", (DL_FUNC) &_SurfaceMesh_normals_jet_pca_cpp, 3},
     {"_SurfaceMesh_readFileSoup_cpp", (DL_FUNC) &_SurfaceMesh_readFileSoup_cpp, 2},
     {"_SurfaceMesh_readFileMesh_cpp", (DL_FUNC) &_SurfaceMesh_readFileMesh_cpp, 3},
-    {"_SurfaceMesh_writeFile_cpp", (DL_FUNC) &_SurfaceMesh_writeFile_cpp, 5},
+    {"_SurfaceMesh_writeFileSoup_cpp", (DL_FUNC) &_SurfaceMesh_writeFileSoup_cpp, 5},
+    {"_SurfaceMesh_writeFileMesh_cpp", (DL_FUNC) &_SurfaceMesh_writeFileMesh_cpp, 5},
     {"_SurfaceMesh_getAverageSpacing_cpp", (DL_FUNC) &_SurfaceMesh_getAverageSpacing_cpp, 2},
     {"_SurfaceMesh_removeOutliers_cpp", (DL_FUNC) &_SurfaceMesh_removeOutliers_cpp, 4},
     {"_SurfaceMesh_reconstructAFS_cpp", (DL_FUNC) &_SurfaceMesh_reconstructAFS_cpp, 4},

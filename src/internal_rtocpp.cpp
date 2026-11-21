@@ -42,7 +42,7 @@ sample_opts ropts_to_sample_opts(const Rcpp::List &ropts) {
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
-// for (E)Point3 and (E)Vector3
+// can be used for both (E)Point3 and (E)Vector3
 template <typename PointT>
 std::vector<PointT> matrix_to_points3(const Rcpp::NumericMatrix &M) {
   const std::size_t nPts = M.ncol();
@@ -505,7 +505,8 @@ MeshT make_surf_mesh_valid_ff(const Rcpp::String filename,
       mesh = std::move(mesh_tmp);
     } else {
       MeshT mesh_tmp;
-      const bool ok = PMP::IO::read_polygon_mesh(fname, mesh_tmp);
+      const bool ok = CGAL::IO::read_polygon_mesh(
+          fname, mesh_tmp, CGAL::parameters::verbose(verbose));
       if(!ok) {
         Rcpp::stop("Reading failure.");
       }

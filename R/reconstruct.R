@@ -283,7 +283,7 @@ reconstructSSS <- function(
   normals       =FALSE) {
   xIn <- getVertsMat(x, nPtsMin=4L)
   stopifnot(isStrictPositiveInteger(nScaleIter))
-  stopifnot(isStrictPositiveInteger(nNeighbors), neighbors >= 2L)
+  stopifnot(isStrictPositiveInteger(nNeighbors), nNeighbors >= 2L)
   stopifnot(isStrictPositiveInteger(nSamples))
   stopifnot(isBoolean(separateShells))
   stopifnot(isBoolean(forceManifold))

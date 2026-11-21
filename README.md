@@ -2,7 +2,7 @@
 
 `SurfaceMesh` is an R package that supports processing of 3D surface meshes using as backend the C++ library [`CGAL`](https://www.cgal.org/) for computational geometry via R package [`RcppCGAL`](https://cran.r-project.org/package=RcppCGAL). Features:
 
-  * Read in and write mesh files in common formats (STL, PLY, OBJ, OFF)
+  * Read in and write mesh files in common formats (STL, PLY, OBJ, OFF, TS)
   * Conversion to / from class `mesh3d` from package [`rgl`](https://cran.r-project.org/package=rgl), also compatible with package [`Rvcg`](https://cran.r-project.org/package=Rvcg)
   * Mesh repair
       * Filling holes
@@ -12,7 +12,7 @@
       * Difference
       * Intersection
   * Remeshing
-      * Approximated centroidal Voronoi diagram remeshing
+      * Approximated centroidal Voronoi diagram
       * Surface Delaunay
       * Isotropic
       * Triangulated surface mesh simplification 

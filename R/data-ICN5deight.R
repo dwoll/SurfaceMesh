@@ -9,7 +9,7 @@
 #' @title Mesh of an ICN5D eight
 #' @description An object of class \code{\link[rgl]{mesh3d}} from package
 #'   \strong{rgl} representing an ICN5D eight, a shape presented by user
-#'   ICN5D on forum \url{https://hi.gher.space/forum/}.
+#'   ICN5D on the Higher Space Forum.
 #' @format A list with components \code{vb}, \code{it}, and \code{normals}.
 #' @author Originally developed by Stephane Laurent.
 #' @examples

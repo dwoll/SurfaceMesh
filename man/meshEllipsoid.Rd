@@ -32,7 +32,7 @@ by iteratively subdividing the faces of an icosahedron).}
 A \code{\link[rgl]{mesh3d}} object.
 }
 \description{
-Create a triangle mesh of a 3D ellipsoid.
+Generate a triangle surface smesh of a 3D ellipsoid.
 }
 \examples{
 library(SurfaceMesh)

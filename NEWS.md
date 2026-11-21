@@ -1,12 +1,7 @@
-# SurfaceMesh 0.1.1 (2026-10-19)
+# SurfaceMesh 0.1.3 (2026-11-18)
 
- * Add `isOutwardOriented()` to check whether mesh has positive orientation.
- * Add `reverseFaceOrientations()` to reverse the orientation of (selected) faces.
- * Add `remeshACVD()` for approximated centroidal Voronoi diagram remeshing.
- * `reconstructAFS()`: change argument name `jetSmoothing` to `nNeighbors` for consistency.
- * `reconstructAFS()`: change argument names `neighbors`, `scaleIterations`, `samples` to `nNeighbors`, `nScaleIter`, `nSamples` for consistency.
- * `remeshSmoothShape()`: change argument name `indices` to `faces` for clarity.
+Fix vignette build error on headless MacOS.
 
-# SurfaceMesh 0.1.0 (2026-10-18)
+# SurfaceMesh 0.1.2 (2026-10-30)
 
 Initial release to CRAN.

@@ -19,7 +19,7 @@
 
 // ----------------------------------------------------------------------- //
 // ----------------------------------------------------------------------- //
-// for (E)Point3 and (E)Vector3
+// can be used for both (E)Point3 and (E)Vector3
 template <typename KernelT, typename PointT>
 Rcpp::NumericMatrix points3_to_matrix(const std::vector<PointT> &points) {
     const std::size_t nPts = points.size();

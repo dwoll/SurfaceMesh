@@ -2,7 +2,7 @@
 % Please edit documentation in R/meshExamples.R
 \name{meshIsoCuboid}
 \alias{meshIsoCuboid}
-\title{Iso-oriented cuboid}
+\title{Iso-oriented cuboid mesh}
 \usage{
 meshIsoCuboid(lo, up)
 }
@@ -17,8 +17,8 @@ whose coordinates must all be higher than those of the lower corner.}
 A \strong{rgl} mesh, i.e. a \code{mesh3d} object.
 }
 \description{
-Mesh of an iso-oriented cuboid, i.e. with edges parallel
-to the axes.
+Generate a surface mesh of an iso-oriented cuboid,
+i.e. with edges parallel to the axes.
 }
 \details{
 CAVE: Y-axis direction is assumed to be front-back,

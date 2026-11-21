@@ -18,7 +18,7 @@ by iteratively subdividing the faces of an icosahedron).}
 A \code{\link[rgl]{mesh3d}} object.
 }
 \description{
-Triangle mesh of a 3D sphere.
+Generate a triangle surface mesh of a 3D sphere.
 }
 \examples{
 library(SurfaceMesh)

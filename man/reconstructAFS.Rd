@@ -40,7 +40,7 @@ library(rgl)
 
 mesh         <- dataHeart1
 mesh_rgl     <- toRGL(mesh)
-mesh_afs     <- reconstructAFS(mesh[["vertices"]], nNeighbors=30)
+mesh_afs     <- reconstructAFS(mesh[["vertices"]], nNeighbors=30L)
 mesh_afs_rgl <- toRGL(mesh_afs)
 
 mfrow3d(1, 2)

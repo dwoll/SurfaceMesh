@@ -40,7 +40,7 @@ Includes triangulation if mesh is not already triangle.
 See \url{https://doc.cgal.org/latest/PMP_Remeshing/} for details.
 Note that CGAL \code{angle_and_area_smoothing()} supports smoothing by area
 optimization as well. However, this feature requires the external
-Ceres library (\url{http://ceres-solver.org/}) and thus is currently
+Ceres library (\url{https://github.com/ceres-solver/ceres-solver}) and thus is currently
 not enabled here.
 }
 \examples{

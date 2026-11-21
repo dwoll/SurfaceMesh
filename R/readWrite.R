@@ -13,7 +13,7 @@
 #' @title Read a mesh file
 #' @description Read mesh vertices and faces from a file.
 #' @param x Path to the mesh file. Supported formats are \code{stl},
-#'   \code{ply}, \code{obj}, \code{off}, \code{ts}, \code{vtp}.
+#'   \code{ply}, \code{obj}, \code{off}, \code{ts}.
 #' @param method Either \code{"soup"} when the file is a polygon soup,
 #'   or \code{"mesh"} when the file is known to be a valid mesh with
 #'   correct face orientations.
@@ -34,7 +34,7 @@
 #' library(SurfaceMesh)
 #' library(rgl)
 #' f_ply    <- system.file("extdata", "dataHeart3.ply", package="SurfaceMesh")
-#' mesh_vf  <- readMeshFile(f_ply, method="soup")
+#' mesh_vf  <- readMesh(f_ply, method="soup")
 #' mesh     <- makeMesh(mesh_vf, normals=TRUE)
 #' mesh_rgl <- toRGL(mesh)
 #' open3d(windowRect=c(50, 50, 562, 562))
@@ -42,10 +42,10 @@
 #' shade3d(mesh_rgl, color="palevioletred")
 #'
 #' @export
-readMeshFile <- function(x,
-                         method=c("soup", "mesh"),
-                         normals=FALSE,
-                         verbose=FALSE) {
+readMesh <- function(x,
+                     method=c("soup", "mesh"),
+                     normals=FALSE,
+                     verbose=FALSE) {
   stopifnot(isString(x))
   stopifnot(isBoolean(verbose))
   method <- match.arg(method)
@@ -54,6 +54,7 @@ readMeshFile <- function(x,
   }
   if(method == "soup") {
     mesh   <- readFileSoup_cpp(x, verbose)
+    ## faces are already changed to 1-based indexing on C++ side
     faces  <- mesh[["faces"]]
     usizes <- length(unique(lengths(faces)))
     if(usizes == 1L) {
@@ -62,43 +63,62 @@ readMeshFile <- function(x,
     mesh
   } else {
     stopifnot(isBoolean(normals))
-    mesh_cpp <- readFileMesh_cpp(x, normals, verbose)
-    fromCPP(mesh_cpp)
+    mesh <- readFileMesh_cpp(x, normals, verbose)
+    fromCPP(mesh)
   }
 }
 
 #' @title Export mesh to a file
 #' @description Export a 3D surface mesh to a file.
-#' @param x A mesh. Given as a list containing (at least) the components
-#'   \code{vertices} and \code{faces}, or a \code{\link[rgl]{mesh3d}} object
-#'   from package \strong{rgl}, or a \code{CGALmesh} object, i.e.,
+#' @param x A mesh given as \code{CGALmesh} object, i.e.,
 #'   the output of \code{\link[SurfaceMesh]{makeMesh}}.
-#' @param filename Name of the output file, with extension \code{stl},
-#'   \code{ply}, \code{obj} or \code{off}.
+#'   Or a \code{\link[rgl]{mesh3d}} object from package \strong{rgl}.
+#'   Or a polygon soup given as a list containing (at least) the components
+#'   \code{vertices} and \code{faces}.
+#' @param filename Name of the output file. Supported file formats are
+#'   \code{stl}, \code{ply}, \code{obj}, \code{off}, \code{ts}.
+#' @param normals Boolean. For \code{x} being a \code{CGALmesh} object which
+#'   has a property map \code{v:normal}:
+#'   Write vertex normals? Only supported for file formats
+#'   \code{off}, \code{ply}. TODO Currently not implemented.
 #' @param precision Positive \code{integer}. Number of decimal digits for the
 #'   vertex coordinates.
-#' @param binary Boolean. Write a binary file (instead of a plain text ASCII file)?
+#' @param binary Boolean. For file types \code{ply}, \code{stl}:
+#'   Write a binary file (instead of a plain text ASCII file)?
+#' @param verbose Boolean. Print out messages about mesh processing?
 #' @returns No value. Just generates the file.
 #' @author Originally developed by Stephane Laurent, adapted by Daniel Wollschlaeger.
 #'
 #' @export
-writeMeshFile <- function(x, filename, precision = 17L, binary = FALSE) {
+writeMesh <- function(x,
+                      filename,
+                      normals=FALSE,
+                      precision = 17L,
+                      binary = FALSE,
+                      verbose = FALSE) {
   stopifnot(isString(filename))
+  stopifnot(isBoolean(normals))
   stopifnot(isPositiveInteger(precision))
   stopifnot(isBoolean(binary))
-  if(inherits(x, "mesh3d")){
-    vft <- getVFT(x, beforeCheck = TRUE)
-    x   <- vft[["rmesh"]]
+  stopifnot(isBoolean(verbose))
+  if(inherits(x, "CGALmesh")) {
+    meshCPP <- fromR(x)
+    writeFileMesh_cpp(meshCPP, filename, precision, binary, verbose)
+  } else {
+    if(inherits(x, "mesh3d")){
+      vft <- getVFT(x, beforeCheck = TRUE)
+      x   <- vft[["rmesh"]]
+    }
+    vertices    <- x[["vertices"]]
+    faces       <- x[["faces"]]
+    checkedMesh <- checkMesh(vertices, faces, aslist=TRUE)
+    vertices    <- checkedMesh[["vertices"]]
+    faces       <- checkedMesh[["faces"]]
+    writeFileSoup_cpp(vertices,
+                      faces,
+                      filename,
+                      as.integer(precision),
+                      binary)
   }
-  vertices    <- x[["vertices"]]
-  faces       <- x[["faces"]]
-  checkedMesh <- checkMesh(vertices, faces, aslist=TRUE)
-  vertices    <- checkedMesh[["vertices"]]
-  faces       <- checkedMesh[["faces"]]
-  writeFile_cpp(filename,
-                binary,
-                as.integer(precision),
-                vertices,
-                faces)
   invisible(NULL)
 }

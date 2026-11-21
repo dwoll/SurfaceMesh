@@ -8,7 +8,11 @@ reverseFaceOrientations(x, faces, normals = FALSE)
 }
 \arguments{
 \item{x}{A \code{CGALmesh} object, i.e., the output of \code{\link[SurfaceMesh]{makeMesh}}.}
-\item{faces}{Indices of the faces to select for reversing orientation. If missing, the orientation of all faces is reversed. Cave: The resulting mesh may be invalid if faces have inconsistent orientation.}
+
+\item{faces}{Indices of the faces to select for reversing orientation.
+If missing, the orientation of all faces is reversed.
+Cave: The resulting mesh may be invalid if faces have inconsistent orientation.}
+
 \item{normals}{Boolean. Return vertex normals?}
 }
 \value{
@@ -22,11 +26,14 @@ of the vertices along the face boundary.
 library(SurfaceMesh)
 mesh <- makeMeshValid(dataTorus)
 doesBoundVolume(mesh)
-getVolume(mesh)
+getVolume(mesh)  # positive
 
 mesh_rfo <- reverseFaceOrientations(mesh)
 doesBoundVolume(mesh_rfo)
-getVolume(mesh_rfo)
+getVolume(mesh_rfo)  # negative
+
+## invalid mesh from inconsistent face orientations
+mesh_invalid <- reverseFaceOrientations(mesh, faces=501:1000)
 
 }
 \seealso{
